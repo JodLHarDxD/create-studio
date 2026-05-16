@@ -33,6 +33,7 @@ export default function ChatPanel() {
   const [keys, setKeys] = useState(getStoredKeys());
   const [keySaved, setKeySaved] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const streamingIdRef = useRef<string | null>(null);
   const activeTask = tasks.find(t => t.status === 'IN_PROGRESS' && t.assignee_id === currentUserId) || null;
   const selectedModelObj = AI_MODELS.find(m => m.id === selectedModel);
 
@@ -53,6 +54,18 @@ export default function ChatPanel() {
     setInput('');
     setIsTyping(true);
 
+    const streamId = `stream-${Date.now()}`;
+    streamingIdRef.current = streamId;
+
+    // Seed the streaming placeholder immediately so the user sees the model name
+    setMessages(prev => [...prev, {
+      id: streamId,
+      role: 'assistant',
+      content: '',
+      model: selectedModel,
+      provider: model?.provider,
+    }]);
+
     try {
       const stored = getStoredKeys();
       const apiUrl = stored.baseUrl || import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -68,35 +81,66 @@ export default function ChatPanel() {
           anthropic: stored.anthropic || null,
           openai: stored.openai || null,
           google: stored.google || null,
-        }
+        },
       };
 
       const headers: Record<string, string> = { 'Content-Type': 'application/json' };
       const { data: session } = await import('@/lib/supabaseClient').then(m => m.supabase.auth.getSession());
       if (session?.session?.access_token) headers['Authorization'] = `Bearer ${session.session.access_token}`;
 
-      const response = await fetch(`${apiUrl}/api/ai/chat`, { method: 'POST', headers, body: JSON.stringify(payload) });
-      if (!response.ok) {
+      const response = await fetch(`${apiUrl}/api/ai/chat/stream`, { method: 'POST', headers, body: JSON.stringify(payload) });
+      if (!response.ok || !response.body) {
         const errData = await response.json().catch(() => ({}));
         throw new Error(errData.detail || `API error ${response.status}`);
       }
-      const data = await response.json();
 
-      const assistantMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: data.response || 'No response generated.',
-        model: selectedModel,
-        provider: model?.provider,
-        context: data.rag_used ? ['RAG active', ...(data.rag_files || [])] : undefined,
-      };
-      setMessages(prev => [...prev, assistantMsg]);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        // Process complete SSE lines from the buffer
+        const lines = buffer.split('\n');
+        buffer = lines.pop() ?? '';
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          try {
+            const event = JSON.parse(line.slice(6));
+            if (event.token) {
+              setMessages(prev => prev.map(m =>
+                m.id === streamId ? { ...m, content: m.content + event.token } : m
+              ));
+            } else if (event.meta) {
+              const ragContext = event.meta.rag_used
+                ? ['RAG active', ...(event.meta.rag_files || [])]
+                : undefined;
+              setMessages(prev => prev.map(m =>
+                m.id === streamId ? { ...m, context: ragContext } : m
+              ));
+            } else if (event.error) {
+              throw new Error(event.error);
+            }
+          } catch (parseErr) {
+            // malformed SSE line — skip
+          }
+        }
+      }
     } catch (err: any) {
-      setMessages(prev => [...prev, {
-        id: 'err-' + Date.now(), role: 'assistant',
-        content: `> Connection error: ${err.message || 'Backend unreachable'}. Ensure FastAPI is running and your API key is set in Settings.`
-      }]);
-    } finally { setIsTyping(false); }
+      // Replace the streaming placeholder with the error
+      setMessages(prev => prev.map(m =>
+        m.id === streamId
+          ? { ...m, content: `> Connection error: ${err.message || 'Backend unreachable'}. Ensure FastAPI is running and your API key is set in Settings.` }
+          : m
+      ));
+    } finally {
+      streamingIdRef.current = null;
+      setIsTyping(false);
+    }
   };
 
   const saveSettings = () => {
