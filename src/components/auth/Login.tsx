@@ -31,8 +31,23 @@ export default function Login() {
           password,
           options: { data: { full_name: fullName, role } },
         });
-        if (signUpErr) throw signUpErr;
-        if (data.user) {
+        if (signUpErr) {
+          // "User already registered" → switch to sign in
+          if (signUpErr.message.toLowerCase().includes('already')) {
+            setMode('login');
+            setError('Account already exists — please sign in.');
+          } else {
+            throw signUpErr;
+          }
+          return;
+        }
+        if (!data.session) {
+          // Email confirmation required, or existing account detected
+          setMode('login');
+          setError('Account exists or confirmation sent — please sign in with your password.');
+          return;
+        }
+        if (data.user && data.session) {
           await supabase.from('profiles').upsert({
             id: data.user.id, email, full_name: fullName, role,
           }, { onConflict: 'id' });
