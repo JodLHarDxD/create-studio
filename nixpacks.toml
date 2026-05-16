@@ -1,8 +1,11 @@
 [phases.setup]
-nixPkgs = ["python312", "python312Packages.pip"]
+nixPkgs = ["python312", "python312Packages.pip", "nodejs"]
 
 [phases.install]
-cmds = ["pip install --break-system-packages -r backend/requirements.txt"]
+cmds = [
+  "pip install --break-system-packages -r backend/requirements.txt",
+  "npm ci"
+]
 
 [start]
 cmd = "uvicorn backend.main:app --host 0.0.0.0 --port $PORT"
