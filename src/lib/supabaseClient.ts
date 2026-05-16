@@ -60,3 +60,13 @@ export interface ProjectFile {
   created_by?: string;
   updated_at?: string;
 }
+
+export interface LocalFileView {
+  name: string;
+  path: string;
+  handle: FileSystemFileHandle;
+  content: string;
+  objectUrl?: string;
+  mimeType: string;
+  lastModified: number;
+}

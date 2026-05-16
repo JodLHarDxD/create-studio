@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
 
 
@@ -9,6 +9,8 @@ class APIKeys(BaseModel):
 
 
 class ChatRequest(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     user_message: str = Field(..., max_length=32_000)
     model_id: str = "gemini-2.5-flash"
     provider: str = "google"
@@ -28,6 +30,8 @@ class FileSaveRequest(BaseModel):
 
 
 class ChatMessageRecord(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     project_id: str
     user_id: str
     role: str

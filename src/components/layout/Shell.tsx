@@ -86,27 +86,7 @@ export default function Shell() {
             >
               {view === 'editor' ? (
                 <div className="flex-1 flex flex-col min-h-0 bg-[#1e1e1e]">
-                  <div className="flex-1 min-h-0 overflow-hidden">
-                    <EditorPanel />
-                  </div>
-                  {/* Terminal panel */}
-                  <div className="h-44 border-t border-[#3c3c3c] bg-[#1e1e1e] flex flex-col shrink-0">
-                    <div className="flex items-center space-x-6 px-4 py-1 border-b border-[#2d2d2d]">
-                      {['TERMINAL', 'OUTPUT', 'PROBLEMS', 'DEBUG CONSOLE'].map((tab, i) => (
-                        <button key={tab} className={cn("text-[10px] pb-0.5 font-medium tracking-normal",
-                          i === 0 ? "text-[#cccccc] border-b border-[#cccccc]" : "text-[#858585] hover:text-[#cccccc]")}>
-                          {tab}
-                        </button>
-                      ))}
-                    </div>
-                    <div className="flex-1 overflow-y-auto p-3 font-mono text-[11px] opacity-80 custom-scrollbar whitespace-pre-wrap">
-                      <span className="text-[#858585]">$ </span>npm run dev{"\n"}
-                      <span className="text-green-400">  VITE v5.0.0  ready in 847 ms{"\n\n"}</span>
-                      <span className="text-blue-400">  ➜  Local:   </span>http://localhost:5173/{"\n"}
-                      <span className="text-[#858585]">  ➜  Network: use --host to expose{"\n"}</span>
-                      <span className="text-[#858585]">  ➜  Role: {userRole}{"\n"}</span>
-                    </div>
-                  </div>
+                  <EditorPanel />
                 </div>
               ) : view === 'dashboard' ? <Dashboard /> : <Profile />}
             </motion.div>

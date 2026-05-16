@@ -1,0 +1,110 @@
+KINETIK QS - Developer Workspace: Bug Report
+Summary
+I attempted to run the TeamForge application and encountered multiple critical issues preventing normal operation. Below is a detailed analysis of the problems found:
+
+Issues Found:
+1. CRITICAL: React Hook Error in EditorPanel Component
+Severity: CRITICAL
+Location: src/components/editor/EditorPanel.tsx (Line 131-132)
+Error: "Rendered more hooks than during the previous render"
+Description:
+
+The EditorPanel component violates React's Rules of Hooks
+A useEffect hook is being called conditionally or the number of hooks rendered is changing between renders
+This causes React to crash when trying to render the admin dashboard
+
+Impact:
+
+The demo guest access button triggers navigation but fails to load the dashboard
+Browser shows a black loading screen indefinitely
+No UI renders after login attempt
+
+Root Cause:
+
+Likely conditional rendering of hooks: if (someCondition) useEffect(...)
+Or hooks called after conditional returns
+Could also be related to dynamic hook array lengths
+
+Fix Required:
+javascript// WRONG - conditional hook
+if (isAdmin) {
+  useEffect(() => {
+    // ...
+  }, []);
+}
+
+// CORRECT - always call hooks
+useEffect(() => {
+  if (isAdmin) {
+    // logic here
+  }
+}, []);
+
+2. WebGL Context Loss
+Severity: HIGH
+Error: THREE.WebGLRenderer: Context Lost
+Description:
+
+The 3D rendering context (likely for visualization) is being lost
+This suggests the app may be using Three.js for 3D graphics in the editor
+
+Impact:
+
+If the editor has 3D visualization features, they won't render
+Could cause the entire dashboard to fail to load
+
+Possible Causes:
+
+GPU memory pressure
+Canvas context loss due to animations or DOM manipulation
+Incompatible browser/GPU combination
+
+
+3. Registration/Account Creation Stuck
+Severity: HIGH
+Issue: Create Account button remains in loading state indefinitely
+Details:
+
+Form filled: Name (hriddhish), Role (ADMIN), Email, Password
+Button clicked but no API response received
+No network request visible (backend might not be running or endpoint broken)
+
+Possible Causes:
+
+Backend API server not running on expected port
+Missing API endpoint for /api/auth/register or similar
+CORS issues preventing request from completing
+
+
+4. Missing Error Boundary
+Severity: MEDIUM
+React Warning: React suggests adding an Error Boundary
+Description:
+
+No error boundary wrapping the EditorPanel component
+When the component crashes, the entire app goes down with a black screen
+
+Impact:
+
+Users get no feedback about what went wrong
+Black screen with no error message is confusing
+
+Fix:
+Wrap app in error boundary component:
+javascript<ErrorBoundary>
+  <App />
+</ErrorBoundary>
+
+Summary of Fixes Needed:
+IssueSeverityFix TypeFileHooks rendering errorCRITICALCode fixEditorPanel.tsxWebGL context lossHIGHInvestigation/FixScene rendering componentAccount creation stuckHIGHBackend/NetworkAPI endpoint checkMissing error boundaryMEDIUMAdd componentApp.tsx or root component
+
+Recommendations:
+
+Immediately Review EditorPanel.tsx - The conditional hook logic is the blocking issue
+Check Backend Status - Ensure API server is running before testing registration
+Add Error Boundaries - Prevent full app crashes from component errors
+Test WebGL Support - Check browser console for GPU/graphics issues
+Add Loading States - Display meaningful error messages instead of black screens
+Add Network Error Handling - Show feedback when API calls fail
+
+The app appears to be in a broken state due to React hook violations that prevent the dashboard from rendering. This must be fixed before the app can function.

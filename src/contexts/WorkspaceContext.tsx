@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { supabase, isSupabaseConfigured, Profile, Project, Task, ProjectFile } from '@/lib/supabaseClient';
+import { supabase, isSupabaseConfigured, Profile, Project, Task, ProjectFile, LocalFileView } from '@/lib/supabaseClient';
 import { getSelectedModel } from '@/lib/aiModels';
 
 interface WorkspaceContextType {
@@ -27,6 +27,8 @@ interface WorkspaceContextType {
   setSelectedModel: (m: string) => void;
   refetchFiles: () => Promise<void>;
   refetchTasks: () => Promise<void>;
+  localActiveFile: LocalFileView | null;
+  setLocalActiveFile: (f: LocalFileView | null) => void;
 }
 
 const WorkspaceContext = createContext<WorkspaceContextType | undefined>(undefined);
@@ -59,6 +61,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [users, setUsers] = useState<Profile[]>([]);
   const [activeFile, setActiveFile] = useState<ProjectFile | null>(null);
+  const [localActiveFile, setLocalActiveFile] = useState<LocalFileView | null>(null);
   const [view, setView] = useState<'editor' | 'dashboard' | 'profile'>('editor');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedModel, setSelectedModelState] = useState<string>(getSelectedModel());
@@ -168,6 +171,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       activeProject, projects, files, tasks, users, setTasks,
       activeFile, setActiveFile, view, setView, isLoading,
       selectedModel, setSelectedModel, refetchFiles, refetchTasks,
+      localActiveFile, setLocalActiveFile,
     }}>
       {children}
     </WorkspaceContext.Provider>
