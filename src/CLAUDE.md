@@ -212,3 +212,64 @@ return () => {
 
 **`motion/react` import error**
 → The package is `motion` (not `framer-motion`) — import as `from 'motion/react'`
+
+---
+
+## Design System
+
+### Tokens
+
+Use `src/design/tokens.ts` as the TypeScript source of truth for shared constants:
+
+```typescript
+import { colors, typography, spacing, motion } from '@/design';
+```
+
+- `colors` mirrors the dark IDE palette used in `src/index.css`
+- `typography` defines small UI text scales and tracking
+- `spacing` stores fixed shell dimensions such as activity bar, sidebars, status bar, and terminal panel
+- `motion` stores duration/easing values used by animation variants
+
+When adding a durable visual constant, add or update the token first, then sync matching CSS custom properties into the Tailwind v4 `@theme` block in `src/index.css`.
+
+### Motion
+
+Use `src/design/motion.ts` for shared transitions and variants:
+
+```typescript
+import { variants, transitions } from '@/design';
+```
+
+- Prefer `transitions.fast`, `base`, `slow`, `cinematic`, or `spring` over inline duration/ease objects
+- Prefer `variants.fadeUp`, `fadeIn`, `scaleIn`, `slideRight`, or `cinematicReveal` for panel and entrance animation
+- Use `layout` with `AnimatePresence` for FLIP-style list motion, as in `Explorer`
+
+### Effects
+
+`components/effects/WebGLBackground.tsx` owns the login WebGL canvas. Keep it decorative, non-interactive, and resilient on low-end devices.
+
+`components/effects/NoiseOverlay.tsx` owns the grain layer. Grain motion depends on the `grain-shift` keyframes in `src/index.css`.
+
+### UI Primitives
+
+`components/ui/Toast.tsx` exports:
+
+```typescript
+import { ToastProvider, useToast } from '@/components/ui/Toast';
+```
+
+- `ToastProvider` is mounted in `App.tsx` inside `WorkspaceProvider`
+- Call `toast({ title, description, tone, duration })` from descendants
+- Tones are `info`, `success`, `warning`, and `error`
+- The provider shows three toasts at a time and queues the rest
+- Set `duration: 0` for a toast that should only dismiss manually
+
+`components/ui/Skeleton.tsx` exports a compact loading placeholder:
+
+```typescript
+import Skeleton from '@/components/ui/Skeleton';
+```
+
+- Variants are `block`, `text`, and `circle`
+- Pass dimensions through `className`
+- The shimmer uses the `skeleton-shimmer` keyframes in `src/index.css`
