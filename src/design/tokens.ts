@@ -10,6 +10,7 @@ export const colors = {
     primary: '#f5f5f4',
     main: '#cccccc',
     muted: '#858585',
+    active: '#ffffff',
   },
   accent: {
     blue: '#007acc',
@@ -20,7 +21,7 @@ export const colors = {
   border: {
     subtle: 'rgba(255,255,255,0.1)',
     visible: 'rgba(255,255,255,0.2)',
-    strong: 'rgba(255,255,255,1)',
+    active: '#ffffff',
   },
 } as const;
 
@@ -33,7 +34,6 @@ export const typography = {
   },
   tracking: {
     widest: '0.2em',
-    cinematic: '0.4em',
   },
 } as const;
 
