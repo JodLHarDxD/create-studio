@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.routers import ai_chat
 
-app = FastAPI(title="TeamForge API", version="1.0.0")
+app = FastAPI(title="CREATstudio API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -16,8 +16,8 @@ app.include_router(ai_chat.router, prefix="/api/ai", tags=["AI Cortex"])
 
 @app.get("/health")
 def health():
-    return {"status": "operational", "service": "TeamForge API"}
+    return {"status": "operational", "service": "CREATstudio API"}
 
 @app.get("/")
 def root():
-    return {"status": "operational", "service": "TeamForge API"}
+    return {"status": "operational", "service": "CREATstudio API"}
