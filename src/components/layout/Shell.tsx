@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileCode, BarChart3, UserCircle, LogOut, Settings, Zap } from 'lucide-react';
+import { FileCode, BarChart3, UserCircle, LogOut, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import Explorer from '../explorer/Explorer';
@@ -9,6 +9,7 @@ import Dashboard from '../dashboard/Dashboard';
 import Login from '../auth/Login';
 import Profile from '../profile/Profile';
 import { motion, AnimatePresence } from 'motion/react';
+import { variants, transitions } from '@/design';
 
 export default function Shell() {
   const { view, setView, loginState, logout, userRole, profile } = useWorkspace();
@@ -35,7 +36,13 @@ export default function Shell() {
           <button key={v} onClick={() => setView(v)} title={label}
             className={cn("p-2.5 transition-all hover:opacity-100 relative",
               view === v ? "text-white opacity-100" : "text-[#858585] opacity-40")}>
-            {view === v && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-white" />}
+            {view === v && (
+              <motion.div
+                layoutId="activeViewIndicator"
+                className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-white"
+                transition={transitions.spring}
+              />
+            )}
             <Icon size={22} strokeWidth={1.5} />
           </button>
         ))}
@@ -68,31 +75,42 @@ export default function Shell() {
 
         {/* Center */}
         <div className="flex-1 flex flex-col min-w-0 bg-[#0a0a0a] overflow-hidden">
-          {view === 'editor' ? (
-            <div className="flex-1 flex flex-col min-h-0 bg-[#1e1e1e]">
-              <div className="flex-1 min-h-0 overflow-hidden">
-                <EditorPanel />
-              </div>
-              {/* Terminal panel */}
-              <div className="h-44 border-t border-[#3c3c3c] bg-[#1e1e1e] flex flex-col shrink-0">
-                <div className="flex items-center space-x-6 px-4 py-1 border-b border-[#2d2d2d]">
-                  {['TERMINAL', 'OUTPUT', 'PROBLEMS', 'DEBUG CONSOLE'].map((tab, i) => (
-                    <button key={tab} className={cn("text-[10px] pb-0.5 font-medium tracking-normal",
-                      i === 0 ? "text-[#cccccc] border-b border-[#cccccc]" : "text-[#858585] hover:text-[#cccccc]")}>
-                      {tab}
-                    </button>
-                  ))}
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={view}
+              variants={variants.fadeUp}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="flex-1 flex flex-col min-h-0"
+            >
+              {view === 'editor' ? (
+                <div className="flex-1 flex flex-col min-h-0 bg-[#1e1e1e]">
+                  <div className="flex-1 min-h-0 overflow-hidden">
+                    <EditorPanel />
+                  </div>
+                  {/* Terminal panel */}
+                  <div className="h-44 border-t border-[#3c3c3c] bg-[#1e1e1e] flex flex-col shrink-0">
+                    <div className="flex items-center space-x-6 px-4 py-1 border-b border-[#2d2d2d]">
+                      {['TERMINAL', 'OUTPUT', 'PROBLEMS', 'DEBUG CONSOLE'].map((tab, i) => (
+                        <button key={tab} className={cn("text-[10px] pb-0.5 font-medium tracking-normal",
+                          i === 0 ? "text-[#cccccc] border-b border-[#cccccc]" : "text-[#858585] hover:text-[#cccccc]")}>
+                          {tab}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex-1 overflow-y-auto p-3 font-mono text-[11px] opacity-80 custom-scrollbar whitespace-pre-wrap">
+                      <span className="text-[#858585]">$ </span>npm run dev{"\n"}
+                      <span className="text-green-400">  VITE v5.0.0  ready in 847 ms{"\n\n"}</span>
+                      <span className="text-blue-400">  ➜  Local:   </span>http://localhost:5173/{"\n"}
+                      <span className="text-[#858585]">  ➜  Network: use --host to expose{"\n"}</span>
+                      <span className="text-[#858585]">  ➜  Role: {userRole}{"\n"}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex-1 overflow-y-auto p-3 font-mono text-[11px] opacity-80 custom-scrollbar whitespace-pre-wrap">
-                  <span className="text-[#858585]">$ </span>npm run dev{"\n"}
-                  <span className="text-green-400">  VITE v5.0.0  ready in 847 ms{"\n\n"}</span>
-                  <span className="text-blue-400">  ➜  Local:   </span>http://localhost:5173/{"\n"}
-                  <span className="text-[#858585]">  ➜  Network: use --host to expose{"\n"}</span>
-                  <span className="text-[#858585]">  ➜  Role: {userRole}{"\n"}</span>
-                </div>
-              </div>
-            </div>
-          ) : view === 'dashboard' ? <Dashboard /> : <Profile />}
+              ) : view === 'dashboard' ? <Dashboard /> : <Profile />}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* AI Chat */}
@@ -113,7 +131,11 @@ export default function Shell() {
         <span>Role: {userRole}</span>
         <div className="ml-auto flex items-center gap-6">
           <span className="opacity-40">Supabase</span>
-          <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+          <motion.div
+            className="w-1.5 h-1.5 rounded-full bg-green-500"
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          />
         </div>
       </div>
     </div>

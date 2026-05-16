@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { supabase, Profile, Project, Task, ProjectFile } from '@/lib/supabaseClient';
+import { supabase, isSupabaseConfigured, Profile, Project, Task, ProjectFile } from '@/lib/supabaseClient';
 import { getSelectedModel } from '@/lib/aiModels';
 
 interface WorkspaceContextType {
@@ -69,6 +69,11 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
+    if (!isSupabaseConfigured) {
+      setIsLoading(false);
+      return;
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         setCurrentUserId(session.user.id);
@@ -76,6 +81,9 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
           if (data) { setProfile(data); setUserRole(data.role); setLoginState('logged_in'); }
         });
       }
+      setIsLoading(false);
+    }).catch(error => {
+      console.warn('Supabase session check skipped:', error);
       setIsLoading(false);
     });
 

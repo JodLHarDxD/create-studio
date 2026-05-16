@@ -105,7 +105,7 @@ export default function Dashboard() {
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={userLoad} barGap={2}>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                      <XAxis dataKey="name" tick={{ fontSize: 9, fill: '#666', textTransform: 'uppercase' }} axisLine={false} tickLine={false} />
+                      <XAxis dataKey="name" tick={{ fontSize: 9, fill: '#666' }} tickFormatter={value => String(value).toUpperCase()} axisLine={false} tickLine={false} />
                       <YAxis tick={{ fontSize: 9, fill: '#666' }} axisLine={false} tickLine={false} />
                       <Tooltip contentStyle={{ backgroundColor: '#000', border: '1px solid rgba(255,255,255,0.15)', fontSize: '10px' }} />
                       <Bar dataKey="total" name="Total" fill="rgba(255,255,255,0.15)" radius={[2, 2, 0, 0]} />
