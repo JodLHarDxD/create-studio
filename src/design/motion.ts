@@ -42,6 +42,7 @@ export const variants = {
       filter: 'blur(0px)',
       transition: transitions.cinematic,
     },
+    exit: { opacity: 0, y: -12, filter: 'blur(8px)', transition: transitions.slow },
   } satisfies Variants,
 
   staggerContainer: {
