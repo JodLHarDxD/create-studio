@@ -41,9 +41,11 @@ export default function Explorer() {
     if (!activeProject) return;
     const name = prompt('File path (e.g. src/utils.ts):');
     if (!name) return;
+    const fileName = name.split('/').pop() || name;
     await supabase.from('project_files').insert({
       project_id: activeProject.id,
-      file_name: name.split('/').pop() || name,
+      file_name: fileName,
+      name: fileName,
       path: name,
       content: '',
     });
@@ -62,14 +64,15 @@ export default function Explorer() {
         for (const [relPath, entry] of Object.entries(contents.files)) {
           if (!entry.dir && !relPath.includes('node_modules/') && !relPath.includes('.git/') && !/\.(png|jpg|ico|svg|DS_Store)$/.test(relPath)) {
             const content = await entry.async('text').catch(() => '');
-            inserts.push({ project_id: activeProject.id, file_name: relPath.split('/').pop() || relPath, path: relPath, content });
+            const fn = relPath.split('/').pop() || relPath;
+            inserts.push({ project_id: activeProject.id, file_name: fn, name: fn, path: relPath, content });
           }
         }
       } else {
         const text = await file.text().catch(() => '');
         const relPath = (file as any).webkitRelativePath || file.name;
         if (!relPath.includes('node_modules/') && !relPath.includes('.git/')) {
-          inserts.push({ project_id: activeProject.id, file_name: file.name, path: relPath, content: text });
+          inserts.push({ project_id: activeProject.id, file_name: file.name, name: file.name, path: relPath, content: text });
         }
       }
     }
@@ -165,7 +168,15 @@ export default function Explorer() {
                       <div className={cn("w-2 h-2 mt-1.5 rounded-sm shrink-0",
                         task.status === 'DONE' ? "bg-green-500" : task.status === 'IN_PROGRESS' ? "bg-[#007acc]" : "border border-[#858585]")} />
                       <div className="flex flex-col min-w-0 flex-1">
-                        <span className={cn("truncate text-[12px]", task.status === 'DONE' && "text-[#858585] line-through")}>{task.title}</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className={cn("truncate text-[12px]", task.status === 'DONE' && "text-[#858585] line-through")}>{task.title}</span>
+                          {task.priority && task.priority !== 'MED' && (
+                            <span className={cn("shrink-0 text-[8px] font-black uppercase tracking-wider px-1 py-px",
+                              task.priority === 'HIGH' ? "text-red-400/80" : "text-green-400/60")}>
+                              {task.priority}
+                            </span>
+                          )}
+                        </div>
                         {task.description && <span className="text-[10px] text-[#858585] line-clamp-1 mt-0.5">{task.description}</span>}
                         {assignee && (
                           <div className="flex items-center gap-1 mt-1">

@@ -140,7 +140,8 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         filesSub = supabase.channel('files').on('postgres_changes', { event: '*', schema: 'public', table: 'project_files', filter: `project_id=eq.${proj.id}` }, () => refetchFiles()).subscribe();
         tasksSub = supabase.channel('tasks').on('postgres_changes', { event: '*', schema: 'public', table: 'tasks', filter: `project_id=eq.${proj.id}` }, () => refetchTasks()).subscribe();
       } else {
-        await supabase.from('projects').insert({ name: 'Kinetix OS Core', description: 'Main development workspace', owner_id: currentUserId });
+        const { data: newProj } = await supabase.from('projects').insert({ name: 'Kinetix OS Core', description: 'Main development workspace', owner_id: currentUserId }).select().single();
+        if (newProj) await supabase.from('project_members').insert({ project_id: newProj.id, user_id: currentUserId, role: 'ADMIN' }).then(() => {});
         loadData();
       }
       setIsLoading(false);

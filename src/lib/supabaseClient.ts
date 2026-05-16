@@ -40,17 +40,23 @@ export interface Task {
   title: string;
   description?: string;
   status: 'TODO' | 'IN_PROGRESS' | 'DONE';
+  priority?: 'LOW' | 'MED' | 'HIGH';
   project_id: string;
   assignee_id?: string | null;
+  creator_id?: string | null;
   due_date?: string;
   created_at?: string;
+  updated_at?: string;
 }
 
 export interface ProjectFile {
   id: string;
   project_id: string;
   file_name: string;
+  name?: string;
   path: string;
   content: string;
+  language?: string;
+  created_by?: string;
   updated_at?: string;
 }
