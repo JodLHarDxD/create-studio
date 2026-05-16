@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronRight, Plus, FilePlus, UploadCloud, FolderUp } from 'lucide-react';
+import { motion, AnimatePresence, LayoutGroup } from 'motion/react';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { cn } from '@/lib/utils';
 import NewTaskModal from '../tasks/NewTaskModal';
@@ -143,13 +144,23 @@ export default function Explorer() {
             </div>
 
             <div className="flex flex-col">
+              <LayoutGroup>
+                <AnimatePresence initial={false}>
               {filteredTasks.map(task => {
                 const isMine = task.assignee_id === currentUserId;
                 const isUnassigned = !task.assignee_id;
                 const assignee = users.find(u => u.id === task.assignee_id);
 
                 return (
-                  <div key={task.id} className="flex flex-col pl-6 pr-2 py-1.5 hover:bg-[#2a2d2e] group border-b border-white/3">
+                  <motion.div
+                    key={task.id}
+                    layout
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 8 }}
+                    transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex flex-col pl-6 pr-2 py-1.5 hover:bg-[#2a2d2e] group border-b border-white/3"
+                  >
                     <div className="flex items-start gap-2">
                       <div className={cn("w-2 h-2 mt-1.5 rounded-sm shrink-0",
                         task.status === 'DONE' ? "bg-green-500" : task.status === 'IN_PROGRESS' ? "bg-[#007acc]" : "border border-[#858585]")} />
@@ -194,9 +205,11 @@ export default function Explorer() {
                           className="text-[10px] border border-[#007acc] text-[#007acc] px-2 py-0.5 rounded">Start</button>
                       )}
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
+                </AnimatePresence>
+              </LayoutGroup>
               {filteredTasks.length === 0 && <div className="pl-6 py-4 text-[10px] opacity-30 italic">No tasks</div>}
             </div>
           </>
