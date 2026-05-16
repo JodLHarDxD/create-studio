@@ -1,5 +1,5 @@
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import * as THREE from 'three';
 
 const vertexShader = /* glsl */ `
@@ -70,6 +70,13 @@ function ShaderPlane() {
 }
 
 export default function WebGLBackground() {
+  const [contextLost, setContextLost] = useState(false);
+
+  // Decorative only — silently degrade to dark background on context loss
+  if (contextLost) {
+    return <div className="fixed inset-0 z-0 pointer-events-none bg-[#050508]" aria-hidden="true" />;
+  }
+
   return (
     <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
       <Canvas
@@ -77,6 +84,9 @@ export default function WebGLBackground() {
         camera={{ position: [0, 0, 1], zoom: 1 }}
         gl={{ antialias: false, powerPreference: 'low-power' }}
         dpr={[1, 1.5]}
+        onCreated={({ gl }) => {
+          gl.domElement.addEventListener('webglcontextlost', () => setContextLost(true));
+        }}
       >
         <ShaderPlane />
       </Canvas>

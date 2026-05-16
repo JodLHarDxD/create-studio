@@ -26,38 +26,17 @@ export default function EditorPanel() {
     if (activeFile) { setLocalContent(activeFile.content); setIsDirty(false); }
   }, [activeFile?.id]);
 
-  if (!activeFile) {
-    return (
-      <div className="flex-1 flex items-center justify-center bg-[#1e1e1e] text-[#858585]">
-        <div className="text-center space-y-4">
-          <div className="text-[60px] font-black tracking-tighter opacity-5 leading-none">AI</div>
-          <div className="text-[11px] uppercase tracking-widest font-bold">Select a file to begin</div>
-          <div className="text-[10px] opacity-40">or create a new file from the explorer</div>
-        </div>
-      </div>
-    );
-  }
-
-  const handleEditorChange = (value: string | undefined) => {
-    const v = value || '';
-    setLocalContent(v);
-    setActiveFile({ ...activeFile, content: v });
-    setIsDirty(true);
-  };
-
   const handleSave = async () => {
     if (!activeFile || !activeProject) return;
     if (loginState === 'guest') { alert('Guest mode: read-only'); return; }
 
     setSaving(true);
     try {
-      // Save content to Supabase
       const { error } = await supabase.from('project_files')
         .update({ content: localContent, updated_at: new Date().toISOString() })
         .eq('id', activeFile.id);
       if (error) throw error;
 
-      // Also trigger backend to regenerate vector embedding
       const stored = getStoredKeys();
       const apiUrl = stored.baseUrl || import.meta.env.VITE_API_URL || 'http://localhost:8000';
       const { data: session } = await supabase.auth.getSession();
@@ -85,12 +64,33 @@ export default function EditorPanel() {
     } finally { setSaving(false); }
   };
 
-  // Ctrl+S handler
+  // Ctrl+S handler — must be before any early return to satisfy Rules of Hooks
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => { if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); handleSave(); } };
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); handleSave(); }
+    };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, [activeFile, localContent]);
+
+  if (!activeFile) {
+    return (
+      <div className="flex-1 flex items-center justify-center bg-[#1e1e1e] text-[#858585]">
+        <div className="text-center space-y-4">
+          <div className="text-[60px] font-black tracking-tighter opacity-5 leading-none">AI</div>
+          <div className="text-[11px] uppercase tracking-widest font-bold">Select a file to begin</div>
+          <div className="text-[10px] opacity-40">or create a new file from the explorer</div>
+        </div>
+      </div>
+    );
+  }
+
+  const handleEditorChange = (value: string | undefined) => {
+    const v = value || '';
+    setLocalContent(v);
+    setActiveFile({ ...activeFile, content: v });
+    setIsDirty(true);
+  };
 
   const lang = getLanguage(activeFile.file_name);
 

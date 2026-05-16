@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { Loader2, Zap } from 'lucide-react';
 import { variants, transitions } from '@/design';
@@ -19,6 +19,10 @@ export default function Login() {
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isSupabaseConfigured) {
+      setError('Supabase is not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env, or use Demo Guest Access below.');
+      return;
+    }
     setLoading(true); setError('');
     try {
       if (mode === 'register') {
