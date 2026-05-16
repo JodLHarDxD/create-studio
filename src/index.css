@@ -102,10 +102,13 @@
   90% { transform: translate(2%, -3%); }
 }
 
+@keyframes skeleton-shimmer {
+  100% { transform: translateX(100%); }
+}
+
 .grain-overlay {
   animation: grain-shift 8s steps(10) infinite;
   pointer-events: none;
   mix-blend-mode: overlay;
   opacity: 0.06;
 }
-
