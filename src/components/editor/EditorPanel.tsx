@@ -62,7 +62,7 @@ export default function EditorPanel() {
       const apiUrl = stored.baseUrl || import.meta.env.VITE_API_URL || 'http://localhost:8000';
       const { data: session } = await supabase.auth.getSession();
 
-      await fetch(`${apiUrl}/api/files`, {
+      await fetch(`${apiUrl}/api/ai/files`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,6 +74,7 @@ export default function EditorPanel() {
           file_name: activeFile.file_name,
           path: activeFile.path,
           content: localContent,
+          google_key: stored.google || null,
         }),
       }).catch(() => {}); // Non-blocking — embedding failure shouldn't block save
 
