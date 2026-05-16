@@ -29,6 +29,10 @@ interface WorkspaceContextType {
   refetchTasks: () => Promise<void>;
   localActiveFile: LocalFileView | null;
   setLocalActiveFile: (f: LocalFileView | null) => void;
+  diffTask: Task | null;
+  setDiffTask: (t: Task | null) => void;
+  diffMode: 'zip' | 'live';
+  setDiffMode: (m: 'zip' | 'live') => void;
 }
 
 const WorkspaceContext = createContext<WorkspaceContextType | undefined>(undefined);
@@ -62,6 +66,8 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [users, setUsers] = useState<Profile[]>([]);
   const [activeFile, setActiveFile] = useState<ProjectFile | null>(null);
   const [localActiveFile, setLocalActiveFile] = useState<LocalFileView | null>(null);
+  const [diffTask, setDiffTask] = useState<Task | null>(null);
+  const [diffMode, setDiffMode] = useState<'zip' | 'live'>('zip');
   const [view, setView] = useState<'editor' | 'dashboard' | 'profile'>('editor');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedModel, setSelectedModelState] = useState<string>(getSelectedModel());
@@ -172,6 +178,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       activeFile, setActiveFile, view, setView, isLoading,
       selectedModel, setSelectedModel, refetchFiles, refetchTasks,
       localActiveFile, setLocalActiveFile,
+      diffTask, setDiffTask, diffMode, setDiffMode,
     }}>
       {children}
     </WorkspaceContext.Provider>

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
-import { Loader2, Zap } from 'lucide-react';
-import { variants, transitions } from '@/design';
+import { Loader2 } from 'lucide-react';
+import { transitions } from '@/design';
 import WebGLBackground from '@/components/effects/WebGLBackground';
 import NoiseOverlay from '@/components/effects/NoiseOverlay';
 
@@ -32,7 +32,6 @@ export default function Login() {
           options: { data: { full_name: fullName, role } },
         });
         if (signUpErr) {
-          // "User already registered" → switch to sign in
           if (signUpErr.message.toLowerCase().includes('already')) {
             setMode('login');
             setError('Account already exists — please sign in.');
@@ -42,7 +41,6 @@ export default function Login() {
           return;
         }
         if (!data.session) {
-          // Email confirmation required, or existing account detected
           setMode('login');
           setError('Account exists or confirmation sent — please sign in with your password.');
           return;
@@ -60,8 +58,6 @@ export default function Login() {
         const { data, error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
         if (signInErr) throw signInErr;
         if (data.user) {
-          // Don't await profile fetch — it blocks indefinitely under some RLS configs.
-          // WorkspaceContext.onAuthStateChange loads the profile in parallel.
           setCurrentUserId(data.user.id);
           setLoginState('logged_in');
           supabase.from('profiles').select('*').eq('id', data.user.id).single().then(({ data: prof }) => {
@@ -76,95 +72,228 @@ export default function Login() {
 
   const handleGuest = () => {
     setCurrentUserId('demo-1'); setUserRole('ADMIN'); setLoginState('guest');
-    setProfile({ id: 'demo-1', email: 'admin@kinetix.os', full_name: 'Admin Demo', role: 'ADMIN', created_at: new Date().toISOString() });
+    setProfile({ id: 'demo-1', email: 'admin@creat.studio', full_name: 'Admin Demo', role: 'ADMIN', created_at: new Date().toISOString() });
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black overflow-hidden">
-      <WebGLBackground />
-      <NoiseOverlay />
+  const inputStyle: React.CSSProperties = {
+    width: '100%', background: 'transparent', outline: 'none',
+    borderBottom: '1px solid rgba(255,255,255,0.1)',
+    padding: '11px 0', fontSize: 13,
+    fontFamily: '"DM Sans", sans-serif', color: '#f7f3ee',
+    transition: 'border-color 0.2s',
+  };
 
-      <motion.div
-        variants={variants.cinematicReveal}
-        initial="hidden"
-        animate="visible"
-        className="relative z-20 w-[420px] border border-white/10 bg-[#0a0a0a]/90 backdrop-blur-md"
-      >
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) =>
+    (e.target.style.borderBottomColor = '#f59e0b');
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) =>
+    (e.target.style.borderBottomColor = 'rgba(255,255,255,0.1)');
+
+  return (
+    <div className="fixed inset-0 z-50 flex overflow-hidden" style={{ background: '#030303' }}>
+
+      {/* ── LEFT: Brand panel ── */}
+      <div className="relative flex-1 flex flex-col justify-between p-14 overflow-hidden">
+        <WebGLBackground />
+        <NoiseOverlay />
+
+        {/* Top micro-label */}
         <motion.div
-          variants={variants.staggerContainer}
-          initial="hidden"
-          animate="visible"
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+          className="relative z-10"
         >
-          <motion.div variants={variants.staggerChild} className="p-8 border-b border-white/10 flex items-center gap-4">
-            <div className="w-8 h-8 bg-white flex items-center justify-center">
-              <Zap size={16} className="text-black" fill="black" />
+          <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#3a3836' }}>
+            v2.0 — Developer Workspace
+          </span>
+        </motion.div>
+
+        {/* Hero wordmark */}
+        <div className="relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            style={{ lineHeight: 0.82, userSelect: 'none' }}
+          >
+            <div style={{
+              fontFamily: '"Syne", sans-serif',
+              fontWeight: 800,
+              fontSize: 'clamp(72px, 9vw, 130px)',
+              letterSpacing: '-0.04em',
+              color: '#f7f3ee',
+            }}>
+              CREAT
             </div>
-            <div>
-              <div className="text-[11px] font-black uppercase tracking-[0.3em]">Kinetix OS</div>
-              <div className="text-[9px] uppercase tracking-widest opacity-40">Developer Workspace</div>
+            <div style={{
+              fontFamily: '"Syne", sans-serif',
+              fontWeight: 300,
+              fontSize: 'clamp(50px, 6.3vw, 91px)',
+              letterSpacing: '-0.03em',
+              color: '#f59e0b',
+              opacity: 0.75,
+            }}>
+              studio
             </div>
           </motion.div>
 
-          <div className="p-8">
-            <motion.div variants={variants.staggerChild} className="flex gap-1 mb-8 border border-white/10 p-1">
-              {(['login', 'register'] as const).map(m => (
-                <button key={m} onClick={() => { setMode(m); setError(''); }}
-                  className={`flex-1 py-2 text-[9px] font-black uppercase tracking-widest transition-all ${mode === m ? 'bg-white text-black' : 'text-white/40 hover:text-white'}`}>
-                  {m === 'login' ? 'Sign In' : 'Register'}
-                </button>
-              ))}
-            </motion.div>
+          {/* Tagline */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            style={{ marginTop: 32, fontSize: 13, fontFamily: '"DM Sans", sans-serif', color: '#5e5855', lineHeight: 1.7, maxWidth: 340 }}
+          >
+            Precision-built for teams that ship. Task management, live code review, and AI assistance — unified.
+          </motion.p>
 
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={transitions.fast}
-                className="mb-4 p-3 border border-red-500/30 bg-red-500/10 text-red-400 text-[10px] font-mono"
-              >
-                {error}
-              </motion.div>
-            )}
+          {/* Ambient line decoration */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+            style={{ marginTop: 40, height: 1, width: 80, background: 'linear-gradient(90deg, #f59e0b, transparent)', transformOrigin: 'left' }}
+          />
+        </div>
 
-            <motion.form variants={variants.staggerChild} onSubmit={handleAuth} className="flex flex-col gap-3">
-              {mode === 'register' && (
-                <>
-                  <input type="text" placeholder="FULL NAME" value={fullName}
-                    onChange={e => setFullName(e.target.value)} required
-                    className="bg-black border border-white/20 p-3 text-[11px] uppercase tracking-wider text-white outline-none focus:border-white/60 transition-colors" />
-                  <select value={role} onChange={e => setRole(e.target.value as any)}
-                    className="bg-black border border-white/20 p-3 text-[11px] uppercase tracking-wider text-white outline-none focus:border-white/60">
-                    <option value="MEMBER">Member</option>
-                    <option value="ADMIN">Admin</option>
-                  </select>
-                </>
-              )}
-              <input type="email" placeholder="EMAIL ADDRESS" value={email}
-                onChange={e => setEmail(e.target.value)} required
-                className="bg-black border border-white/20 p-3 text-[11px] uppercase tracking-wider text-white outline-none focus:border-white/60 transition-colors" />
-              <input type="password" placeholder="PASSWORD" value={password}
-                onChange={e => setPassword(e.target.value)} required minLength={6}
-                className="bg-black border border-white/20 p-3 text-[11px] uppercase tracking-wider text-white outline-none focus:border-white/60 transition-colors" />
-              <motion.button
-                type="submit"
-                disabled={loading}
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}
-                transition={transitions.fast}
-                className="mt-2 bg-white text-black py-4 text-[10px] font-black uppercase tracking-[0.4em] hover:bg-white/90 disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {loading ? <Loader2 size={14} className="animate-spin" /> : null}
-                {mode === 'login' ? 'Authenticate' : 'Create Account'}
-              </motion.button>
-            </motion.form>
-
-            <motion.div variants={variants.staggerChild} className="mt-6 flex flex-col gap-3 border-t border-white/10 pt-6">
-              <button onClick={handleGuest} className="text-[9px] uppercase tracking-widest font-bold text-yellow-500/50 hover:text-yellow-500 transition-colors">
-                Demo Guest Access (Admin View)
-              </button>
-            </motion.div>
-          </div>
+        {/* Bottom left corner marker */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          className="relative z-10"
+          style={{ fontSize: 8, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.2em', color: '#3a3836', textTransform: 'uppercase' }}
+        >
+          creat.studio © 2025
         </motion.div>
+      </div>
+
+      {/* ── RIGHT: Auth panel ── */}
+      <motion.div
+        initial={{ opacity: 0, x: 32 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+        className="flex flex-col justify-center shrink-0"
+        style={{
+          width: 420,
+          background: '#080808',
+          borderLeft: '1px solid rgba(245,158,11,0.1)',
+          padding: '64px 52px',
+        }}
+      >
+        {/* Panel header */}
+        <div style={{ marginBottom: 40 }}>
+          <div style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#f7f3ee', marginBottom: 6 }}>
+            {mode === 'login' ? 'Sign in' : 'Create account'}
+          </div>
+          <div style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#3a3836' }}>
+            to CREATstudio workspace
+          </div>
+        </div>
+
+        {/* Mode toggle */}
+        <div className="flex mb-8" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)', gap: 24 }}>
+          {(['login', 'register'] as const).map(m => (
+            <button key={m} onClick={() => { setMode(m); setError(''); }}
+              className="pb-3 transition-all"
+              style={{
+                fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700,
+                letterSpacing: '0.18em', textTransform: 'uppercase',
+                color: mode === m ? '#f59e0b' : '#3a3836',
+                borderBottom: `2px solid ${mode === m ? '#f59e0b' : 'transparent'}`,
+                marginBottom: -1,
+              }}>
+              {m === 'login' ? 'Sign In' : 'Register'}
+            </button>
+          ))}
+        </div>
+
+        {/* Error */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={transitions.fast}
+            style={{ marginBottom: 20, padding: '10px 14px', border: '1px solid rgba(248,113,113,0.2)', background: 'rgba(248,113,113,0.05)', color: '#f87171', fontSize: 10, fontFamily: '"JetBrains Mono", monospace', lineHeight: 1.5 }}
+          >
+            {error}
+          </motion.div>
+        )}
+
+        {/* Form */}
+        <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          {mode === 'register' && (
+            <>
+              <div>
+                <label style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#5e5855', display: 'block', marginBottom: 8 }}>Full Name</label>
+                <input type="text" placeholder="Your name" value={fullName}
+                  onChange={e => setFullName(e.target.value)} required
+                  style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} />
+              </div>
+              <div>
+                <label style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#5e5855', display: 'block', marginBottom: 8 }}>Role</label>
+                <select value={role} onChange={e => setRole(e.target.value as any)}
+                  style={{ ...inputStyle, fontSize: 11, fontFamily: '"JetBrains Mono", monospace', color: '#a09590', letterSpacing: '0.08em' }}
+                  onFocus={handleFocus as any} onBlur={handleBlur as any}>
+                  <option value="MEMBER" style={{ background: '#080808' }}>Member</option>
+                  <option value="ADMIN" style={{ background: '#080808' }}>Admin</option>
+                </select>
+              </div>
+            </>
+          )}
+
+          <div>
+            <label style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#5e5855', display: 'block', marginBottom: 8 }}>Email</label>
+            <input type="email" placeholder="you@company.com" value={email}
+              onChange={e => setEmail(e.target.value)} required
+              style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} />
+          </div>
+
+          <div>
+            <label style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#5e5855', display: 'block', marginBottom: 8 }}>Password</label>
+            <input type="password" placeholder="••••••••" value={password}
+              onChange={e => setPassword(e.target.value)} required minLength={6}
+              style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} />
+          </div>
+
+          <motion.button
+            type="submit"
+            disabled={loading}
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
+            transition={transitions.fast}
+            style={{
+              marginTop: 8,
+              padding: '16px',
+              background: '#f59e0b',
+              color: '#000',
+              fontSize: 10,
+              fontFamily: '"Syne", sans-serif',
+              fontWeight: 800,
+              letterSpacing: '0.3em',
+              textTransform: 'uppercase',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+              opacity: loading ? 0.7 : 1,
+              cursor: loading ? 'not-allowed' : 'pointer',
+            }}
+          >
+            {loading && <Loader2 size={13} className="animate-spin" />}
+            {mode === 'login' ? 'Authenticate' : 'Create Account'}
+          </motion.button>
+        </form>
+
+        {/* Guest */}
+        <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+          <button onClick={handleGuest}
+            style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#3a3836', transition: 'color 0.15s' }}
+            onMouseEnter={e => (e.currentTarget.style.color = '#f59e0b')}
+            onMouseLeave={e => (e.currentTarget.style.color = '#3a3836')}>
+            Demo Guest Access → Admin View
+          </button>
+        </div>
       </motion.div>
     </div>
   );

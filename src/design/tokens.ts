@@ -1,62 +1,81 @@
 export const colors = {
+  // Obsidian surface scale
   bg: {
-    true: '#000000',
-    app: '#0a0a0a',
-    editor: '#1e1e1e',
-    tabBar: '#252526',
-    panelBorder: '#3c3c3c',
+    void:    '#030303',
+    app:     '#080808',
+    surface: '#0e0e0e',
+    raised:  '#141414',
+    editor:  '#1e1e1e',
+    tabBar:  '#252526',
   },
+  // Warm text
   text: {
-    primary: '#f5f5f4',
-    main: '#cccccc',
-    muted: '#858585',
-    active: '#ffffff',
+    primary:  '#f7f3ee',
+    secondary: '#a09590',
+    muted:    '#5e5855',
+    dim:      '#3a3836',
+    active:   '#ffffff',
   },
+  // Signature accent: warm amber
   accent: {
-    blue: '#007acc',
-    green: '#22c55e',
-    red: '#ef4444',
-    yellow: '#eab308',
+    amber:    '#f59e0b',
+    amberDim: 'rgba(245,158,11,0.12)',
+    amberGlow:'rgba(245,158,11,0.06)',
+    blue:     '#4f8ef7',
+    blueDim:  'rgba(79,142,247,0.12)',
   },
+  // Semantic
+  status: {
+    green:  '#4ade80',
+    red:    '#f87171',
+    yellow: '#fbbf24',
+  },
+  // Borders
   border: {
-    subtle: 'rgba(255,255,255,0.1)',
-    visible: 'rgba(255,255,255,0.2)',
-    active: '#ffffff',
+    faint:   'rgba(255,255,255,0.05)',
+    subtle:  'rgba(255,255,255,0.09)',
+    visible: 'rgba(255,255,255,0.16)',
+    amber:   'rgba(245,158,11,0.3)',
   },
 } as const;
 
 export const typography = {
+  font: {
+    sans:    '"DM Sans", ui-sans-serif, system-ui, sans-serif',
+    display: '"Syne", ui-sans-serif, system-ui, sans-serif',
+    mono:    '"JetBrains Mono", ui-monospace, SFMono-Regular, monospace',
+  },
   size: {
-    label: '8px',
-    ui: '10px',
-    body: '12px',
+    label:  '9px',
+    ui:     '11px',
+    body:   '13px',
     editor: '13px',
   },
   tracking: {
-    widest: '0.2em',
+    widest: '0.18em',
+    wide:   '0.1em',
   },
 } as const;
 
 export const spacing = {
-  activityBar: 56,
-  sidebar: 280,
-  chatPanel: 380,
-  statusBar: 24,
-  terminalPanel: 176,
+  activityBar: 48,
+  sidebar:     260,
+  chatPanel:   360,
+  statusBar:   28,
 } as const;
 
 export const motion = {
   duration: {
-    instant: 0.12,
-    fast: 0.24,
-    base: 0.36,
-    slow: 0.6,
-    cinematic: 1.2,
+    instant:   0.1,
+    fast:      0.2,
+    base:      0.32,
+    slow:      0.55,
+    cinematic: 1.1,
   },
   ease: {
     standard: [0.22, 1, 0.36, 1] as const,
-    entrance: [0.16, 1, 0.3, 1] as const,
-    exit: [0.7, 0, 0.84, 0] as const,
-    spring: { type: 'spring' as const, stiffness: 260, damping: 28 },
+    entrance: [0.16, 1, 0.3, 1]  as const,
+    exit:     [0.7, 0, 0.84, 0]  as const,
+    spring:   { type: 'spring' as const, stiffness: 280, damping: 30 },
   },
 } as const;

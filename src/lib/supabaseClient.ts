@@ -47,6 +47,9 @@ export interface Task {
   due_date?: string;
   created_at?: string;
   updated_at?: string;
+  url?: string | null;
+  original_zip_path?: string | null;
+  patched_zip_path?: string | null;
 }
 
 export interface ProjectFile {

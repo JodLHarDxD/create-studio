@@ -36,118 +36,150 @@ export default function Profile() {
     } finally { setIsSaving(false); }
   };
 
-  const displayEmail = profile?.email || 'unknown@kinetix.os';
+  const displayEmail = profile?.email || 'unknown@creat.studio';
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%', background: 'transparent', outline: 'none',
+    borderBottom: '1px solid rgba(255,255,255,0.1)', padding: '8px 0',
+    color: '#f7f3ee', fontFamily: '"DM Sans", sans-serif',
+  };
 
   return (
-    <div className="flex-1 overflow-auto bg-[#0a0a0a] p-12 custom-scrollbar pb-12">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-start gap-8 border-b border-white/10 pb-12 mb-12">
-          <div className="w-28 h-28 bg-white/5 border border-white/20 flex items-center justify-center shrink-0">
-            <User size={44} className="opacity-20" />
+    <div className="flex-1 overflow-auto custom-scrollbar pb-12" style={{ background: '#0a0a0a' }}>
+      <div className="max-w-4xl mx-auto p-10">
+
+        {/* Header row */}
+        <div className="flex items-start gap-8 pb-12 mb-12" style={{ borderBottom: '1px solid var(--border-1)' }}>
+
+          {/* Avatar */}
+          <div className="w-24 h-24 flex items-center justify-center shrink-0"
+            style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderTop: '2px solid rgba(245,158,11,0.4)' }}>
+            <User size={36} style={{ color: '#f59e0b', opacity: 0.4 }} />
           </div>
+
+          {/* Info / edit form */}
           <div className="flex-1 min-w-0">
             {isEditing ? (
-              <div className="space-y-4">
-                <div>
-                  <label className="text-[8px] font-black uppercase tracking-widest opacity-40 block mb-1">Name</label>
-                  <input value={form.full_name} onChange={e => setForm(p => ({ ...p, full_name: e.target.value }))}
-                    className="w-full bg-black border border-white/20 p-2 text-xl font-black uppercase tracking-tighter outline-none focus:border-white" />
-                </div>
-                <div>
-                  <label className="text-[8px] font-black uppercase tracking-widest opacity-40 block mb-1">Bio</label>
-                  <textarea value={form.bio} onChange={e => setForm(p => ({ ...p, bio: e.target.value }))} rows={3}
-                    className="w-full bg-black border border-white/20 p-3 text-sm font-mono outline-none focus:border-white resize-none custom-scrollbar" />
-                </div>
-                <div>
-                  <label className="text-[8px] font-black uppercase tracking-widest opacity-40 block mb-1">GitHub URL</label>
-                  <input value={form.github_url} onChange={e => setForm(p => ({ ...p, github_url: e.target.value }))}
-                    placeholder="https://github.com/..."
-                    className="w-full bg-black border border-white/20 p-2 text-xs outline-none focus:border-white" />
-                </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                {[
+                  { label: 'Name', key: 'full_name' as const, type: 'input', style: { fontSize: 20, fontFamily: '"Syne", sans-serif', fontWeight: 800, letterSpacing: '-0.02em' } },
+                  { label: 'Bio', key: 'bio' as const, type: 'textarea' },
+                  { label: 'GitHub URL', key: 'github_url' as const, type: 'input', placeholder: 'https://github.com/…' },
+                ].map(({ label, key, type, style: extraStyle, placeholder }) => (
+                  <div key={key}>
+                    <label style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#5e5855', display: 'block', marginBottom: 6 }}>{label}</label>
+                    {type === 'textarea'
+                      ? <textarea value={form[key]} onChange={e => setForm(p => ({ ...p, [key]: e.target.value }))} rows={3}
+                          className="w-full outline-none resize-none custom-scrollbar" style={{ ...inputStyle, fontSize: 12, fontFamily: '"JetBrains Mono", monospace' }} />
+                      : <input value={form[key]} onChange={e => setForm(p => ({ ...p, [key]: e.target.value }))} placeholder={placeholder}
+                          style={{ ...inputStyle, fontSize: 13, ...extraStyle }} />
+                    }
+                  </div>
+                ))}
               </div>
             ) : (
               <>
-                <h1 className="text-4xl font-black uppercase tracking-tighter mb-3">{form.full_name || 'Operative'}</h1>
-                <div className="flex gap-3 items-center mb-4 text-[9px] uppercase tracking-widest font-bold opacity-60 flex-wrap">
-                  <span className="flex items-center gap-1 border border-white/20 px-2 py-1"><Activity size={11} /> {userRole}</span>
-                  <span className="flex items-center gap-1 border border-white/20 px-2 py-1">{displayEmail}</span>
+                <h1 style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 36, letterSpacing: '-0.025em', lineHeight: 1, color: '#f7f3ee', marginBottom: 16 }}>
+                  {form.full_name || 'Operative'}
+                </h1>
+                <div className="flex gap-2 items-center flex-wrap" style={{ marginBottom: 16 }}>
+                  {[
+                    { content: <><Activity size={10} /> {userRole}</>, amber: true },
+                    { content: displayEmail },
+                  ].map((badge, i) => (
+                    <span key={i} className="flex items-center gap-1"
+                      style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em', padding: '3px 8px',
+                        border: badge.amber ? '1px solid rgba(245,158,11,0.3)' : '1px solid var(--border-2)',
+                        color: badge.amber ? '#f59e0b' : '#5e5855',
+                        background: badge.amber ? 'rgba(245,158,11,0.06)' : 'transparent' }}>
+                      {badge.content}
+                    </span>
+                  ))}
                   {form.github_url && (
                     <a href={form.github_url} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1 border border-white/20 px-2 py-1 hover:bg-white/10 transition-colors">
-                      <Github size={11} /> GitHub
+                      className="flex items-center gap-1 transition-colors"
+                      style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em', padding: '3px 8px', border: '1px solid var(--border-2)', color: '#5e5855' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#f7f3ee'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-3)'; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#5e5855'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-2)'; }}>
+                      <Github size={10} /> GitHub
                     </a>
                   )}
                 </div>
-                {form.bio && <p className="opacity-60 text-sm font-mono max-w-2xl whitespace-pre-wrap">{form.bio}</p>}
+                {form.bio && <p style={{ fontSize: 12, fontFamily: '"JetBrains Mono", monospace', color: '#5e5855', lineHeight: 1.7, maxWidth: 560, whiteSpace: 'pre-wrap' }}>{form.bio}</p>}
               </>
             )}
           </div>
-          <div className="text-right flex flex-col items-end gap-6 shrink-0">
-            <div>
-              <div className="text-[9px] uppercase font-black tracking-widest opacity-40 mb-1">Tasks Done</div>
-              <div className="text-5xl font-black italic tracking-tighter">{completedTasks}</div>
+
+          {/* Stats + actions */}
+          <div className="flex flex-col items-end gap-6 shrink-0">
+            <div className="text-right">
+              <div style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#5e5855', marginBottom: 4 }}>Tasks Done</div>
+              <div style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 48, lineHeight: 1, letterSpacing: '-0.02em', color: '#f59e0b' }}>{completedTasks}</div>
             </div>
             <div className="flex gap-2">
               {isEditing ? (
                 <>
                   <button onClick={() => setIsEditing(false)} disabled={isSaving}
-                    className="flex items-center gap-1.5 border border-white/10 px-3 py-2 text-[9px] font-black uppercase tracking-widest hover:bg-white/5 text-white/50">
-                    <X size={12} /> Cancel
+                    className="flex items-center gap-1.5 px-3 py-2 transition-all"
+                    style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', border: '1px solid var(--border-2)', color: '#5e5855' }}>
+                    <X size={11} /> Cancel
                   </button>
                   <button onClick={handleSave} disabled={isSaving}
-                    className="flex items-center gap-1.5 bg-white text-black px-4 py-2 text-[9px] font-black uppercase tracking-widest hover:bg-white/90 disabled:opacity-50">
-                    {isSaving ? <Loader2 size={12} className="animate-spin" /> : <Save size={12} />} Save
+                    className="flex items-center gap-1.5 px-4 py-2 transition-all"
+                    style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', background: '#f59e0b', color: '#000', opacity: isSaving ? 0.6 : 1 }}>
+                    {isSaving ? <Loader2 size={11} className="animate-spin" /> : <Save size={11} />} Save
                   </button>
                 </>
               ) : (
                 <button onClick={() => setIsEditing(true)}
-                  className="flex items-center gap-1.5 border border-white px-3 py-2 text-[9px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all">
-                  <Edit3 size={12} /> Edit
+                  className="flex items-center gap-1.5 px-3 py-2 transition-all"
+                  style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', border: '1px solid rgba(245,158,11,0.3)', color: '#f59e0b' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(245,158,11,0.08)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
+                  <Edit3 size={11} /> Edit
                 </button>
               )}
             </div>
           </div>
         </div>
 
+        {/* Content grid */}
         <div className="grid grid-cols-3 gap-8">
           <div className="col-span-2">
-            <h2 className="text-[11px] font-black uppercase tracking-widest mb-4 flex items-center gap-2">
-              <Trophy size={13} /> Recent Activity
-            </h2>
-            <div className="border border-white/10 bg-black divide-y divide-white/5">
+            <div className="flex items-center gap-2 mb-5">
+              <Trophy size={12} style={{ color: '#f59e0b', opacity: 0.6 }} />
+              <span style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#5e5855' }}>Recent Activity</span>
+            </div>
+            <div style={{ border: '1px solid var(--border-1)', background: '#000' }}>
               {myTasks.filter(t => t.status === 'DONE').map(t => (
-                <div key={t.id} className="p-4 flex items-start gap-3">
-                  <CheckCircle2 size={14} className="text-green-400 mt-0.5 shrink-0" />
+                <div key={t.id} className="flex items-start gap-3 p-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                  <CheckCircle2 size={13} style={{ color: '#4ade80', marginTop: 1, flexShrink: 0 }} />
                   <div>
-                    <div className="font-bold text-[11px] uppercase tracking-wider">{t.title}</div>
-                    {t.description && <div className="text-[10px] opacity-40 mt-0.5">{t.description}</div>}
+                    <div style={{ fontSize: 11, fontFamily: '"DM Sans", sans-serif', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#f7f3ee' }}>{t.title}</div>
+                    {t.description && <div style={{ fontSize: 10, color: '#3a3836', marginTop: 2 }}>{t.description}</div>}
                   </div>
                 </div>
               ))}
               {completedTasks === 0 && (
-                <div className="p-8 text-center text-[10px] uppercase font-bold tracking-widest opacity-30">No completed tasks yet.</div>
+                <div style={{ padding: '32px', textAlign: 'center', fontSize: 10, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#3a3836' }}>No completed tasks yet.</div>
               )}
             </div>
           </div>
+
           <div>
-            <h2 className="text-[11px] font-black uppercase tracking-widest mb-4">Details</h2>
-            <div className="border border-white/10 bg-black p-5 space-y-4">
-              <div>
-                <div className="text-[8px] uppercase font-bold opacity-40 mb-1">User ID</div>
-                <div className="font-mono text-[9px] break-all opacity-60">{currentUserId}</div>
-              </div>
-              <div>
-                <div className="text-[8px] uppercase font-bold opacity-40 mb-1">Role</div>
-                <div className="font-mono text-[10px] font-black">{userRole}</div>
-              </div>
-              <div>
-                <div className="text-[8px] uppercase font-bold opacity-40 mb-1">Tasks Assigned</div>
-                <div className="font-mono text-[10px]">{myTasks.length}</div>
-              </div>
-              <div>
-                <div className="text-[8px] uppercase font-bold opacity-40 mb-1">Completion Rate</div>
-                <div className="font-mono text-[10px]">{myTasks.length > 0 ? Math.round((completedTasks / myTasks.length) * 100) : 0}%</div>
-              </div>
+            <div style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#5e5855', marginBottom: 20 }}>Details</div>
+            <div style={{ border: '1px solid var(--border-1)', background: '#000', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {[
+                { label: 'User ID', value: currentUserId, mono: true, truncate: true },
+                { label: 'Role', value: userRole, mono: true, amber: true },
+                { label: 'Tasks Assigned', value: String(myTasks.length), mono: true },
+                { label: 'Completion Rate', value: `${myTasks.length > 0 ? Math.round((completedTasks / myTasks.length) * 100) : 0}%`, mono: true },
+              ].map(({ label, value, mono, truncate, amber }) => (
+                <div key={label}>
+                  <div style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#3a3836', marginBottom: 4 }}>{label}</div>
+                  <div className={truncate ? 'truncate' : ''} style={{ fontSize: truncate ? 9 : 11, fontFamily: mono ? '"JetBrains Mono", monospace' : '"DM Sans", sans-serif', color: amber ? '#f59e0b' : '#a09590', fontWeight: amber ? 700 : 400 }}>{value}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

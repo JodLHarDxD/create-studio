@@ -85,21 +85,23 @@ function LocalFileViewer({ file, onClose }: { file: LocalFileView; onClose: () =
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#1e1e1e]">
       {/* Tab bar */}
-      <div className="h-9 bg-[#252526] flex items-center shrink-0 border-b border-[#1e1e1e]">
-        <div className="h-full px-4 bg-[#1e1e1e] flex items-center gap-2 text-[13px] text-[#cccccc] border-t-2 border-[#007acc]">
-          <span className="truncate max-w-[200px]">{name}</span>
-          <button onClick={onClose} className="opacity-40 hover:opacity-100 hover:bg-[#333333] rounded p-0.5">
-            <X size={13} />
+      <div className="h-9 flex items-center shrink-0" style={{ background: '#252526', borderBottom: '1px solid #1e1e1e' }}>
+        <div className="h-full px-4 flex items-center gap-2 bg-[#1e1e1e]" style={{ borderTop: '2px solid #f59e0b' }}>
+          <span className="truncate max-w-[200px]" style={{ fontSize: 12, color: '#f7f3ee', fontFamily: '"DM Sans", sans-serif' }}>{name}</span>
+          <button onClick={onClose} className="p-0.5 transition-opacity" style={{ opacity: 0.3, color: '#f7f3ee' }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '0.3')}>
+            <X size={12} />
           </button>
         </div>
-        <span className="ml-auto px-4 text-[9px] font-mono text-[#858585] uppercase tracking-widest">
+        <span className="ml-auto px-4" style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#5e5855', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
           {lang} · LOCAL
         </span>
       </div>
 
       {/* Breadcrumb */}
-      <div className="h-6 flex items-center px-4 bg-[#1e1e1e] text-[#cccccc] text-[11px] shrink-0 border-b border-[#252526]">
-        <span className="opacity-40 truncate">{path}</span>
+      <div className="h-6 flex items-center px-4 shrink-0" style={{ background: '#1e1e1e', borderBottom: '1px solid #252526', fontSize: 11, fontFamily: '"JetBrains Mono", monospace', color: '#5e5855' }}>
+        <span className="truncate">{path}</span>
       </div>
 
       {renderContent()}
@@ -181,11 +183,11 @@ export default function EditorPanel() {
 
   if (!activeFile) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-[#1e1e1e] text-[#858585]">
-        <div className="text-center space-y-4">
-          <div className="text-[60px] font-black tracking-tighter opacity-5 leading-none">AI</div>
-          <div className="text-[11px] uppercase tracking-widest font-bold">Open a folder or select a file</div>
-          <div className="text-[10px] opacity-40">Use the explorer to browse local files or cloud files</div>
+      <div className="flex-1 flex items-center justify-center bg-[#1e1e1e]">
+        <div className="text-center" style={{ userSelect: 'none' }}>
+          <div style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 80, letterSpacing: '-0.04em', lineHeight: 1, color: '#f7f3ee', opacity: 0.04, marginBottom: 20 }}>CS</div>
+          <div style={{ fontSize: 11, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#3a3836', marginBottom: 6 }}>Open a folder or select a file</div>
+          <div style={{ fontSize: 10, fontFamily: '"JetBrains Mono", monospace', color: '#3a3836', opacity: 0.5 }}>Use the explorer to browse local or cloud files</div>
         </div>
       </div>
     );
@@ -203,24 +205,26 @@ export default function EditorPanel() {
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#1e1e1e]">
       {/* Tab bar */}
-      <div className="h-9 bg-[#252526] flex items-center shrink-0 border-b border-[#1e1e1e]">
-        <div className="h-full px-4 bg-[#1e1e1e] flex items-center gap-2 text-[13px] text-[#cccccc] border-t-2 border-[#007acc]">
-          <span className={`truncate max-w-[180px] ${isDirty ? 'italic' : ''}`}>{activeFile.file_name}{isDirty ? ' ●' : ''}</span>
-          <button className="opacity-0 hover:opacity-100 hover:bg-[#333333] rounded p-0.5"><X size={13} /></button>
+      <div className="h-9 flex items-center shrink-0" style={{ background: '#252526', borderBottom: '1px solid #1e1e1e' }}>
+        <div className="h-full px-4 flex items-center gap-2 bg-[#1e1e1e]" style={{ borderTop: '2px solid #f59e0b' }}>
+          <span className="truncate max-w-[180px]" style={{ fontSize: 12, color: '#f7f3ee', fontFamily: '"DM Sans", sans-serif', fontStyle: isDirty ? 'italic' : 'normal' }}>
+            {activeFile.file_name}{isDirty ? ' ●' : ''}
+          </span>
         </div>
         <div className="ml-auto px-4 flex items-center gap-3">
-          <span className="text-[9px] uppercase font-mono text-[#858585]">{lang}</span>
+          <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#5e5855', textTransform: 'uppercase', letterSpacing: '0.12em' }}>{lang}</span>
           <button onClick={handleSave} disabled={saving}
-            className="flex items-center gap-1.5 text-[#cccccc] hover:text-white p-1 rounded hover:bg-[#333333] text-[10px] uppercase tracking-widest font-bold disabled:opacity-40">
-            {saving ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
-            {!saving && <span className="hidden sm:inline">Save</span>}
+            className="flex items-center gap-1.5 transition-all"
+            style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: isDirty ? '#f59e0b' : '#5e5855', padding: '3px 8px', border: `1px solid ${isDirty ? 'rgba(245,158,11,0.3)' : 'transparent'}`, opacity: saving ? 0.5 : 1 }}>
+            {saving ? <Loader2 size={11} className="animate-spin" /> : <Save size={11} />}
+            <span className="hidden sm:inline">Save</span>
           </button>
         </div>
       </div>
 
       {/* Breadcrumb */}
-      <div className="h-6 flex items-center px-4 bg-[#1e1e1e] text-[#cccccc] text-[11px] shrink-0 border-b border-[#252526]">
-        <span className="opacity-50">{activeProject?.name} › {activeFile.path || activeFile.file_name}</span>
+      <div className="h-6 flex items-center px-4 shrink-0" style={{ background: '#1e1e1e', borderBottom: '1px solid #252526', fontSize: 11, fontFamily: '"JetBrains Mono", monospace', color: '#5e5855' }}>
+        <span className="truncate">{activeProject?.name} › {activeFile.path || activeFile.file_name}</span>
       </div>
 
       {/* Monaco */}

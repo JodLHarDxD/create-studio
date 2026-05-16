@@ -4,15 +4,43 @@ import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { cn } from '@/lib/utils';
 import { AlertTriangle, CheckCircle, Clock, Users } from 'lucide-react';
 
-function StatCard({ label, value, sub, icon: Icon, accent }: any) {
+function StatCard({ label, value, sub, icon: Icon, accent, amber }: any) {
   return (
-    <div className="bg-black border border-white/10 p-6 relative group hover:border-white/20 transition-colors">
-      <div className="flex items-start justify-between mb-4">
-        <div className="text-[9px] font-black uppercase tracking-[0.25em] opacity-40">{label}</div>
-        {Icon && <Icon size={14} className="opacity-20" />}
+    <div
+      className="relative group p-6 transition-all duration-200"
+      style={{
+        background: amber ? 'linear-gradient(135deg, rgba(245,158,11,0.06) 0%, rgba(245,158,11,0.02) 100%)' : '#090909',
+        border: `1px solid ${amber ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.07)'}`,
+        borderTop: amber ? '2px solid rgba(245,158,11,0.5)' : undefined,
+      }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = amber ? 'rgba(245,158,11,0.4)' : 'rgba(255,255,255,0.14)'; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = amber ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.07)'; }}
+    >
+      <div className="flex items-start justify-between mb-5">
+        <div style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', color: amber ? '#f59e0b' : '#5e5855', textTransform: 'uppercase' }}>
+          {label}
+        </div>
+        {Icon && <Icon size={13} style={{ opacity: amber ? 0.5 : 0.18, color: amber ? '#f59e0b' : undefined }} />}
       </div>
-      <div className={cn("text-4xl font-black italic tracking-tighter mb-1", accent || "")}>{value}</div>
-      {sub && <div className="text-[9px] opacity-30 uppercase tracking-widest">{sub}</div>}
+      <div
+        style={{
+          fontFamily: '"Syne", sans-serif',
+          fontWeight: 800,
+          fontSize: 42,
+          lineHeight: 1,
+          letterSpacing: '-0.02em',
+          marginBottom: 6,
+          color: amber ? '#f59e0b' : '#f7f3ee',
+        }}
+        className={cn(accent || '')}
+      >
+        {value}
+      </div>
+      {sub && (
+        <div style={{ fontSize: 10, color: '#3a3836', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: '"JetBrains Mono", monospace' }}>
+          {sub}
+        </div>
+      )}
     </div>
   );
 }
@@ -50,22 +78,31 @@ export default function Dashboard() {
     <div className="flex-1 overflow-y-auto bg-[#0a0a0a] custom-scrollbar pb-12">
       <div className="max-w-6xl mx-auto p-10">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-10">
-          <span className="px-3 py-1 bg-white text-black text-[9px] font-black uppercase tracking-[0.25em]">Live Analytics</span>
-          <span className="text-[9px] uppercase tracking-widest opacity-30 font-bold">Role: {userRole}</span>
+        <div className="flex items-center gap-5 mb-10">
+          <div>
+            <h1 style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 28, letterSpacing: '-0.02em', color: '#f7f3ee', lineHeight: 1 }}>
+              Analytics
+            </h1>
+            <div style={{ fontSize: 10, color: '#5e5855', letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: '"JetBrains Mono", monospace', marginTop: 4 }}>
+              {userRole} · Live
+            </div>
+          </div>
           {overdue.length > 0 && (
-            <div className="ml-auto flex items-center gap-2 text-red-400 text-[10px] font-black uppercase tracking-widest">
-              <AlertTriangle size={13} />
+            <div
+              className="ml-auto flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5"
+              style={{ color: '#f87171', border: '1px solid rgba(248,113,113,0.25)', background: 'rgba(248,113,113,0.06)', fontFamily: '"Syne", sans-serif' }}
+            >
+              <AlertTriangle size={11} />
               {overdue.length} overdue
             </div>
           )}
         </div>
 
         {/* Stats row */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/5 border border-white/10 mb-8">
-          <StatCard label="Total Tasks" value={visibleTasks.length} icon={Clock} />
-          <StatCard label="Completed" value={done.length} accent="text-green-400" icon={CheckCircle} />
-          <StatCard label="In Progress" value={inProgress.length} accent="text-blue-400" icon={Clock} />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+          <StatCard label="Total Tasks" value={visibleTasks.length} icon={Clock} amber />
+          <StatCard label="Completed" value={done.length} icon={CheckCircle} accent="text-green-400" />
+          <StatCard label="In Progress" value={inProgress.length} icon={Clock} accent="text-blue-400" />
           <StatCard label="Efficiency" value={`${efficiency}%`} icon={Users} accent={efficiency > 70 ? 'text-green-400' : efficiency > 40 ? 'text-yellow-400' : 'text-red-400'} />
         </div>
 
@@ -74,24 +111,24 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-white/5 border border-white/10 mb-8">
             {/* Pie */}
             <div className="bg-black p-8">
-              <div className="text-[9px] font-black uppercase tracking-[0.25em] opacity-40 mb-6">Throughput Velocity</div>
+              <div style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', color: '#5e5855', textTransform: 'uppercase', marginBottom: 24 }}>Throughput Velocity</div>
               <div className="h-56">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={pieData} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={2} dataKey="value" stroke="none">
-                      <Cell fill="#ffffff" />
-                      <Cell fill="#3b82f6" />
-                      <Cell fill="rgba(255,255,255,0.1)" />
+                    <Pie data={pieData} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={3} dataKey="value" stroke="none">
+                      <Cell fill="#f59e0b" />
+                      <Cell fill="#4f8ef7" />
+                      <Cell fill="rgba(255,255,255,0.07)" />
                     </Pie>
-                    <Tooltip contentStyle={{ backgroundColor: '#000', border: '1px solid rgba(255,255,255,0.15)', fontSize: '10px' }} />
+                    <Tooltip contentStyle={{ backgroundColor: '#0a0a0a', border: '1px solid rgba(245,158,11,0.2)', fontSize: '10px', fontFamily: '"JetBrains Mono", monospace', color: '#f7f3ee' }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <div className="flex gap-4 mt-4">
+              <div className="flex gap-5 mt-4">
                 {pieData.map((d, i) => (
                   <div key={d.name} className="flex items-center gap-1.5">
-                    <div className="w-2 h-2 rounded-full" style={{ background: ['#fff', '#3b82f6', 'rgba(255,255,255,0.15)'][i] }} />
-                    <span className="text-[9px] uppercase opacity-50">{d.name} {d.value}</span>
+                    <div className="w-1.5 h-1.5 rounded-full" style={{ background: ['#f59e0b', '#4f8ef7', 'rgba(255,255,255,0.12)'][i] }} />
+                    <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#5e5855', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{d.name} <span style={{ color: '#a09590' }}>{d.value}</span></span>
                   </div>
                 ))}
               </div>
@@ -99,21 +136,21 @@ export default function Dashboard() {
 
             {/* Bar - user load */}
             <div className="bg-black p-8">
-              <div className="text-[9px] font-black uppercase tracking-[0.25em] opacity-40 mb-6">Load Distribution</div>
+              <div style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', color: '#5e5855', textTransform: 'uppercase', marginBottom: 24 }}>Load Distribution</div>
               <div className="h-56">
                 {userLoad.length > 0 ? (
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={userLoad} barGap={2}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                      <XAxis dataKey="name" tick={{ fontSize: 9, fill: '#666' }} tickFormatter={value => String(value).toUpperCase()} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fontSize: 9, fill: '#666' }} axisLine={false} tickLine={false} />
-                      <Tooltip contentStyle={{ backgroundColor: '#000', border: '1px solid rgba(255,255,255,0.15)', fontSize: '10px' }} />
-                      <Bar dataKey="total" name="Total" fill="rgba(255,255,255,0.15)" radius={[2, 2, 0, 0]} />
-                      <Bar dataKey="done" name="Done" fill="white" radius={[2, 2, 0, 0]} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+                      <XAxis dataKey="name" tick={{ fontSize: 9, fill: '#5e5855', fontFamily: '"JetBrains Mono", monospace' }} tickFormatter={value => String(value).toUpperCase()} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fontSize: 9, fill: '#5e5855', fontFamily: '"JetBrains Mono", monospace' }} axisLine={false} tickLine={false} />
+                      <Tooltip contentStyle={{ backgroundColor: '#0a0a0a', border: '1px solid rgba(245,158,11,0.2)', fontSize: '10px', fontFamily: '"JetBrains Mono", monospace', color: '#f7f3ee' }} />
+                      <Bar dataKey="total" name="Total" fill="rgba(245,158,11,0.15)" radius={[2, 2, 0, 0]} />
+                      <Bar dataKey="done" name="Done" fill="#f59e0b" radius={[2, 2, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
-                  <div className="h-full flex items-center justify-center text-[10px] opacity-20 uppercase">No assignment data</div>
+                  <div className="h-full flex items-center justify-center" style={{ fontSize: 10, color: '#3a3836', textTransform: 'uppercase', letterSpacing: '0.15em', fontFamily: '"JetBrains Mono", monospace' }}>No assignment data</div>
                 )}
               </div>
             </div>

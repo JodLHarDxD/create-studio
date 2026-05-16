@@ -156,43 +156,49 @@ export default function ChatPanel() {
   }, {} as Record<string, AIModel[]>);
 
   return (
-    <div className="flex flex-col h-full bg-black relative">
+    <div className="flex flex-col h-full relative" style={{ background: '#080808' }}>
       {/* Header */}
-      <div className="p-4 border-b border-white/10 flex items-center justify-between bg-black shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center">
-            <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+      <div className="px-4 py-3 flex items-center justify-between shrink-0" style={{ borderBottom: '1px solid var(--border-1)', background: '#030303' }}>
+        <div className="flex items-center gap-2.5">
+          <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ border: '1px solid rgba(245,158,11,0.3)', background: 'rgba(245,158,11,0.06)' }}>
+            <div className="w-1.5 h-1.5 rounded-full amber-pulse" style={{ background: '#f59e0b' }} />
           </div>
-          <span className="text-[9px] font-black uppercase tracking-[0.2em]">AI Cortex</span>
+          <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 700, fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#f7f3ee' }}>AI Cortex</span>
         </div>
         <div className="flex items-center gap-2">
-          {/* Model Selector — free-will switching like Claude.ai */}
+          {/* Model Selector */}
           <div className="relative">
             <button onClick={() => setModelDropOpen(p => !p)}
-              className="flex items-center gap-2 border border-white/10 px-2 py-1.5 text-[8px] font-black uppercase tracking-wider hover:bg-white/5 transition-all">
+              className="flex items-center gap-1.5 px-2 py-1 transition-all"
+              style={{ border: '1px solid var(--border-1)', fontSize: 8, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#a09590' }}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(245,158,11,0.3)')}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border-1)')}>
               <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: PROVIDER_COLORS[selectedModelObj?.provider || 'google'] }} />
-              <span className="max-w-[100px] truncate">{selectedModelObj?.displayName || selectedModel}</span>
-              <ChevronDown size={10} />
+              <span className="max-w-[90px] truncate">{selectedModelObj?.displayName || selectedModel}</span>
+              <ChevronDown size={9} />
             </button>
 
             <AnimatePresence>
               {modelDropOpen && (
-                <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                  className="absolute right-0 top-full mt-1 w-[220px] bg-[#111] border border-white/10 z-50 shadow-2xl">
+                <motion.div initial={{ opacity: 0, y: -4, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute right-0 top-full mt-1 w-[220px] z-50"
+                  style={{ background: '#0a0a0a', border: '1px solid rgba(245,158,11,0.15)', boxShadow: '0 16px 32px rgba(0,0,0,0.8)' }}>
                   {Object.entries(modelsByProvider).map(([provider, models]) => (
                     <div key={provider}>
-                      <div className="px-3 py-1.5 text-[8px] font-black uppercase tracking-widest opacity-30 border-b border-white/5">
+                      <div className="px-3 py-1.5 border-b" style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#3a3836', borderColor: 'var(--border-1)' }}>
                         {PROVIDER_LABELS[provider]}
                       </div>
                       {models.map(m => (
                         <button key={m.id} onClick={() => { setSelectedModel(m.id); setModelDropOpen(false); }}
-                          className={cn("w-full flex items-start gap-2 px-3 py-2 hover:bg-white/5 transition-all text-left", selectedModel === m.id && 'bg-white/10')}>
+                          className="w-full flex items-start gap-2 px-3 py-2 text-left transition-all"
+                          style={{ background: selectedModel === m.id ? 'rgba(245,158,11,0.06)' : 'transparent', borderLeft: selectedModel === m.id ? '2px solid #f59e0b' : '2px solid transparent' }}>
                           <div className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: PROVIDER_COLORS[provider] }} />
                           <div className="min-w-0">
-                            <div className="text-[10px] font-bold">{m.displayName}</div>
-                            <div className="text-[8px] opacity-40">{m.description}</div>
+                            <div style={{ fontSize: 10, fontWeight: 500, color: selectedModel === m.id ? '#f7f3ee' : '#a09590' }}>{m.displayName}</div>
+                            <div style={{ fontSize: 8, color: '#3a3836', marginTop: 1 }}>{m.description}</div>
                           </div>
-                          {selectedModel === m.id && <CheckCircle size={10} className="ml-auto shrink-0 mt-1 opacity-60" />}
+                          {selectedModel === m.id && <CheckCircle size={10} className="ml-auto shrink-0 mt-1" style={{ color: '#f59e0b', opacity: 0.7 }} />}
                         </button>
                       ))}
                     </div>
@@ -202,7 +208,9 @@ export default function ChatPanel() {
             </AnimatePresence>
           </div>
 
-          <button onClick={() => setSettingsOpen(true)} className="p-1.5 text-white/30 hover:text-white transition-colors">
+          <button onClick={() => setSettingsOpen(true)} className="p-1.5 transition-colors" style={{ color: '#3a3836' }}
+            onMouseEnter={e => (e.currentTarget.style.color = '#f59e0b')}
+            onMouseLeave={e => (e.currentTarget.style.color = '#3a3836')}>
             <Settings size={13} />
           </button>
         </div>
@@ -210,9 +218,9 @@ export default function ChatPanel() {
 
       {/* Context badges */}
       {(activeFile || activeTask) && (
-        <div className="flex gap-2 px-4 py-2 bg-white/3 border-b border-white/5 flex-wrap shrink-0">
-          {activeFile && <span className="text-[8px] border border-white/15 px-2 py-0.5 font-mono opacity-60">📄 {activeFile.file_name}</span>}
-          {activeTask && <span className="text-[8px] border border-blue-500/30 text-blue-400 px-2 py-0.5 font-mono opacity-80">🎯 {activeTask.title}</span>}
+        <div className="flex gap-1.5 px-4 py-2 flex-wrap shrink-0" style={{ borderBottom: '1px solid var(--border-1)', background: 'rgba(245,158,11,0.02)' }}>
+          {activeFile && <span style={{ fontSize: 8, fontFamily: '"JetBrains Mono", monospace', border: '1px solid var(--border-2)', color: '#5e5855', padding: '2px 6px' }}>📄 {activeFile.file_name}</span>}
+          {activeTask && <span style={{ fontSize: 8, fontFamily: '"JetBrains Mono", monospace', border: '1px solid rgba(79,142,247,0.25)', color: '#4f8ef7', padding: '2px 6px' }}>🎯 {activeTask.title}</span>}
         </div>
       )}
 
@@ -220,13 +228,17 @@ export default function ChatPanel() {
       <AnimatePresence>
         {settingsOpen && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="absolute inset-0 z-50 bg-[#0a0a0a] p-8 flex flex-col border-l border-white/10">
+            className="absolute inset-0 z-50 p-8 flex flex-col" style={{ background: '#080808', borderLeft: '1px solid var(--border-1)' }}>
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-[11px] font-black uppercase tracking-[0.3em]">API Keys & Config</h2>
-              <button onClick={() => setSettingsOpen(false)}><X size={18} className="opacity-40 hover:opacity-100" /></button>
+              <h2 style={{ fontFamily: '"Syne", sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#f7f3ee' }}>API Keys & Config</h2>
+              <button onClick={() => setSettingsOpen(false)} style={{ opacity: 0.3, color: '#f7f3ee' }}
+                onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+                onMouseLeave={e => (e.currentTarget.style.opacity = '0.3')}>
+                <X size={16} />
+              </button>
             </div>
             <div className="space-y-6 flex-1">
-              <div className="text-[8px] uppercase tracking-widest opacity-40 mb-4">Keys stored in localStorage — never sent to our server</div>
+              <div style={{ fontSize: 8, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3a3836', marginBottom: 16 }}>Keys stored in localStorage — never sent to our server</div>
 
               {[
                 { label: 'Anthropic API Key', key: 'anthropic' as const, placeholder: 'sk-ant-...' },
@@ -234,36 +246,40 @@ export default function ChatPanel() {
                 { label: 'Google (Gemini) API Key', key: 'google' as const, placeholder: 'AIza...' },
                 { label: 'Backend URL (optional)', key: 'baseUrl' as const, placeholder: 'https://your-backend.railway.app' },
               ].map(({ label, key, placeholder }) => (
-                <div key={key} className="relative">
-                  <label className="text-[8px] font-black tracking-widest uppercase opacity-40 block mb-2">{label}</label>
+                <div key={key}>
+                  <label style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#5e5855', display: 'block', marginBottom: 8 }}>{label}</label>
                   <input type={key === 'baseUrl' ? 'text' : 'password'} placeholder={placeholder}
                     value={keys[key]} onChange={e => setKeys(p => ({ ...p, [key]: e.target.value }))}
-                    className="w-full bg-transparent border-b border-white/20 py-2 text-xs font-mono focus:border-white focus:outline-none transition-colors" />
+                    className="w-full bg-transparent py-2 outline-none transition-colors"
+                    style={{ borderBottom: '1px solid rgba(255,255,255,0.12)', fontSize: 11, fontFamily: '"JetBrains Mono", monospace', color: '#f7f3ee' }} />
                 </div>
               ))}
             </div>
             <button onClick={saveSettings}
-              className="mt-6 w-full h-12 border border-white flex items-center justify-center text-[9px] font-black uppercase tracking-[0.4em] hover:bg-white hover:text-black transition-all gap-2">
-              {keySaved ? <><CheckCircle size={14} /> Saved</> : 'Save Configuration'}
+              className="mt-6 w-full h-11 flex items-center justify-center gap-2 transition-all"
+              style={{ border: '1px solid #f59e0b', color: keySaved ? '#000' : '#f59e0b', background: keySaved ? '#f59e0b' : 'transparent', fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase' }}>
+              {keySaved ? <><CheckCircle size={13} /> Saved</> : 'Save Configuration'}
             </button>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Messages */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto custom-scrollbar" style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 24 }}>
         {messages.map(msg => (
           <div key={msg.id} className={cn("flex flex-col gap-2 max-w-[92%]", msg.role === 'user' ? "ml-auto items-end" : "mr-auto items-start")}>
             {msg.role === 'assistant' && msg.model && (
               <div className="flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: PROVIDER_COLORS[msg.provider || 'google'] }} />
-                <span className="text-[7px] font-black uppercase tracking-widest opacity-30">
+                <span style={{ fontSize: 7, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#3a3836' }}>
                   {AI_MODELS.find(m => m.id === msg.model)?.displayName || msg.model}
                 </span>
               </div>
             )}
-            <div className={cn("text-[12px] leading-relaxed",
-              msg.role === 'user' ? "bg-white text-black px-4 py-2 font-bold" : "text-[#d4d4d4] font-medium")}>
+            <div className={cn("leading-relaxed", msg.role === 'user' ? "px-4 py-2" : "")}
+              style={msg.role === 'user'
+                ? { background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', borderTop: '2px solid #f59e0b', fontSize: 12, fontFamily: '"DM Sans", sans-serif', fontWeight: 500, color: '#f7f3ee' }
+                : { fontSize: 12, color: '#a09590', fontFamily: '"DM Sans", sans-serif' }}>
               {msg.role === 'assistant'
                 ? <div className="markdown-body prose prose-invert prose-sm max-w-none"><ReactMarkdown>{msg.content}</ReactMarkdown></div>
                 : <span>{msg.content}</span>}
@@ -271,32 +287,34 @@ export default function ChatPanel() {
             {msg.context && msg.context.length > 0 && (
               <div className="flex gap-1 flex-wrap">
                 {msg.context.map((c, i) => (
-                  <span key={i} className="text-[7px] border border-white/10 px-1.5 py-0.5 uppercase font-black opacity-30">{c}</span>
+                  <span key={i} style={{ fontSize: 7, fontFamily: '"JetBrains Mono", monospace', border: '1px solid var(--border-1)', color: '#3a3836', padding: '1px 5px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{c}</span>
                 ))}
               </div>
             )}
           </div>
         ))}
         {isTyping && (
-          <div className="flex gap-2 items-center px-1 text-[9px] font-black uppercase tracking-widest opacity-20">
+          <div className="flex gap-2 items-center">
             <div className="flex gap-1">
-              {[0,1,2].map(i => <div key={i} className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />)}
+              {[0,1,2].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: '#f59e0b', opacity: 0.5, animationDelay: `${i * 0.15}s` }} />)}
             </div>
-            <span>Processing...</span>
+            <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#3a3836' }}>Processing…</span>
           </div>
         )}
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-white/10 bg-black shrink-0">
+      <div className="shrink-0" style={{ padding: '12px 16px', borderTop: '1px solid var(--border-1)', background: '#030303' }}>
         <div className="flex flex-col gap-2">
           <textarea value={input} onChange={e => setInput(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-            placeholder="Ask anything... (Shift+Enter for newline)"
-            className="w-full bg-[#111] border border-white/10 focus:border-white/30 p-3 text-[11px] font-mono focus:outline-none resize-none min-h-[80px] transition-all placeholder:opacity-30" />
+            placeholder="Ask anything… (Shift+Enter for newline)"
+            className="w-full outline-none resize-none custom-scrollbar transition-all"
+            style={{ background: '#080808', border: '1px solid var(--border-1)', padding: '10px 12px', fontSize: 11, fontFamily: '"DM Sans", sans-serif', color: '#f7f3ee', minHeight: 72 }} />
           <button onClick={handleSend} disabled={isTyping || !input.trim()}
-            className="w-full h-10 bg-white text-black text-[9px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-2 hover:bg-white/90 transition-all disabled:opacity-20">
-            <Send size={12} /> Send Packet
+            className="w-full h-9 flex items-center justify-center gap-2 transition-all"
+            style={{ background: input.trim() && !isTyping ? '#f59e0b' : 'transparent', border: '1px solid rgba(245,158,11,0.3)', color: input.trim() && !isTyping ? '#000' : 'rgba(245,158,11,0.3)', fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase' }}>
+            <Send size={11} /> Send
           </button>
         </div>
       </div>
