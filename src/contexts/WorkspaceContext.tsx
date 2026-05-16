@@ -87,11 +87,13 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         setCurrentUserId(session.user.id);
-        const { data: prof } = await supabase.from('profiles').select('*').eq('id', session.user.id).single();
-        if (prof) { setProfile(prof); setUserRole(prof.role); setLoginState('logged_in'); }
+        setLoginState('logged_in');
+        supabase.from('profiles').select('*').eq('id', session.user.id).single().then(({ data: prof }) => {
+          if (prof) { setProfile(prof); setUserRole(prof.role); }
+        });
       }
     });
     return () => subscription.unsubscribe();

@@ -60,10 +60,13 @@ export default function Login() {
         const { data, error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
         if (signInErr) throw signInErr;
         if (data.user) {
-          const { data: prof } = await supabase.from('profiles').select('*').eq('id', data.user.id).single();
+          // Don't await profile fetch — it blocks indefinitely under some RLS configs.
+          // WorkspaceContext.onAuthStateChange loads the profile in parallel.
           setCurrentUserId(data.user.id);
-          if (prof) { setUserRole(prof.role); setProfile(prof); }
           setLoginState('logged_in');
+          supabase.from('profiles').select('*').eq('id', data.user.id).single().then(({ data: prof }) => {
+            if (prof) { setUserRole(prof.role); setProfile(prof); }
+          });
         }
       }
     } catch (err: any) {
