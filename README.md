@@ -1,12 +1,13 @@
-# TeamForge — AI Developer Workspace
+# CREATstudio — Developer Workspace
 
-A VSCode-style team task manager with context-aware AI assistant supporting multiple LLM providers.
+A precision-built developer workspace for teams that ship. Task management, live code review, and AI assistance — unified in a VSCode-style IDE with a cinematic dark design system.
 
 ## Stack
-- **Frontend**: React (Vite) + Tailwind + Monaco Editor
+- **Frontend**: React 18 + Vite + TypeScript + Tailwind v4 + Monaco Editor
 - **Backend**: FastAPI (Python)
 - **Database**: Supabase (PostgreSQL + pgvector + RLS)
 - **AI**: Claude (Anthropic) / GPT-4o (OpenAI) / Gemini (Google) — user-switchable
+- **Animations**: Motion (motion/react) — FLIP, view transitions, cinematic entrances
 
 ---
 
@@ -27,12 +28,13 @@ cd backend
 ```
 Start command: `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
 
-### 3. Frontend (Vercel or Railway)
+### 3. Frontend (Vercel)
 ```bash
 cp .env.example .env
 # Fill in: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, VITE_API_URL
 npm install
-npm run build
+npm run dev      # dev server on :5173
+npm run build    # production build → dist/
 ```
 
 ---
@@ -41,10 +43,10 @@ npm run build
 
 Users configure their API keys in **Settings** (gear icon in chat panel).
 
-Keys are stored in **localStorage only** — never sent to your server.
-Each request sends the key in the payload, used per-request, never persisted.
+Keys are stored in **localStorage only** — never sent to the server, never persisted server-side.
+Each request sends the key in the payload, used per-request and discarded.
 
-### Supported Models (free-will switching mid-conversation):
+### Supported Models (switch mid-conversation):
 
 | Provider | Models |
 |----------|--------|
@@ -58,17 +60,22 @@ Each request sends the key in the payload, used per-request, never persisted.
 
 | Role | Permissions |
 |------|-------------|
-| **ADMIN** | See all tasks, manage all tasks, assign/reassign, create files, view analytics |
-| **MEMBER** | See own tasks, update own task status, view editor, use AI chat |
+| **ADMIN** | See all tasks, manage all tasks, assign/reassign, create tasks, view analytics |
+| **MEMBER** | See own tasks, update own task status, use editor, use AI chat |
 
 ---
 
 ## Features
-- ✅ Monaco Editor (VSCode engine) with language detection
-- ✅ Real-time task & file updates via Supabase subscriptions  
-- ✅ Multi-model AI chat (Claude / GPT-4o / Gemini) — switch mid-conversation
-- ✅ RAG: file content embedded on save, queried on AI request  
-- ✅ Role-based access control (ADMIN / MEMBER)
-- ✅ Context-aware AI (knows open file + active task)
-- ✅ ZIP file upload → auto-extract to project files
-- ✅ Dashboard analytics with task distribution charts
+
+- **Design**: Obsidian dark palette · Syne + DM Sans + JetBrains Mono typography · amber `#f59e0b` accent
+- **Monaco Editor** (VSCode engine) with syntax highlighting for 20+ languages
+- **Real-time** task & file updates via Supabase subscriptions
+- **Multi-model AI chat** — switch between Claude / GPT-4o / Gemini mid-conversation
+- **RAG pipeline** — file content embedded on save, top-3 matches injected into AI context
+- **Command Palette** — `⌘K` fuzzy search across commands, files, and active tasks
+- **Live Diff Viewer** — compare original ZIP vs. member's live synced folder in real time
+- **Role-based access control** — enforced at both UI and database (RLS) layers
+- **Local folder sync** — open any local directory, link to a task, auto-upload changes
+- **Dashboard analytics** — task distribution charts, user load, overdue alerts (ADMIN)
+- **WebGL background** + SVG grain overlay on the cinematic login screen
+- **Guest / demo mode** — full ADMIN preview with no backend required
