@@ -84,6 +84,7 @@ export default function WebGLBackground() {
         camera={{ position: [0, 0, 1], zoom: 1 }}
         gl={{ antialias: false, powerPreference: 'low-power' }}
         dpr={[1, 1.5]}
+        style={{ pointerEvents: 'none' }}
         onCreated={({ gl }) => {
           gl.domElement.addEventListener('webglcontextlost', () => setContextLost(true));
         }}
