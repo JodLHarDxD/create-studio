@@ -56,7 +56,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
       <div className="relative z-10">
         {/* Background text — dim unfilled */}
-        <h1 className="text-[12vw] leading-none uppercase tracking-tighter text-[#151515] select-none">
+        <h1 className="text-[8vw] leading-none uppercase tracking-tighter text-[#151515] select-none">
           <span style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontWeight: 900 }}>CREAT</span>
           <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 900 }}>studio</span>
         </h1>
@@ -65,7 +65,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         <motion.div className="absolute inset-0 overflow-hidden" style={{ clipPath: maskPath }}>
           <div className="relative w-full h-full">
             <div className="absolute inset-0 flex">
-              <h1 className="text-[12vw] leading-none uppercase tracking-tighter">
+              <h1 className="text-[8vw] leading-none uppercase tracking-tighter">
                 <span className="font-serif italic font-black text-white">CREAT</span>
                 <span className="font-sans font-black text-orange-500">studio</span>
               </h1>
