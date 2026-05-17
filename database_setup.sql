@@ -145,6 +145,14 @@ CREATE POLICY "files_update" ON project_files FOR UPDATE USING (is_admin());
 DROP POLICY IF EXISTS "files_delete" ON project_files;
 CREATE POLICY "files_delete" ON project_files FOR DELETE USING (is_admin());
 
+-- ── Additional task columns (run once after initial setup) ───────────────────
+DO $$ BEGIN ALTER TABLE tasks ADD COLUMN priority TEXT DEFAULT 'MED'; EXCEPTION WHEN duplicate_column THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE tasks ADD COLUMN creator_id UUID REFERENCES profiles(id) ON DELETE SET NULL; EXCEPTION WHEN duplicate_column THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE tasks ADD COLUMN url TEXT; EXCEPTION WHEN duplicate_column THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE tasks ADD COLUMN original_zip_path TEXT; EXCEPTION WHEN duplicate_column THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE tasks ADD COLUMN patched_zip_path TEXT; EXCEPTION WHEN duplicate_column THEN NULL; END $$;
+DO $$ BEGIN ALTER TABLE tasks ADD COLUMN progress INTEGER DEFAULT 0; EXCEPTION WHEN duplicate_column THEN NULL; END $$;
+
 -- ── Indexes for performance ───────────────────────────────────────────────────
 CREATE INDEX IF NOT EXISTS idx_tasks_project ON tasks(project_id);
 CREATE INDEX IF NOT EXISTS idx_tasks_assignee ON tasks(assignee_id);

@@ -50,6 +50,7 @@ export interface Task {
   url?: string | null;
   original_zip_path?: string | null;
   patched_zip_path?: string | null;
+  progress?: number | null;
 }
 
 export interface ProjectFile {

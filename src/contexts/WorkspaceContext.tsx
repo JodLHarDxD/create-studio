@@ -123,7 +123,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (loginState === 'guest') {
       setProjects([DEMO_PROJECT]); setActiveProject(DEMO_PROJECT);
-      setFiles(DEMO_FILES); setActiveFile(DEMO_FILES[0]);
+      setFiles(DEMO_FILES);
       setTasks(DEMO_TASKS); setUsers(DEMO_USERS);
       setIsLoading(false); return;
     }
@@ -143,7 +143,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         setProjects(projectsData); setActiveProject(proj);
 
         const { data: filesData } = await supabase.from('project_files').select('*').eq('project_id', proj.id).order('path');
-        if (filesData) { setFiles(filesData); if (filesData.length > 0) setActiveFile(filesData[0]); }
+        if (filesData) setFiles(filesData);
 
         const { data: tasksData } = await supabase.from('tasks').select('*').eq('project_id', proj.id).order('created_at');
         if (tasksData) setTasks(tasksData);

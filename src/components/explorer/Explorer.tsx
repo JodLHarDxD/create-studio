@@ -186,6 +186,8 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
   const [syncing, setSyncing] = useState(false);
   const [syncStatus, setSyncStatus] = useState('');
   const [changedPaths, setChangedPaths] = useState<Set<string>>(new Set());
+  const [totalFiles, setTotalFiles] = useState(0);
+  const [folderError, setFolderError] = useState('');
   const lastModifiedMapRef = useRef<Map<string, number>>(new Map());
   const manifestRef = useRef<Record<string, string>>({});
   const isUploadingRef = useRef(false);
@@ -199,20 +201,46 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
     return true;
   });
 
-  // Task eligible for sync: IN_PROGRESS + has original ZIP
+  // Task eligible for sync: member's assigned task with a ZIP (TODO or IN_PROGRESS)
   const syncCandidateTask = useMemo(() => {
-    if (!localDirHandle || linkedTaskId) return null;
+    if (!localDirHandle || linkedTaskId || isAdmin) return null;
     return visibleTasks.find(t =>
-      t.status === 'IN_PROGRESS' && t.original_zip_path
+      (t.status === 'TODO' || t.status === 'IN_PROGRESS') &&
+      t.original_zip_path &&
+      t.assignee_id === currentUserId
     ) ?? null;
-  }, [localDirHandle, linkedTaskId, visibleTasks]);
+  }, [localDirHandle, linkedTaskId, isAdmin, visibleTasks, currentUserId]);
+
+  // Local progress for the currently linked task (reactive, no DB roundtrip)
+  const localProgress = useMemo(() => {
+    if (!linkedTaskId || totalFiles === 0) return 0;
+    return Math.round((changedPaths.size / totalFiles) * 100);
+  }, [linkedTaskId, totalFiles, changedPaths]);
 
   // ── Open local folder ──
   const openFolder = async () => {
+    if (!(window as any).showDirectoryPicker) {
+      setFolderError('Requires Chrome or Edge browser.');
+      return;
+    }
+    setFolderError('');
     try {
-      const handle = await (window as any).showDirectoryPicker({ mode: 'read' });
+      const handle = await (window as any).showDirectoryPicker({ mode: 'readwrite' });
+      // Reset all previous folder state before mounting the new one
+      if (localActiveFile?.objectUrl) URL.revokeObjectURL(localActiveFile.objectUrl);
+      setLocalActiveFile(null);
+      setLinkedTaskId(null);
+      setChangedPaths(new Set());
+      changedPathsRef.current = new Set();
+      lastModifiedMapRef.current = new Map();
+      manifestRef.current = {};
+      setTotalFiles(0);
       setLocalDirHandle(handle);
-    } catch { /* user cancelled */ }
+    } catch (err: any) {
+      if (err?.name !== 'AbortError') {
+        setFolderError('Could not open folder. Check browser permissions.');
+      }
+    }
   };
 
   const closeFolder = () => {
@@ -225,6 +253,8 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
     changedPathsRef.current = new Set();
     lastModifiedMapRef.current = new Map();
     manifestRef.current = {};
+    setTotalFiles(0);
+    setFolderError('');
   };
 
   // ── Link folder to task + initial manifest upload ──
@@ -263,12 +293,22 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
       );
       if (error) throw error;
 
+      const fileCount = Object.keys(manifest).length;
       lastModifiedMapRef.current = modMap;
       manifestRef.current = manifest;
       changedPathsRef.current = new Set();
       setChangedPaths(new Set());
+      setTotalFiles(fileCount);
       setLinkedTaskId(task.id);
-      setSyncStatus(`Synced · ${Object.keys(manifest).length} files`);
+      setSyncStatus(`Linked · ${fileCount} files`);
+
+      // Auto-mark as IN_PROGRESS when folder is first linked
+      if (task.status === 'TODO' && loginState !== 'guest') {
+        await supabase.from('tasks').update({ status: 'IN_PROGRESS', progress: 0 }).eq('id', task.id);
+        await refetchTasks();
+      } else if (loginState !== 'guest') {
+        await supabase.from('tasks').update({ progress: 0 }).eq('id', task.id).then(() => {});
+      }
     } catch (err: any) {
       alert(`Sync failed: ${err.message}`);
       setSyncStatus('');
@@ -322,12 +362,20 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
         manifestRef.current = manifest;
         changedPathsRef.current = newChanged;
         setChangedPaths(new Set(newChanged));
-        setSyncStatus(`Synced · ${newChanged.size} changed`);
+
+        // Compute progress and push to DB (non-blocking)
+        const total = Object.keys(manifest).length;
+        const progress = total > 0 ? Math.round((newChanged.size / total) * 100) : 0;
+        setTotalFiles(total);
+        if (loginState !== 'guest') {
+          supabase.from('tasks').update({ progress }).eq('id', taskId).then(() => {});
+        }
+        setSyncStatus(`Synced · ${newChanged.size}/${total} changed`);
       } finally {
         isUploadingRef.current = false;
       }
     }
-  }, [localDirHandle]);
+  }, [localDirHandle, loginState]);
 
   // ── Read directory & poll for changes ──
   const refreshTree = useCallback(async () => {
@@ -407,16 +455,23 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
       {/* ── Local Folder Section ── */}
       <div className="shrink-0" style={{ borderBottom: '1px solid var(--border-1)' }}>
         {!localDirHandle ? (
-          <button
-            onClick={openFolder}
-            className="w-full flex items-center gap-2 px-3 py-2 transition-colors"
-            style={{ color: '#3a3836', fontSize: 10, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}
-            onMouseEnter={e => (e.currentTarget.style.color = '#f59e0b')}
-            onMouseLeave={e => (e.currentTarget.style.color = '#3a3836')}
-          >
-            <FolderOpen size={12} />
-            Open Local Folder
-          </button>
+          <>
+            <button
+              onClick={openFolder}
+              className="w-full flex items-center gap-2 px-3 py-2 transition-colors"
+              style={{ color: '#3a3836', fontSize: 10, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#f59e0b')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#3a3836')}
+            >
+              <FolderOpen size={12} />
+              Open Local Folder
+            </button>
+            {folderError && (
+              <div className="px-3 pb-2" style={{ fontSize: 9, color: '#f87171', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.05em' }}>
+                {folderError}
+              </div>
+            )}
+          </>
         ) : (
           <>
             <div
@@ -446,13 +501,16 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
               </button>
             </div>
 
-            {/* Sync banner */}
+            {/* Sync banner — shown when member opens a folder and has a relevant task */}
             {!linkedTaskId && syncCandidateTask && (
               <div className="mx-2 mb-1.5 px-3 py-2 flex items-center gap-2" style={{ border: '1px solid rgba(245,158,11,0.2)', background: 'rgba(245,158,11,0.04)' }}>
                 <CloudUpload size={10} style={{ color: '#f59e0b', flexShrink: 0, opacity: 0.7 }} />
                 <div className="flex-1 min-w-0">
                   <div className="truncate" style={{ fontSize: 9, color: '#f59e0b', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.08em' }}>
                     {syncCandidateTask.title}
+                  </div>
+                  <div style={{ fontSize: 8, color: '#5e5855', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.06em', marginTop: 2 }}>
+                    {syncCandidateTask.status === 'TODO' ? 'link folder → starts task' : 'link folder → sync progress'}
                   </div>
                 </div>
                 <button
@@ -461,7 +519,7 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                   className="shrink-0 transition-all"
                   style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)', padding: '2px 8px' }}
                 >
-                  {syncing ? <Loader2 size={9} className="animate-spin" /> : 'Link'}
+                  {syncing ? <Loader2 size={9} className="animate-spin" /> : syncCandidateTask.status === 'TODO' ? 'Start' : 'Link'}
                 </button>
               </div>
             )}
@@ -595,6 +653,25 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                                   {assignee.full_name[0]}
                                 </div>
                                 <span style={{ fontSize: 9, color: '#3a3836', fontFamily: '"JetBrains Mono", monospace' }}>{assignee.full_name}</span>
+                              </div>
+                            )}
+
+                            {/* Progress bar — shown for IN_PROGRESS tasks with a ZIP attached */}
+                            {task.status === 'IN_PROGRESS' && task.original_zip_path && (
+                              <div className="flex items-center gap-2 mt-1.5">
+                                <div className="flex-1 overflow-hidden" style={{ height: 2, background: 'rgba(255,255,255,0.05)', borderRadius: 1 }}>
+                                  <div
+                                    className="h-full transition-all duration-700"
+                                    style={{
+                                      width: `${linkedTaskId === task.id ? localProgress : (task.progress ?? 0)}%`,
+                                      background: 'rgba(245,158,11,0.55)',
+                                      borderRadius: 1,
+                                    }}
+                                  />
+                                </div>
+                                <span style={{ fontSize: 8, fontFamily: '"JetBrains Mono", monospace', color: '#5e5855', minWidth: 26, textAlign: 'right' }}>
+                                  {linkedTaskId === task.id ? localProgress : (task.progress ?? 0)}%
+                                </span>
                               </div>
                             )}
                           </div>
