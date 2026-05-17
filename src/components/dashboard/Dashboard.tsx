@@ -48,11 +48,12 @@ function StatCard({ label, value, sub, icon: Icon, accent, amber }: any) {
   );
 }
 
-function CompletedTaskRow({ task, assigneeName, assigneeInitial, assigneeEmail }: {
+function CompletedTaskRow({ task, assigneeName, assigneeInitial, assigneeEmail, assigneeAvatar }: {
   task: Task;
   assigneeName: string;
   assigneeInitial: string;
   assigneeEmail: string;
+  assigneeAvatar?: string | null;
 }) {
   const [downloading, setDownloading] = useState(false);
 
@@ -107,11 +108,11 @@ function CompletedTaskRow({ task, assigneeName, assigneeInitial, assigneeEmail }
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-2 px-2.5 py-1"
             style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.15)' }}>
-            <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
+            <div className="w-5 h-5 rounded-full overflow-hidden flex items-center justify-center shrink-0"
               style={{ background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.3)' }}>
-              <span style={{ fontSize: 9, color: '#f59e0b', fontFamily: '"Syne", sans-serif', fontWeight: 800 }}>
-                {assigneeInitial}
-              </span>
+              {assigneeAvatar
+                ? <img src={assigneeAvatar} alt={assigneeName} className="w-full h-full object-cover" />
+                : <span style={{ fontSize: 9, color: '#f59e0b', fontFamily: '"Syne", sans-serif', fontWeight: 800 }}>{assigneeInitial}</span>}
             </div>
             <span style={{ fontSize: 11, fontFamily: '"DM Sans", sans-serif', fontWeight: 600, color: '#f7f3ee' }}>
               {assigneeName}
@@ -319,6 +320,7 @@ export default function Dashboard() {
                   assigneeName={assignee.full_name}
                   assigneeInitial={assignee.full_name[0]}
                   assigneeEmail={assignee.email}
+                  assigneeAvatar={assignee.avatar_url}
                 />
               );
             })}

@@ -660,8 +660,10 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                             {task.description && <span className="line-clamp-1 mt-0.5" style={{ fontSize: 10, color: '#3a3836', fontFamily: '"DM Sans", sans-serif' }}>{task.description}</span>}
                             {assignee && (
                               <div className="flex items-center gap-1 mt-1">
-                                <div className="w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0" style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)', fontSize: 9, color: '#f59e0b', fontFamily: '"Syne", sans-serif', fontWeight: 700 }}>
-                                  {assignee.full_name[0]}
+                                <div className="w-3.5 h-3.5 rounded-full overflow-hidden flex items-center justify-center shrink-0" style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)', fontSize: 9, color: '#f59e0b', fontFamily: '"Syne", sans-serif', fontWeight: 700 }}>
+                                  {assignee.avatar_url
+                                    ? <img src={assignee.avatar_url} alt={assignee.full_name} className="w-full h-full object-cover" />
+                                    : assignee.full_name[0]}
                                 </div>
                                 <span style={{ fontSize: 9, color: '#3a3836', fontFamily: '"JetBrains Mono", monospace' }}>{assignee.full_name}</span>
                               </div>
