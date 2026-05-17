@@ -154,6 +154,9 @@ DO $$ BEGIN ALTER TABLE tasks ADD COLUMN patched_zip_path TEXT; EXCEPTION WHEN d
 DO $$ BEGIN ALTER TABLE tasks ADD COLUMN progress INTEGER DEFAULT 0; EXCEPTION WHEN duplicate_column THEN NULL; END $$;
 DO $$ BEGIN ALTER TABLE tasks ADD COLUMN archived BOOLEAN DEFAULT false; EXCEPTION WHEN duplicate_column THEN NULL; END $$;
 
+-- ── Additional profile columns ────────────────────────────────────────────────
+DO $$ BEGIN ALTER TABLE profiles ADD COLUMN avatar_url TEXT; EXCEPTION WHEN duplicate_column THEN NULL; END $$;
+
 -- ── Indexes for performance ───────────────────────────────────────────────────
 CREATE INDEX IF NOT EXISTS idx_tasks_project ON tasks(project_id);
 CREATE INDEX IF NOT EXISTS idx_tasks_assignee ON tasks(assignee_id);

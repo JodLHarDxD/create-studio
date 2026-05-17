@@ -96,13 +96,23 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
         setCurrentUserId(session.user.id);
         setLoginState('logged_in');
         supabase.from('profiles').select('*').eq('id', session.user.id).single().then(({ data: prof }) => {
           if (prof) { setProfile(prof); setUserRole(prof.role); }
         });
+      } else if (event === 'SIGNED_OUT') {
+        // Token expired or explicitly signed out — clear all state
+        setLoginState('logged_out');
+        setProfile(null);
+        setCurrentUserId(null);
+        setUserRole('MEMBER');
+        setTasks([]);
+        setFiles([]);
+        setProjects([]);
+        setActiveProject(null);
       }
     });
     return () => subscription.unsubscribe();

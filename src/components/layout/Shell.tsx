@@ -142,7 +142,7 @@ export default function Shell() {
           {/* User avatar */}
           {profile && (
             <div
-              className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
+              className="w-7 h-7 rounded-full overflow-hidden shrink-0 flex items-center justify-center text-[10px] font-bold"
               style={{
                 background: 'rgba(245,158,11,0.1)',
                 border: '1.5px solid rgba(245,158,11,0.35)',
@@ -152,7 +152,9 @@ export default function Shell() {
               }}
               title={profile.full_name}
             >
-              {initials}
+              {profile.avatar_url
+                ? <img src={profile.avatar_url} alt="avatar" className="w-full h-full object-cover" />
+                : initials}
             </div>
           )}
 

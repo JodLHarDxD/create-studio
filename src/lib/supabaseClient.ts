@@ -24,6 +24,7 @@ export interface Profile {
   role: UserRole;
   bio?: string;
   github_url?: string;
+  avatar_url?: string | null;
   created_at: string;
 }
 

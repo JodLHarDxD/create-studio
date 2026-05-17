@@ -1,13 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { supabase } from '@/lib/supabaseClient';
-import { User, Activity, Github, Trophy, CheckCircle2, Edit3, Save, X, Loader2 } from 'lucide-react';
+import { User, Activity, Github, Trophy, CheckCircle2, Edit3, Save, X, Loader2, Camera } from 'lucide-react';
+
+async function resizeToDataUrl(file: File, maxPx = 128, quality = 0.8): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const scale = Math.min(maxPx / img.width, maxPx / img.height, 1);
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d')!.drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+}
 
 export default function Profile() {
   const { profile, tasks, currentUserId, userRole, loginState, setProfile } = useWorkspace();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [form, setForm] = useState({ full_name: '', bio: '', github_url: '' });
+  const avatarInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setForm({
@@ -36,6 +58,23 @@ export default function Profile() {
     } finally { setIsSaving(false); }
   };
 
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || loginState === 'guest' || !currentUserId) return;
+    setUploadingAvatar(true);
+    try {
+      const dataUrl = await resizeToDataUrl(file);
+      const { error } = await supabase.from('profiles').update({ avatar_url: dataUrl }).eq('id', currentUserId);
+      if (error) throw error;
+      if (profile) setProfile({ ...profile, avatar_url: dataUrl });
+    } catch (err: any) {
+      alert(`Avatar upload failed: ${err.message}`);
+    } finally {
+      setUploadingAvatar(false);
+      e.target.value = '';
+    }
+  };
+
   const displayEmail = profile?.email || 'unknown@creat.studio';
 
   const inputStyle: React.CSSProperties = {
@@ -51,10 +90,49 @@ export default function Profile() {
         {/* Header row */}
         <div className="flex items-start gap-8 pb-12 mb-12" style={{ borderBottom: '1px solid var(--border-1)' }}>
 
-          {/* Avatar */}
-          <div className="w-24 h-24 flex items-center justify-center shrink-0"
-            style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderTop: '2px solid rgba(245,158,11,0.4)' }}>
-            <User size={36} style={{ color: '#f59e0b', opacity: 0.4 }} />
+          {/* Avatar — clickable upload */}
+          <div className="relative shrink-0" style={{ width: 96, height: 96 }}>
+            {/* Avatar image / placeholder */}
+            <div
+              className="w-24 h-24 rounded-full flex items-center justify-center overflow-hidden cursor-pointer"
+              style={{ background: 'rgba(245,158,11,0.06)', border: '2px solid rgba(245,158,11,0.35)' }}
+              onClick={() => loginState !== 'guest' && avatarInputRef.current?.click()}
+              title={loginState === 'guest' ? 'Login to upload avatar' : 'Change profile picture'}
+            >
+              {profile?.avatar_url ? (
+                <img src={profile.avatar_url} alt="avatar" className="w-full h-full object-cover" />
+              ) : (
+                <User size={36} style={{ color: '#f59e0b', opacity: 0.4 }} />
+              )}
+            </div>
+
+            {/* Always-visible camera badge — bottom right */}
+            {loginState !== 'guest' && (
+              <button
+                onClick={() => avatarInputRef.current?.click()}
+                className="absolute bottom-0 right-0 flex items-center justify-center rounded-full transition-all"
+                style={{
+                  width: 28, height: 28,
+                  background: '#f59e0b',
+                  border: '2px solid #0a0a0a',
+                  color: '#000',
+                  cursor: 'pointer',
+                }}
+                title="Change profile picture"
+              >
+                {uploadingAvatar
+                  ? <Loader2 size={13} className="animate-spin" />
+                  : <Camera size={13} />}
+              </button>
+            )}
+
+            <input
+              ref={avatarInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleAvatarChange}
+            />
           </div>
 
           {/* Info / edit form */}
