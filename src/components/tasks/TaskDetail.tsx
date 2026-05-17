@@ -19,6 +19,7 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
   const { loginState, currentUserId, userRole, refetchTasks, setDiffTask, setDiffMode } = useWorkspace();
   const [uploading, setUploading] = useState(false);
   const [downloadingOrig, setDownloadingOrig] = useState(false);
+  const [downloadingPatch, setDownloadingPatch] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const isAdmin = userRole === 'ADMIN';
@@ -38,6 +39,20 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
         a.click();
       }
     } finally { setDownloadingOrig(false); }
+  };
+
+  const handleDownloadPatched = async () => {
+    if (!task.patched_zip_path) return;
+    setDownloadingPatch(true);
+    try {
+      const url = await getSignedUrl(task.patched_zip_path);
+      if (url) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${task.title.replace(/\s+/g, '-')}-patched.zip`;
+        a.click();
+      }
+    } finally { setDownloadingPatch(false); }
   };
 
   const handleUploadPatch = async (file: File) => {
@@ -162,17 +177,23 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
             </div>
           )}
 
-          {/* Patched ZIP already uploaded */}
+          {/* Patched ZIP — download for admin, confirmation for member */}
           {task.patched_zip_path && (
             <div>
               <div className="text-[9px] uppercase tracking-widest opacity-30 mb-2">Patched Codebase</div>
-              <div className="flex items-center gap-2 text-[10px] text-white/60">
-                <File size={12} className="opacity-60" />
-                <span>patched.zip uploaded</span>
-                <span className="ml-auto text-[8px] uppercase tracking-widest text-white/20">
-                  {task.status === 'DONE' ? '✓ Done' : ''}
-                </span>
-              </div>
+              {isAdmin ? (
+                <button onClick={handleDownloadPatched} disabled={downloadingPatch}
+                  className="flex items-center gap-2 border border-white/20 px-4 py-2.5 text-[10px] uppercase tracking-widest font-bold hover:border-white/50 transition-colors disabled:opacity-40">
+                  {downloadingPatch ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
+                  Download patched.zip
+                </button>
+              ) : (
+                <div className="flex items-center gap-2 text-[10px] text-white/60">
+                  <File size={12} className="opacity-60" />
+                  <span>patched.zip uploaded</span>
+                  <span className="ml-auto text-[8px] uppercase tracking-widest text-white/20">✓ Submitted</span>
+                </div>
+              )}
             </div>
           )}
         </div>
