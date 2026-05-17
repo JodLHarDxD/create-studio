@@ -195,7 +195,9 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
 
   const isAdmin = userRole === 'ADMIN';
   const visibleTasks = isAdmin ? tasks : tasks.filter(t => t.assignee_id === currentUserId);
+  // Archived tasks are cleared from the panel but preserved in the dashboard
   const filteredTasks = visibleTasks.filter(t => {
+    if (t.archived) return false;
     if (taskFilter === 'TODO') return t.status !== 'DONE';
     if (taskFilter === 'DONE') return t.status === 'DONE';
     return true;
@@ -436,6 +438,15 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
       return;
     }
     await supabase.from('tasks').update(updates).eq('id', taskId);
+    await refetchTasks();
+  };
+
+  const archiveTask = async (taskId: string) => {
+    if (loginState === 'guest') {
+      setTasks(prev => prev.map(t => t.id === taskId ? { ...t, archived: true } : t));
+      return;
+    }
+    await supabase.from('tasks').update({ archived: true }).eq('id', taskId);
     await refetchTasks();
   };
 
@@ -711,6 +722,16 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                             <button onClick={() => updateTask(task.id, { status: 'IN_PROGRESS' })}
                               style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)', padding: '2px 8px' }}>
                               Start
+                            </button>
+                          )}
+                          {isAdmin && task.status === 'DONE' && (
+                            <button
+                              onClick={() => archiveTask(task.id)}
+                              style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#3a3836', border: '1px solid rgba(255,255,255,0.06)', padding: '2px 8px' }}
+                              onMouseEnter={e => (e.currentTarget.style.color = '#f87171')}
+                              onMouseLeave={e => (e.currentTarget.style.color = '#3a3836')}
+                            >
+                              Clear
                             </button>
                           )}
                         </div>

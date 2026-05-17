@@ -51,6 +51,7 @@ export interface Task {
   original_zip_path?: string | null;
   patched_zip_path?: string | null;
   progress?: number | null;
+  archived?: boolean | null;
 }
 
 export interface ProjectFile {
