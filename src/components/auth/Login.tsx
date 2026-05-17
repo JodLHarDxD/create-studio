@@ -117,23 +117,25 @@ export default function Login() {
             style={{ lineHeight: 0.82, userSelect: 'none' }}
           >
             <div style={{
-              fontFamily: '"Syne", sans-serif',
-              fontWeight: 800,
+              fontFamily: '"Playfair Display", serif',
+              fontWeight: 900,
+              fontStyle: 'italic',
               fontSize: 'clamp(72px, 9vw, 130px)',
-              letterSpacing: '-0.04em',
+              letterSpacing: '-0.03em',
               color: '#f7f3ee',
+              textTransform: 'uppercase',
             }}>
               CREAT
             </div>
             <div style={{
               fontFamily: '"Syne", sans-serif',
-              fontWeight: 300,
+              fontWeight: 900,
               fontSize: 'clamp(50px, 6.3vw, 91px)',
               letterSpacing: '-0.03em',
               color: '#f59e0b',
-              opacity: 0.75,
+              textTransform: 'uppercase',
             }}>
-              studio
+              STUDIO
             </div>
           </motion.div>
 

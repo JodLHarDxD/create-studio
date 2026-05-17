@@ -57,8 +57,8 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       <div className="relative z-10">
         {/* Background text — dim unfilled */}
         <h1 className="text-[12vw] leading-none uppercase tracking-tighter text-[#151515] select-none">
-          <span className="font-serif italic font-black">CREAT</span>
-          <span className="font-sans font-black">studio</span>
+          <span style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontWeight: 900 }}>CREAT</span>
+          <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 900 }}>studio</span>
         </h1>
 
         {/* Liquid foreground layer — diagonal mask sweep */}
