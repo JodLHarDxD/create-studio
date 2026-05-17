@@ -20,8 +20,8 @@ interface WorkspaceContextType {
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
   activeFile: ProjectFile | null;
   setActiveFile: (f: ProjectFile | null) => void;
-  view: 'editor' | 'dashboard' | 'profile';
-  setView: (v: 'editor' | 'dashboard' | 'profile') => void;
+  view: 'editor' | 'dashboard' | 'profile' | 'team';
+  setView: (v: 'editor' | 'dashboard' | 'profile' | 'team') => void;
   isLoading: boolean;
   selectedModel: string;
   setSelectedModel: (m: string) => void;
@@ -68,7 +68,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [localActiveFile, setLocalActiveFile] = useState<LocalFileView | null>(null);
   const [diffTask, setDiffTask] = useState<Task | null>(null);
   const [diffMode, setDiffMode] = useState<'zip' | 'live'>('zip');
-  const [view, setView] = useState<'editor' | 'dashboard' | 'profile'>('editor');
+  const [view, setView] = useState<'editor' | 'dashboard' | 'profile' | 'team'>('editor');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedModel, setSelectedModelState] = useState<string>(getSelectedModel());
 

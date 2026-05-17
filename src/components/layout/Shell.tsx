@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FileCode, BarChart3, UserCircle, LogOut, Command } from 'lucide-react';
+import { FileCode, BarChart3, UserCircle, LogOut, Command, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import Explorer from '../explorer/Explorer';
@@ -8,6 +8,7 @@ import ChatPanel from '../chat/ChatPanel';
 import Dashboard from '../dashboard/Dashboard';
 import Login from '../auth/Login';
 import Profile from '../profile/Profile';
+import TeamPage from '../team/TeamPage';
 import DiffViewer from '../tasks/DiffViewer';
 import CommandPalette from '../ui/CommandPalette';
 import NewTaskModal from '../tasks/NewTaskModal';
@@ -17,6 +18,7 @@ import { variants, transitions } from '@/design';
 const NAV = [
   { v: 'editor'    as const, icon: FileCode,   label: 'Editor',    shortcut: 'E' },
   { v: 'dashboard' as const, icon: BarChart3,  label: 'Analytics', shortcut: 'D' },
+  { v: 'team'      as const, icon: Users,      label: 'Team',      shortcut: 'T' },
   { v: 'profile'   as const, icon: UserCircle, label: 'Profile',   shortcut: 'P' },
 ] as const;
 
@@ -210,6 +212,8 @@ export default function Shell() {
                 </div>
               ) : view === 'dashboard' ? (
                 <Dashboard />
+              ) : view === 'team' ? (
+                <TeamPage />
               ) : (
                 <Profile />
               )}
