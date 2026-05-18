@@ -28,10 +28,10 @@ const DEFAULT_DURATION = 4_000;
 const VISIBLE_LIMIT = 3;
 
 const toneClass: Record<ToastTone, string> = {
-  info: 'border-white/15 bg-black text-white',
-  success: 'border-green-400/30 bg-green-500/10 text-green-100',
-  warning: 'border-yellow-400/30 bg-yellow-500/10 text-yellow-100',
-  error: 'border-red-400/30 bg-red-500/10 text-red-100',
+  info: 'border-[rgba(26,22,18,0.13)] bg-[#F4EFE6] text-[#1A1612]',
+  success: 'border-[#4A6B3A]/30 bg-[#4A6B3A]/10 text-[#1A1612]',
+  warning: 'border-[#C99A2E]/30 bg-[#C99A2E]/10 text-[#1A1612]',
+  error: 'border-[#B53C2A]/30 bg-[#B53C2A]/10 text-[#1A1612]',
 };
 
 const toneIcon = {
@@ -114,16 +114,16 @@ function ToastCard({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: str
     >
       <Icon size={15} className="mt-0.5 shrink-0 opacity-80" />
       <div className="min-w-0">
-        <div className="text-[10px] font-black uppercase tracking-widest text-white">{toast.title}</div>
+        <div className="text-[10px] font-black uppercase tracking-widest text-[#1A1612]">{toast.title}</div>
         {toast.description && (
-          <div className="mt-1 text-[11px] leading-relaxed text-[#cccccc]">{toast.description}</div>
+          <div className="mt-1 text-[11px] leading-relaxed text-[#1A1612]">{toast.description}</div>
         )}
       </div>
       <button
         type="button"
         aria-label={`Dismiss ${toast.title}`}
         onClick={() => onDismiss(toast.id)}
-        className="p-0.5 text-white/40 transition-colors hover:text-white"
+        className="p-0.5 text-[#6B645C] transition-colors hover:text-[#1A1612]"
       >
         <X size={13} />
       </button>

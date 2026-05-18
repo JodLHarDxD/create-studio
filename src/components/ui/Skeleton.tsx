@@ -10,7 +10,7 @@ export default function Skeleton({ className, variant = 'block', ...props }: Ske
     <div
       aria-hidden="true"
       className={cn(
-        'relative overflow-hidden bg-white/10',
+        'relative overflow-hidden bg-[rgba(26,22,18,0.10)]',
         'before:absolute before:inset-0 before:-translate-x-full before:animate-[skeleton-shimmer_1.4s_infinite]',
         'before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent',
         variant === 'text' && 'h-3 w-full rounded-sm',

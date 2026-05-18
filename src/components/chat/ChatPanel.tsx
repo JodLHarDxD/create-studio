@@ -156,23 +156,23 @@ export default function ChatPanel() {
   }, {} as Record<string, AIModel[]>);
 
   return (
-    <div className="flex flex-col h-full relative" style={{ background: '#09090E' }}>
+    <div className="flex flex-col h-full relative" style={{ background: '#F4EFE6' }}>
       {/* Header */}
-      <div className="px-4 py-3 flex items-center justify-between shrink-0" style={{ borderBottom: '1px solid var(--border-1)', background: '#0D0D13' }}>
+      <div className="px-4 py-3 flex items-center justify-between shrink-0" style={{ borderBottom: '1px solid var(--border-1)', background: '#EFEAE0' }}>
         <div className="flex items-center gap-2.5">
-          <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ border: '1px solid rgba(94,106,210,0.3)', background: 'rgba(94,106,210,0.06)' }}>
-            <div className="w-1.5 h-1.5 rounded-full amber-pulse" style={{ background: '#5E6AD2' }} />
+          <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ border: '1px solid rgba(191,74,42,0.3)', background: 'rgba(191,74,42,0.06)' }}>
+            <div className="w-1.5 h-1.5 rounded-full amber-pulse" style={{ background: '#BF4A2A' }} />
           </div>
-          <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#EBEBF0' }}>AI Cortex</span>
+          <span style={{ fontFamily: '"Fraunces", serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1A1612' }}>AI Cortex</span>
         </div>
         <div className="flex items-center gap-2">
           {/* Model Selector */}
           <div className="relative">
             <button onClick={() => setModelDropOpen(p => !p)}
               className="flex items-center gap-2 px-2.5 py-1.5 transition-all"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 2, fontSize: 11, fontFamily: '"DM Sans", sans-serif', fontWeight: 500, color: '#8A8AA0' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(94,106,210,0.3)'; (e.currentTarget as HTMLElement).style.color = '#EBEBF0'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; (e.currentTarget as HTMLElement).style.color = '#8A8AA0'; }}>
+              style={{ background: 'rgba(26,22,18,0.05)', border: '1px solid rgba(26,22,18,0.10)', borderRadius: 2, fontSize: 11, fontFamily: '"Inter", sans-serif', fontWeight: 500, color: '#6B645C' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(191,74,42,0.3)'; (e.currentTarget as HTMLElement).style.color = '#1A1612'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(26,22,18,0.10)'; (e.currentTarget as HTMLElement).style.color = '#6B645C'; }}>
               <div className="w-2 h-2 rounded-full" style={{ backgroundColor: PROVIDER_COLORS[selectedModelObj?.provider || 'google'] }} />
               <span className="max-w-[100px] truncate">{selectedModelObj?.displayName || selectedModel}</span>
               <ChevronDown size={10} style={{ opacity: 0.5 }} />
@@ -183,24 +183,24 @@ export default function ChatPanel() {
                 <motion.div initial={{ opacity: 0, y: -6, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -4, scale: 0.97 }}
                   transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
                   className="absolute right-0 top-full mt-1.5 w-[240px] z-50 glass"
-                  style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: 4, overflow: 'hidden', boxShadow: '0 16px 48px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,0.4)' }}>
+                  style={{ border: '1px solid rgba(26,22,18,0.13)', borderRadius: 4, overflow: 'hidden', boxShadow: '0 16px 48px rgba(26,22,18,0.4), 0 4px 12px rgba(26,22,18,0.14)' }}>
                   {Object.entries(modelsByProvider).map(([provider, models]) => (
                     <div key={provider}>
-                      <div className="px-3 py-2" style={{ fontSize: 10, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#505068', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                      <div className="px-3 py-2" style={{ fontSize: 10, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#9B948A', borderBottom: '1px solid rgba(26,22,18,0.08)' }}>
                         {PROVIDER_LABELS[provider]}
                       </div>
                       {models.map(m => (
                         <button key={m.id} onClick={() => { setSelectedModel(m.id); setModelDropOpen(false); }}
                           className="w-full flex items-start gap-2.5 px-3 py-2.5 text-left transition-all"
-                          style={{ background: selectedModel === m.id ? 'rgba(94,106,210,0.09)' : 'transparent' }}
-                          onMouseEnter={e => { if (selectedModel !== m.id) (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)'; }}
+                          style={{ background: selectedModel === m.id ? 'rgba(191,74,42,0.09)' : 'transparent' }}
+                          onMouseEnter={e => { if (selectedModel !== m.id) (e.currentTarget as HTMLElement).style.background = 'rgba(26,22,18,0.05)'; }}
                           onMouseLeave={e => { if (selectedModel !== m.id) (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
                           <div className="w-2 h-2 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: PROVIDER_COLORS[provider] }} />
                           <div className="min-w-0 flex-1">
-                            <div style={{ fontSize: 12, fontWeight: 500, color: selectedModel === m.id ? '#EBEBF0' : '#8A8AA0', fontFamily: '"DM Sans", sans-serif' }}>{m.displayName}</div>
-                            <div style={{ fontSize: 10, color: '#505068', marginTop: 2, fontFamily: '"DM Sans", sans-serif' }}>{m.description}</div>
+                            <div style={{ fontSize: 12, fontWeight: 500, color: selectedModel === m.id ? '#1A1612' : '#6B645C', fontFamily: '"Inter", sans-serif' }}>{m.displayName}</div>
+                            <div style={{ fontSize: 10, color: '#9B948A', marginTop: 2, fontFamily: '"Inter", sans-serif' }}>{m.description}</div>
                           </div>
-                          {selectedModel === m.id && <CheckCircle size={11} className="ml-auto shrink-0 mt-1" style={{ color: '#5E6AD2', opacity: 0.7 }} />}
+                          {selectedModel === m.id && <CheckCircle size={11} className="ml-auto shrink-0 mt-1" style={{ color: '#BF4A2A', opacity: 0.7 }} />}
                         </button>
                       ))}
                     </div>
@@ -213,9 +213,9 @@ export default function ChatPanel() {
           <button onClick={() => setSettingsOpen(true)}
             aria-label="Open settings"
             className="w-8 h-8 flex items-center justify-center transition-all rounded"
-            style={{ color: '#505068' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#5E6AD2'; (e.currentTarget as HTMLElement).style.background = 'rgba(94,106,210,0.06)'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#505068'; (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
+            style={{ color: '#9B948A' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#BF4A2A'; (e.currentTarget as HTMLElement).style.background = 'rgba(191,74,42,0.06)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#9B948A'; (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
             <Settings size={13} />
           </button>
         </div>
@@ -223,15 +223,15 @@ export default function ChatPanel() {
 
       {/* Context badges */}
       {(activeFile || activeTask) && (
-        <div className="flex gap-2 px-4 py-2.5 flex-wrap shrink-0" style={{ borderBottom: '1px solid var(--border-1)', background: 'rgba(94,106,210,0.015)' }}>
+        <div className="flex gap-2 px-4 py-2.5 flex-wrap shrink-0" style={{ borderBottom: '1px solid var(--border-1)', background: 'rgba(191,74,42,0.015)' }}>
           {activeFile && (
-            <span className="flex items-center gap-1.5" style={{ fontSize: 10, fontFamily: '"DM Sans", sans-serif', border: '1px solid rgba(255,255,255,0.08)', color: '#8A8AA0', padding: '3px 8px', borderRadius: 2 }}>
-              <span style={{ width: 5, height: 5, borderRadius: 1, background: '#8A8AA0', display: 'inline-block', opacity: 0.6 }} />
+            <span className="flex items-center gap-1.5" style={{ fontSize: 10, fontFamily: '"Inter", sans-serif', border: '1px solid rgba(26,22,18,0.10)', color: '#6B645C', padding: '3px 8px', borderRadius: 2 }}>
+              <span style={{ width: 5, height: 5, borderRadius: 1, background: '#6B645C', display: 'inline-block', opacity: 0.6 }} />
               {activeFile.file_name}
             </span>
           )}
           {activeTask && (
-            <span className="flex items-center gap-1.5" style={{ fontSize: 10, fontFamily: '"DM Sans", sans-serif', border: '1px solid rgba(79,142,247,0.2)', color: '#4f8ef7', padding: '3px 8px', borderRadius: 2, background: 'rgba(79,142,247,0.05)' }}>
+            <span className="flex items-center gap-1.5" style={{ fontSize: 10, fontFamily: '"Inter", sans-serif', border: '1px solid rgba(79,142,247,0.2)', color: '#4f8ef7', padding: '3px 8px', borderRadius: 2, background: 'rgba(79,142,247,0.05)' }}>
               <span style={{ width: 5, height: 5, borderRadius: 5, background: '#4f8ef7', display: 'inline-block' }} />
               {activeTask.title}
             </span>
@@ -244,17 +244,17 @@ export default function ChatPanel() {
         {settingsOpen && (
           <motion.div initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 8 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute inset-0 z-50 p-6 flex flex-col" style={{ background: '#0D0D13', borderLeft: '1px solid var(--border-1)' }}>
+            className="absolute inset-0 z-50 p-6 flex flex-col" style={{ background: '#EFEAE0', borderLeft: '1px solid var(--border-1)' }}>
             <div className="flex items-center justify-between mb-6">
               <div>
-                <div style={{ fontFamily: '"Syne", sans-serif', fontWeight: 700, fontSize: 14, color: '#EBEBF0', letterSpacing: '-0.01em' }}>Configuration</div>
-                <div style={{ fontSize: 11, fontFamily: '"DM Sans", sans-serif', color: '#505068', marginTop: 3 }}>Keys stored locally · never sent to server</div>
+                <div style={{ fontFamily: '"Fraunces", serif', fontWeight: 700, fontSize: 14, color: '#1A1612', letterSpacing: '-0.01em' }}>Configuration</div>
+                <div style={{ fontSize: 11, fontFamily: '"Inter", sans-serif', color: '#9B948A', marginTop: 3 }}>Keys stored locally · never sent to server</div>
               </div>
               <button onClick={() => setSettingsOpen(false)}
                 className="w-8 h-8 flex items-center justify-center transition-all rounded"
-                style={{ color: '#505068', background: 'transparent' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#EBEBF0'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#505068'; (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
+                style={{ color: '#9B948A', background: 'transparent' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#1A1612'; (e.currentTarget as HTMLElement).style.background = 'rgba(26,22,18,0.07)'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#9B948A'; (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
                 <X size={15} />
               </button>
             </div>
@@ -276,16 +276,16 @@ export default function ChatPanel() {
             <button onClick={saveSettings}
               className="mt-5 w-full h-10 flex items-center justify-center gap-2 transition-all"
               style={{
-                border: '1px solid #5E6AD2',
+                border: '1px solid #BF4A2A',
                 borderRadius: 2,
-                color: keySaved ? '#000' : '#5E6AD2',
-                background: keySaved ? '#5E6AD2' : 'transparent',
+                color: keySaved ? '#000' : '#BF4A2A',
+                background: keySaved ? '#BF4A2A' : 'transparent',
                 fontSize: 11,
-                fontFamily: '"Syne", sans-serif',
+                fontFamily: '"Fraunces", serif',
                 fontWeight: 700,
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
-                boxShadow: keySaved ? '0 2px 8px rgba(94,106,210,0.25)' : 'none',
+                boxShadow: keySaved ? '0 2px 8px rgba(191,74,42,0.25)' : 'none',
               }}>
               {keySaved ? <><CheckCircle size={12} /> Saved</> : 'Save Configuration'}
             </button>
@@ -300,7 +300,7 @@ export default function ChatPanel() {
             {msg.role === 'assistant' && msg.model && (
               <div className="flex items-center gap-1.5" style={{ paddingLeft: 2 }}>
                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: PROVIDER_COLORS[msg.provider || 'google'] }} />
-                <span style={{ fontSize: 10, fontFamily: '"DM Sans", sans-serif', fontWeight: 500, color: '#505068' }}>
+                <span style={{ fontSize: 10, fontFamily: '"Inter", sans-serif', fontWeight: 500, color: '#9B948A' }}>
                   {AI_MODELS.find(m => m.id === msg.model)?.displayName || msg.model}
                 </span>
               </div>
@@ -308,16 +308,16 @@ export default function ChatPanel() {
             <div className={cn("leading-relaxed", msg.role === 'user' ? "px-4 py-3" : "px-1")}
               style={msg.role === 'user'
                 ? {
-                    background: 'rgba(94,106,210,0.08)',
-                    border: '1px solid rgba(94,106,210,0.2)',
+                    background: 'rgba(191,74,42,0.08)',
+                    border: '1px solid rgba(191,74,42,0.2)',
                     borderRadius: 4,
                     fontSize: 13,
-                    fontFamily: '"DM Sans", sans-serif',
+                    fontFamily: '"Inter", sans-serif',
                     fontWeight: 500,
-                    color: '#EBEBF0',
+                    color: '#1A1612',
                     lineHeight: 1.6,
                   }
-                : { fontSize: 13, color: 'rgba(235,235,240,0.75)', fontFamily: '"DM Sans", sans-serif', lineHeight: 1.65 }}>
+                : { fontSize: 13, color: 'rgba(235,235,240,0.75)', fontFamily: '"Inter", sans-serif', lineHeight: 1.65 }}>
               {msg.role === 'assistant'
                 ? <div className="markdown-body prose prose-invert prose-sm max-w-none"><ReactMarkdown>{msg.content}</ReactMarkdown></div>
                 : <span>{msg.content}</span>}
@@ -325,7 +325,7 @@ export default function ChatPanel() {
             {msg.context && msg.context.length > 0 && (
               <div className="flex gap-1 flex-wrap" style={{ paddingLeft: msg.role === 'assistant' ? 2 : 0 }}>
                 {msg.context.map((c, i) => (
-                  <span key={i} style={{ fontSize: 10, fontFamily: '"JetBrains Mono", monospace', border: '1px solid rgba(255,255,255,0.08)', color: '#505068', padding: '2px 6px', borderRadius: 2 }}>{c}</span>
+                  <span key={i} style={{ fontSize: 10, fontFamily: '"JetBrains Mono", monospace', border: '1px solid rgba(26,22,18,0.10)', color: '#9B948A', padding: '2px 6px', borderRadius: 2 }}>{c}</span>
                 ))}
               </div>
             )}
@@ -334,15 +334,15 @@ export default function ChatPanel() {
         {isTyping && (
           <div className="flex gap-2.5 items-center" style={{ paddingLeft: 2 }}>
             <div className="flex gap-1">
-              {[0,1,2].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: '#5E6AD2', opacity: 0.4, animationDelay: `${i * 0.12}s` }} />)}
+              {[0,1,2].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: '#BF4A2A', opacity: 0.4, animationDelay: `${i * 0.12}s` }} />)}
             </div>
-            <span style={{ fontSize: 11, fontFamily: '"DM Sans", sans-serif', color: '#505068' }}>Thinking…</span>
+            <span style={{ fontSize: 11, fontFamily: '"Inter", sans-serif', color: '#9B948A' }}>Thinking…</span>
           </div>
         )}
       </div>
 
       {/* Input */}
-      <div className="shrink-0" style={{ padding: '12px 14px', borderTop: '1px solid var(--border-1)', background: '#0D0D13' }}>
+      <div className="shrink-0" style={{ padding: '12px 14px', borderTop: '1px solid var(--border-1)', background: '#EFEAE0' }}>
         <div className="flex flex-col gap-2">
           <textarea value={input} onChange={e => setInput(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
@@ -350,20 +350,20 @@ export default function ChatPanel() {
             className="w-full outline-none resize-none custom-scrollbar input-contained"
             style={{ minHeight: 68, fontSize: 13, borderRadius: 3 }} />
           <div className="flex items-center justify-between gap-2">
-            <span style={{ fontSize: 11, fontFamily: '"DM Sans", sans-serif', color: '#505068' }}>Shift+↵ newline</span>
+            <span style={{ fontSize: 11, fontFamily: '"Inter", sans-serif', color: '#9B948A' }}>Shift+↵ newline</span>
             <button onClick={handleSend} disabled={isTyping || !input.trim()}
               className="flex items-center gap-2 px-4 h-9 transition-all"
               style={{
-                background: input.trim() && !isTyping ? '#5E6AD2' : 'rgba(94,106,210,0.07)',
-                border: '1px solid rgba(94,106,210,0.25)',
+                background: input.trim() && !isTyping ? '#BF4A2A' : 'rgba(191,74,42,0.07)',
+                border: '1px solid rgba(191,74,42,0.25)',
                 borderRadius: 2,
-                color: input.trim() && !isTyping ? '#000' : 'rgba(94,106,210,0.3)',
+                color: input.trim() && !isTyping ? '#000' : 'rgba(191,74,42,0.3)',
                 fontSize: 11,
-                fontFamily: '"Syne", sans-serif',
+                fontFamily: '"Fraunces", serif',
                 fontWeight: 700,
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
-                boxShadow: input.trim() && !isTyping ? '0 2px 8px rgba(94,106,210,0.2)' : 'none',
+                boxShadow: input.trim() && !isTyping ? '0 2px 8px rgba(191,74,42,0.2)' : 'none',
               }}>
               <Send size={11} /> Send
             </button>

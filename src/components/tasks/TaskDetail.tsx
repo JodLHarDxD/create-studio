@@ -80,20 +80,20 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
   const hasBothZips = task.original_zip_path && task.patched_zip_path;
 
   const statusColor = task.status === 'DONE'
-    ? 'bg-white text-black border-white'
+    ? 'bg-[#1A1612] text-[#F4EFE6] border-[#1A1612]'
     : task.status === 'IN_PROGRESS'
-    ? 'text-blue-400 border-blue-400/30'
-    : 'text-white/30 border-white/10';
+    ? 'text-[#2A4A6B] border-[#2A4A6B]/30'
+    : 'text-[#9B948A] border-[rgba(26,22,18,0.10)]';
 
   const priorityColor = task.priority === 'HIGH'
-    ? 'text-red-400' : task.priority === 'LOW'
-    ? 'text-white/30' : 'text-yellow-400';
+    ? 'text-[#B53C2A]' : task.priority === 'LOW'
+    ? 'text-[#9B948A]' : 'text-[#C99A2E]';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-      <div className="w-[560px] max-h-[85vh] bg-[#0a0a0a] border border-white/10 flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md">
+      <div className="w-[560px] max-h-[85vh] bg-[#EFEAE0] border border-[rgba(26,22,18,0.10)] flex flex-col">
         {/* Header */}
-        <div className="flex justify-between items-start p-6 border-b border-white/10 shrink-0">
+        <div className="flex justify-between items-start p-6 border-b border-[rgba(26,22,18,0.10)] shrink-0">
           <div className="flex-1 pr-4">
             <div className="text-[9px] uppercase tracking-widest opacity-30 mb-2">Task Detail</div>
             <h2 className="text-[13px] font-black uppercase tracking-wide leading-tight">{task.title}</h2>
@@ -126,7 +126,7 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
           {task.description && (
             <div>
               <div className="text-[9px] uppercase tracking-widest opacity-30 mb-2">Description</div>
-              <p className="text-[12px] text-white/70 leading-relaxed whitespace-pre-wrap">{task.description}</p>
+              <p className="text-[12px] text-[#1A1612]/80 leading-relaxed whitespace-pre-wrap">{task.description}</p>
             </div>
           )}
 
@@ -135,7 +135,7 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
             <div>
               <div className="text-[9px] uppercase tracking-widest opacity-30 mb-2">Reference URL</div>
               <a href={task.url} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 text-[11px] text-blue-400 hover:text-blue-300 break-all">
+                className="flex items-center gap-2 text-[11px] text-[#2A4A6B] hover:text-[#1A3A5B] break-all">
                 <ExternalLink size={12} className="shrink-0" />
                 {task.url}
               </a>
@@ -147,7 +147,7 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
             <div className="text-[9px] uppercase tracking-widest opacity-30 mb-2">Codebase (Original)</div>
             {task.original_zip_path ? (
               <button onClick={handleDownloadOriginal} disabled={downloadingOrig}
-                className="flex items-center gap-2 border border-white/20 px-4 py-2.5 text-[10px] uppercase tracking-widest font-bold hover:border-white/50 transition-colors disabled:opacity-40">
+                className="flex items-center gap-2 border border-[rgba(26,22,18,0.18)] px-4 py-2.5 text-[10px] uppercase tracking-widest font-bold hover:border-[rgba(26,22,18,0.07)]0 transition-colors disabled:opacity-40">
                 {downloadingOrig ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
                 Download original.zip
               </button>
@@ -165,11 +165,11 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
               </div>
               <div
                 onClick={() => !uploading && fileRef.current?.click()}
-                className="border border-dashed border-white/20 p-5 flex items-center gap-3 cursor-pointer hover:border-white/40 transition-colors">
+                className="border border-dashed border-[rgba(26,22,18,0.18)] p-5 flex items-center gap-3 cursor-pointer hover:border-[#1A1612]/40 transition-colors">
                 {uploading ? (
                   <><Loader2 size={14} className="animate-spin opacity-60" /><span className="text-[10px] opacity-40">Uploading…</span></>
                 ) : (
-                  <><Upload size={14} className="opacity-30" /><span className="text-[10px] text-white/30 uppercase tracking-widest">Upload patched .zip</span></>
+                  <><Upload size={14} className="opacity-30" /><span className="text-[10px] text-[#9B948A] uppercase tracking-widest">Upload patched .zip</span></>
                 )}
               </div>
               <input ref={fileRef} type="file" accept=".zip" className="hidden"
@@ -183,15 +183,15 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
               <div className="text-[9px] uppercase tracking-widest opacity-30 mb-2">Patched Codebase</div>
               {isAdmin ? (
                 <button onClick={handleDownloadPatched} disabled={downloadingPatch}
-                  className="flex items-center gap-2 border border-white/20 px-4 py-2.5 text-[10px] uppercase tracking-widest font-bold hover:border-white/50 transition-colors disabled:opacity-40">
+                  className="flex items-center gap-2 border border-[rgba(26,22,18,0.18)] px-4 py-2.5 text-[10px] uppercase tracking-widest font-bold hover:border-[rgba(26,22,18,0.07)]0 transition-colors disabled:opacity-40">
                   {downloadingPatch ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
                   Download patched.zip
                 </button>
               ) : (
-                <div className="flex items-center gap-2 text-[10px] text-white/60">
+                <div className="flex items-center gap-2 text-[10px] text-[#6B645C]">
                   <File size={12} className="opacity-60" />
                   <span>patched.zip uploaded</span>
-                  <span className="ml-auto text-[8px] uppercase tracking-widest text-white/20">✓ Submitted</span>
+                  <span className="ml-auto text-[8px] uppercase tracking-widest text-[#9B948A]/60">✓ Submitted</span>
                 </div>
               )}
             </div>
@@ -199,7 +199,7 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
         </div>
 
         {/* Footer actions */}
-        <div className="p-6 border-t border-white/10 flex items-center gap-3 shrink-0">
+        <div className="p-6 border-t border-[rgba(26,22,18,0.10)] flex items-center gap-3 shrink-0">
             {/* Live progress — IN_PROGRESS task with original ZIP */}
           {task.status === 'IN_PROGRESS' && task.original_zip_path && (
             <button
@@ -212,13 +212,13 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
           {hasBothZips && (
             <button
               onClick={() => { setDiffMode('zip'); setDiffTask(task); onClose(); }}
-              className="flex items-center gap-2 bg-white text-black font-black uppercase tracking-widest text-[10px] px-5 py-3 hover:bg-white/90">
+              className="flex items-center gap-2 bg-[#1A1612] text-[#F4EFE6] font-black uppercase tracking-widest text-[10px] px-5 py-3 hover:bg-[#1A1612]/90">
               <GitCompare size={13} />
               View Diff
             </button>
           )}
           <button onClick={onClose}
-            className="flex-1 border border-white/20 text-[10px] uppercase tracking-widest font-bold py-3 hover:border-white/50 transition-colors">
+            className="flex-1 border border-[rgba(26,22,18,0.18)] text-[10px] uppercase tracking-widest font-bold py-3 hover:border-[rgba(26,22,18,0.07)]0 transition-colors">
             Close
           </button>
         </div>

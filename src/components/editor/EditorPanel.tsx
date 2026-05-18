@@ -28,23 +28,23 @@ function LocalFileViewer({ file, onClose }: { file: LocalFileView; onClose: () =
   const renderContent = () => {
     if (mimeType.startsWith('image/')) {
       return (
-        <div className="flex-1 flex items-center justify-center overflow-auto p-8 bg-[#1e1e1e]">
+        <div className="flex-1 flex items-center justify-center overflow-auto p-8 bg-[#E8E2D6]">
           <img src={objectUrl} alt={name} className="max-w-full max-h-full object-contain" />
         </div>
       );
     }
     if (mimeType.startsWith('audio/')) {
       return (
-        <div className="flex-1 flex flex-col items-center justify-center gap-6 bg-[#1e1e1e]">
+        <div className="flex-1 flex flex-col items-center justify-center gap-6 bg-[#E8E2D6]">
           <div className="text-[32px] opacity-10">♫</div>
-          <div className="text-[11px] text-[#858585] uppercase tracking-widest">{name}</div>
+          <div className="text-[11px] text-[#6B645C] uppercase tracking-widest">{name}</div>
           <audio src={objectUrl} controls className="w-80" style={{ colorScheme: 'dark' }} />
         </div>
       );
     }
     if (mimeType.startsWith('video/')) {
       return (
-        <div className="flex-1 flex items-center justify-center bg-black overflow-hidden">
+        <div className="flex-1 flex items-center justify-center bg-[#F4EFE6] overflow-hidden">
           <video src={objectUrl} controls className="max-w-full max-h-full" />
         </div>
       );
@@ -83,24 +83,24 @@ function LocalFileViewer({ file, onClose }: { file: LocalFileView; onClose: () =
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#1e1e1e]">
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#E8E2D6]">
       {/* Tab bar */}
-      <div className="h-9 flex items-center shrink-0" style={{ background: '#252526', borderBottom: '1px solid #1e1e1e' }}>
-        <div className="h-full px-4 flex items-center gap-2 bg-[#1e1e1e]" style={{ borderTop: '2px solid #5E6AD2' }}>
-          <span className="truncate max-w-[200px]" style={{ fontSize: 12, color: '#EBEBF0', fontFamily: '"DM Sans", sans-serif' }}>{name}</span>
-          <button onClick={onClose} className="p-0.5 transition-opacity" style={{ opacity: 0.3, color: '#EBEBF0' }}
+      <div className="h-9 flex items-center shrink-0" style={{ background: '#DDD5C6', borderBottom: '1px solid #E8E2D6' }}>
+        <div className="h-full px-4 flex items-center gap-2" style={{ background: '#ECE6DA', borderBottom: '1px solid rgba(26,22,18,0.10)' }}>
+          <span className="truncate max-w-[200px]" style={{ fontSize: 12, color: '#1A1612', fontFamily: '"Inter", sans-serif' }}>{name}</span>
+          <button onClick={onClose} className="p-0.5 transition-opacity" style={{ opacity: 0.3, color: '#1A1612' }}
             onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
             onMouseLeave={e => (e.currentTarget.style.opacity = '0.3')}>
             <X size={12} />
           </button>
         </div>
-        <span className="ml-auto px-4" style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#505068', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+        <span className="ml-auto px-4" style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#9B948A', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
           {lang} · LOCAL
         </span>
       </div>
 
       {/* Breadcrumb */}
-      <div className="h-6 flex items-center px-4 shrink-0" style={{ background: '#1e1e1e', borderBottom: '1px solid #252526', fontSize: 11, fontFamily: '"JetBrains Mono", monospace', color: '#505068' }}>
+      <div className="h-6 flex items-center px-4 shrink-0" style={{ background: '#E8E2D6', borderBottom: '1px solid #DDD5C6', fontSize: 11, fontFamily: '"JetBrains Mono", monospace', color: '#9B948A' }}>
         <span className="truncate">{path}</span>
       </div>
 
@@ -183,11 +183,11 @@ export default function EditorPanel() {
 
   if (!activeFile) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-[#1e1e1e]">
+      <div className="flex-1 flex items-center justify-center bg-[#E8E2D6]">
         <div className="text-center" style={{ userSelect: 'none' }}>
-          <div style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 80, letterSpacing: '-0.04em', lineHeight: 1, color: '#EBEBF0', opacity: 0.04, marginBottom: 20 }}>CS</div>
-          <div style={{ fontSize: 11, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#2E2E40', marginBottom: 6 }}>Open a folder or select a file</div>
-          <div style={{ fontSize: 10, fontFamily: '"JetBrains Mono", monospace', color: '#2E2E40', opacity: 0.5 }}>Use the explorer to browse local or cloud files</div>
+          <div style={{ fontFamily: '"Fraunces", serif', fontWeight: 800, fontSize: 80, letterSpacing: '-0.04em', lineHeight: 1, color: '#1A1612', opacity: 0.04, marginBottom: 20 }}>CS</div>
+          <div style={{ fontSize: 11, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#C4BDB1', marginBottom: 6 }}>Open a folder or select a file</div>
+          <div style={{ fontSize: 10, fontFamily: '"JetBrains Mono", monospace', color: '#C4BDB1', opacity: 0.5 }}>Use the explorer to browse local or cloud files</div>
         </div>
       </div>
     );
@@ -203,19 +203,19 @@ export default function EditorPanel() {
   const lang = getLanguage(activeFile.file_name);
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#1e1e1e]">
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#E8E2D6]">
       {/* Tab bar */}
-      <div className="h-9 flex items-center shrink-0" style={{ background: '#252526', borderBottom: '1px solid #1e1e1e' }}>
-        <div className="h-full px-4 flex items-center gap-2 bg-[#1e1e1e]" style={{ borderTop: '2px solid #5E6AD2' }}>
-          <span className="truncate max-w-[180px]" style={{ fontSize: 12, color: '#EBEBF0', fontFamily: '"DM Sans", sans-serif', fontStyle: isDirty ? 'italic' : 'normal' }}>
+      <div className="h-9 flex items-center shrink-0" style={{ background: '#DDD5C6', borderBottom: '1px solid #E8E2D6' }}>
+        <div className="h-full px-4 flex items-center gap-2" style={{ background: '#ECE6DA', borderBottom: '1px solid rgba(26,22,18,0.10)' }}>
+          <span className="truncate max-w-[180px]" style={{ fontSize: 12, color: '#1A1612', fontFamily: '"Inter", sans-serif', fontStyle: isDirty ? 'italic' : 'normal' }}>
             {activeFile.file_name}{isDirty ? ' ●' : ''}
           </span>
         </div>
         <div className="ml-auto px-4 flex items-center gap-3">
-          <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#505068', textTransform: 'uppercase', letterSpacing: '0.12em' }}>{lang}</span>
+          <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#9B948A', textTransform: 'uppercase', letterSpacing: '0.12em' }}>{lang}</span>
           <button onClick={handleSave} disabled={saving}
             className="flex items-center gap-1.5 transition-all"
-            style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: isDirty ? '#5E6AD2' : '#505068', padding: '3px 8px', border: `1px solid ${isDirty ? 'rgba(94,106,210,0.3)' : 'transparent'}`, opacity: saving ? 0.5 : 1 }}>
+            style={{ fontSize: 9, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: isDirty ? '#BF4A2A' : '#9B948A', padding: '3px 8px', border: `1px solid ${isDirty ? 'rgba(191,74,42,0.3)' : 'transparent'}`, opacity: saving ? 0.5 : 1 }}>
             {saving ? <Loader2 size={11} className="animate-spin" /> : <Save size={11} />}
             <span className="hidden sm:inline">Save</span>
           </button>
@@ -223,7 +223,7 @@ export default function EditorPanel() {
       </div>
 
       {/* Breadcrumb */}
-      <div className="h-6 flex items-center px-4 shrink-0" style={{ background: '#1e1e1e', borderBottom: '1px solid #252526', fontSize: 11, fontFamily: '"JetBrains Mono", monospace', color: '#505068' }}>
+      <div className="h-6 flex items-center px-4 shrink-0" style={{ background: '#E8E2D6', borderBottom: '1px solid #DDD5C6', fontSize: 11, fontFamily: '"JetBrains Mono", monospace', color: '#9B948A' }}>
         <span className="truncate">{activeProject?.name} › {activeFile.path || activeFile.file_name}</span>
       </div>
 

@@ -53,7 +53,7 @@ export default function Shell() {
   return (
     <div
       className="flex h-screen w-screen overflow-hidden"
-      style={{ background: 'var(--surface-1)', color: 'var(--text-1)', fontFamily: '"DM Sans", sans-serif' }}
+      style={{ background: 'var(--surface-1)', color: 'var(--text-1)', fontFamily: '"Inter", sans-serif' }}
     >
       {/* ═══════════════════════════════════════════════
           ACTIVITY BAR
@@ -62,7 +62,7 @@ export default function Shell() {
         className="flex flex-col items-center py-4 gap-1 z-20 shrink-0"
         style={{
           width: 48,
-          background: '#030303',
+          background: '#EFEAE0',
           borderRight: '1px solid var(--border-1)',
         }}
       >
@@ -75,10 +75,10 @@ export default function Shell() {
         >
           <div
             className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            style={{ background: 'radial-gradient(circle, rgba(94,106,210,0.12), transparent 70%)' }}
+            style={{ background: 'radial-gradient(circle, rgba(191,74,42,0.12), transparent 70%)' }}
           />
-          <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 11, letterSpacing: '-0.02em', color: '#EBEBF0', lineHeight: 1 }}>CR</span>
-          <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 300, fontSize: 7.5, letterSpacing: '0.04em', color: '#5E6AD2', lineHeight: 1, opacity: 0.8 }}>st</span>
+          <span style={{ fontFamily: '"Fraunces", serif', fontWeight: 800, fontSize: 11, letterSpacing: '-0.02em', color: '#1A1612', lineHeight: 1 }}>CR</span>
+          <span style={{ fontFamily: '"Fraunces", serif', fontWeight: 300, fontSize: 7.5, letterSpacing: '0.04em', color: '#BF4A2A', lineHeight: 1, opacity: 0.8 }}>st</span>
         </button>
 
         {/* Nav items */}
@@ -96,18 +96,18 @@ export default function Shell() {
                 <motion.div
                   className="w-9 h-9 flex items-center justify-center rounded transition-all duration-200"
                   style={{
-                    background: isActive ? 'rgba(94,106,210,0.12)' : 'transparent',
-                    border: isActive ? '1px solid rgba(94,106,210,0.18)' : '1px solid transparent',
+                    background: isActive ? 'rgba(191,74,42,0.12)' : 'transparent',
+                    border: isActive ? '1px solid rgba(191,74,42,0.18)' : '1px solid transparent',
                   }}
-                  onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)'; }}
-                  onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = isActive ? 'rgba(94,106,210,0.12)' : 'transparent'; }}
+                  onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'rgba(26,22,18,0.07)'; }}
+                  onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = isActive ? 'rgba(191,74,42,0.12)' : 'transparent'; }}
                 >
                   <Icon
                     size={17}
                     strokeWidth={isActive ? 2 : 1.5}
                     style={{
                       opacity: isActive ? 1 : 0.3,
-                      color: isActive ? '#5E6AD2' : '#EBEBF0',
+                      color: isActive ? '#BF4A2A' : '#1A1612',
                       transition: 'opacity 0.15s, color 0.15s',
                     }}
                   />
@@ -136,10 +136,10 @@ export default function Shell() {
             <div
               className="w-7 h-7 rounded-full overflow-hidden shrink-0 flex items-center justify-center text-[10px] font-bold"
               style={{
-                background: 'rgba(94,106,210,0.1)',
-                border: '1.5px solid rgba(94,106,210,0.35)',
-                color: '#5E6AD2',
-                fontFamily: '"Syne", sans-serif',
+                background: 'rgba(191,74,42,0.1)',
+                border: '1.5px solid rgba(191,74,42,0.35)',
+                color: '#BF4A2A',
+                fontFamily: '"Fraunces", serif',
                 fontWeight: 700,
               }}
               title={profile.full_name}
@@ -156,9 +156,9 @@ export default function Shell() {
             title="Logout"
             aria-label="Logout"
             className="w-8 h-8 flex items-center justify-center transition-all duration-200"
-            style={{ opacity: 0.18, color: '#EBEBF0' }}
-            onMouseEnter={e => { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.color = '#f87171'; }}
-            onMouseLeave={e => { e.currentTarget.style.opacity = '0.18'; e.currentTarget.style.color = '#EBEBF0'; }}
+            style={{ opacity: 0.18, color: '#1A1612' }}
+            onMouseEnter={e => { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.color = '#B53C2A'; }}
+            onMouseLeave={e => { e.currentTarget.style.opacity = '0.18'; e.currentTarget.style.color = '#1A1612'; }}
           >
             <LogOut size={14} strokeWidth={1.5} />
           </button>
@@ -177,7 +177,7 @@ export default function Shell() {
               animate={{ width: 260 }}
               exit={{ width: 0 }}
               className="overflow-hidden flex flex-col shrink-0"
-              style={{ background: '#080808', borderRight: '1px solid var(--border-1)' }}
+              style={{ background: '#F4EFE6', borderRight: '1px solid var(--border-1)' }}
             >
               <Explorer onNewTask={() => setNewTaskOpen(true)} />
             </motion.div>
@@ -198,7 +198,7 @@ export default function Shell() {
               {diffTask ? (
                 <DiffViewer />
               ) : view === 'editor' ? (
-                <div className="flex-1 flex flex-col min-h-0" style={{ background: '#1e1e1e' }}>
+                <div className="flex-1 flex flex-col min-h-0" style={{ background: '#E8E2D6' }}>
                   <EditorPanel />
                 </div>
               ) : view === 'dashboard' ? (
@@ -220,7 +220,7 @@ export default function Shell() {
               animate={{ width: 360 }}
               exit={{ width: 0 }}
               className="overflow-hidden flex flex-col shrink-0"
-              style={{ background: '#080808', borderLeft: '1px solid var(--border-1)' }}
+              style={{ background: '#F4EFE6', borderLeft: '1px solid var(--border-1)' }}
             >
               <ChatPanel />
             </motion.div>
@@ -235,7 +235,7 @@ export default function Shell() {
         className="fixed bottom-0 w-full z-30 flex items-center px-5"
         style={{
           height: 28,
-          background: '#030303',
+          background: '#EFEAE0',
           borderTop: '1px solid var(--border-1)',
           fontFamily: '"JetBrains Mono", monospace',
           fontSize: 10,
@@ -246,12 +246,12 @@ export default function Shell() {
           <div className="flex items-center gap-2">
             <div
               className="w-1.5 h-1.5 rounded-full amber-pulse"
-              style={{ background: '#5E6AD2' }}
+              style={{ background: '#BF4A2A' }}
             />
-            <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 9, letterSpacing: '0.1em', color: '#EBEBF0' }}>
+            <span style={{ fontFamily: '"Fraunces", serif', fontWeight: 800, fontSize: 9, letterSpacing: '0.1em', color: '#1A1612' }}>
               CREAT
             </span>
-            <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 300, fontSize: 8, letterSpacing: '0.06em', color: '#5E6AD2', opacity: 0.8, marginLeft: -1 }}>
+            <span style={{ fontFamily: '"Fraunces", serif', fontWeight: 300, fontSize: 8, letterSpacing: '0.06em', color: '#BF4A2A', opacity: 0.8, marginLeft: -1 }}>
               studio
             </span>
           </div>
@@ -267,7 +267,7 @@ export default function Shell() {
             onClick={() => setCmdOpen(true)}
             className="flex items-center gap-1.5 transition-colors duration-150"
             style={{ color: 'var(--text-3)' }}
-            onMouseEnter={e => (e.currentTarget.style.color = '#5E6AD2')}
+            onMouseEnter={e => (e.currentTarget.style.color = '#BF4A2A')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
           >
             <Command size={9} />
@@ -276,7 +276,7 @@ export default function Shell() {
           <span>Supabase</span>
           <motion.div
             className="w-1.5 h-1.5 rounded-full"
-            style={{ background: '#4ade80' }}
+            style={{ background: '#4A6B3A' }}
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
           />

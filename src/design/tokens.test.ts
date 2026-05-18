@@ -3,24 +3,24 @@ import { colors, typography, motion, spacing } from './tokens';
 
 describe('design tokens', () => {
   it('exposes the Obsidian dark palette', () => {
-    expect(colors.bg.void).toBe('#030303');
-    expect(colors.bg.app).toBe('#080808');
-    expect(colors.bg.editor).toBe('#1e1e1e');
-    expect(colors.bg.tabBar).toBe('#252526');
+    expect(colors.bg.void).toBe('#EFEAE0');
+    expect(colors.bg.app).toBe('#F4EFE6');
+    expect(colors.bg.editor).toBe('#E8E2D6');
+    expect(colors.bg.tabBar).toBe('#DDD5C6');
   });
 
   it('exposes text + accent colors', () => {
-    expect(colors.text.primary).toBe('#f7f3ee');
-    expect(colors.text.secondary).toBe('#a09590');
-    expect(colors.text.muted).toBe('#5e5855');
+    expect(colors.text.primary).toBe('#1A1612');
+    expect(colors.text.secondary).toBe('#6B645C');
+    expect(colors.text.muted).toBe('#9B948A');
     expect(colors.accent.amber).toBe('#f59e0b');
     expect(colors.accent.blue).toBe('#4f8ef7');
   });
 
   it('exposes border tokens as rgba strings', () => {
-    expect(colors.border.faint).toBe('rgba(255,255,255,0.05)');
-    expect(colors.border.subtle).toBe('rgba(255,255,255,0.09)');
-    expect(colors.border.visible).toBe('rgba(255,255,255,0.16)');
+    expect(colors.border.faint).toBe('rgba(26,22,18,0.07)');
+    expect(colors.border.subtle).toBe('rgba(26,22,18,0.11)');
+    expect(colors.border.visible).toBe('rgba(26,22,18,0.18)');
   });
 
   it('exposes typography size scale', () => {

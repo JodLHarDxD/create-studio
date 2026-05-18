@@ -65,40 +65,40 @@ export default function NewTaskModal({ isOpen, onClose }: { isOpen: boolean; onC
 
   const fieldStyle: React.CSSProperties = {
     width: '100%',
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(255,255,255,0.09)',
+    background: 'rgba(26,22,18,0.05)',
+    border: '1px solid rgba(26,22,18,0.11)',
     borderRadius: 2,
     outline: 'none',
     padding: '10px 12px',
     fontSize: 13,
-    fontFamily: '"DM Sans", sans-serif',
-    color: '#EBEBF0',
+    fontFamily: '"Inter", sans-serif',
+    color: '#1A1612',
     transition: 'border-color 0.2s, background 0.2s',
   };
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    e.target.style.borderColor = 'rgba(94,106,210,0.45)';
-    e.target.style.background = 'rgba(255,255,255,0.06)';
+    e.target.style.borderColor = 'rgba(191,74,42,0.45)';
+    e.target.style.background = 'rgba(26,22,18,0.08)';
   };
   const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    e.target.style.borderColor = 'rgba(255,255,255,0.09)';
-    e.target.style.background = 'rgba(255,255,255,0.04)';
+    e.target.style.borderColor = 'rgba(26,22,18,0.11)';
+    e.target.style.background = 'rgba(26,22,18,0.05)';
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(3,3,3,0.85)', backdropFilter: 'blur(8px)' }}>
-      <div className="w-[500px]" style={{ background: '#080808', border: '1px solid rgba(255,255,255,0.07)', borderTop: '2px solid #5E6AD2', boxShadow: '0 32px 64px rgba(0,0,0,0.8)' }}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(26,22,18,0.35)', backdropFilter: 'blur(8px)' }}>
+      <div className="w-[500px]" style={{ background: '#FBF8F2', border: '1px solid rgba(26,22,18,0.13)', borderRadius: 3, boxShadow: '0 24px 56px rgba(26,22,18,0.18), 0 6px 16px rgba(26,22,18,0.08)' }}>
         {/* Header */}
-        <div className="flex justify-between items-center px-7 py-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="flex justify-between items-center px-7 py-5" style={{ borderBottom: '1px solid rgba(26,22,18,0.08)' }}>
           <div>
-            <div style={{ fontFamily: '"Syne", sans-serif', fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em', color: '#EBEBF0' }}>New Task</div>
+            <div style={{ fontFamily: '"Fraunces", serif', fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em', color: '#1A1612' }}>New Task</div>
           </div>
           <button onClick={onClose}
             aria-label="Close modal"
             className="w-8 h-8 flex items-center justify-center rounded transition-all"
-            style={{ color: '#505068', background: 'transparent' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#EBEBF0'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#505068'; (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
+            style={{ color: '#9B948A', background: 'transparent' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#1A1612'; (e.currentTarget as HTMLElement).style.background = 'rgba(26,22,18,0.07)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#9B948A'; (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
             <X size={15} />
           </button>
         </div>
@@ -109,7 +109,7 @@ export default function NewTaskModal({ isOpen, onClose }: { isOpen: boolean; onC
             <label className="form-label">Title *</label>
             <input placeholder="What needs to be done?" value={form.title} required
               onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
-              style={{ ...fieldStyle, fontSize: 14, fontFamily: '"Syne", sans-serif', fontWeight: 600 }}
+              style={{ ...fieldStyle, fontSize: 14, fontFamily: '"Fraunces", serif', fontWeight: 600 }}
               onFocus={handleFocus} onBlur={handleBlur} />
           </div>
 
@@ -127,7 +127,7 @@ export default function NewTaskModal({ isOpen, onClose }: { isOpen: boolean; onC
           <div>
             <label className="form-label">Reference URL</label>
             <div className="relative flex items-center">
-              <Link size={12} className="absolute" style={{ color: '#2E2E40', left: 12 }} />
+              <Link size={12} className="absolute" style={{ color: '#C4BDB1', left: 12 }} />
               <input placeholder="https://…" value={form.url}
                 onChange={e => setForm(p => ({ ...p, url: e.target.value }))}
                 style={{ ...fieldStyle, paddingLeft: 34 }}
@@ -141,24 +141,24 @@ export default function NewTaskModal({ isOpen, onClose }: { isOpen: boolean; onC
             <div
               onClick={() => fileRef.current?.click()}
               className="flex items-center gap-3 cursor-pointer transition-all"
-              style={{ padding: '11px 14px', border: `1px dashed ${zipFile ? 'rgba(94,106,210,0.35)' : 'rgba(255,255,255,0.09)'}`, background: zipFile ? 'rgba(94,106,210,0.04)' : 'rgba(255,255,255,0.02)', borderRadius: 2 }}
-              onMouseEnter={e => { if (!zipFile) (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.18)'; }}
-              onMouseLeave={e => { if (!zipFile) (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.09)'; }}
+              style={{ padding: '11px 14px', border: `1px dashed ${zipFile ? 'rgba(191,74,42,0.35)' : 'rgba(26,22,18,0.11)'}`, background: zipFile ? 'rgba(191,74,42,0.04)' : 'rgba(26,22,18,0.03)', borderRadius: 2 }}
+              onMouseEnter={e => { if (!zipFile) (e.currentTarget as HTMLElement).style.borderColor = 'rgba(26,22,18,0.22)'; }}
+              onMouseLeave={e => { if (!zipFile) (e.currentTarget as HTMLElement).style.borderColor = 'rgba(26,22,18,0.11)'; }}
             >
               {zipFile ? (
                 <>
-                  <File size={13} style={{ color: '#5E6AD2', flexShrink: 0 }} />
-                  <span className="truncate flex-1" style={{ fontSize: 12, color: '#8A8AA0', fontFamily: '"JetBrains Mono", monospace' }}>{zipFile.name}</span>
-                  <button type="button" onClick={e => { e.stopPropagation(); setZipFile(null); }} style={{ color: '#2E2E40', transition: 'color 0.15s' }}
-                    onMouseEnter={e => (e.currentTarget.style.color = '#f87171')}
-                    onMouseLeave={e => (e.currentTarget.style.color = '#2E2E40')}>
+                  <File size={13} style={{ color: '#BF4A2A', flexShrink: 0 }} />
+                  <span className="truncate flex-1" style={{ fontSize: 12, color: '#6B645C', fontFamily: '"JetBrains Mono", monospace' }}>{zipFile.name}</span>
+                  <button type="button" onClick={e => { e.stopPropagation(); setZipFile(null); }} style={{ color: '#C4BDB1', transition: 'color 0.15s' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = '#B53C2A')}
+                    onMouseLeave={e => (e.currentTarget.style.color = '#C4BDB1')}>
                     <X size={12} />
                   </button>
                 </>
               ) : (
                 <>
-                  <Upload size={13} style={{ color: '#2E2E40', flexShrink: 0 }} />
-                  <span style={{ fontSize: 11, fontFamily: '"DM Sans", sans-serif', color: '#2E2E40' }}>Upload .zip file</span>
+                  <Upload size={13} style={{ color: '#C4BDB1', flexShrink: 0 }} />
+                  <span style={{ fontSize: 11, fontFamily: '"Inter", sans-serif', color: '#C4BDB1' }}>Upload .zip file</span>
                 </>
               )}
             </div>
@@ -200,7 +200,7 @@ export default function NewTaskModal({ isOpen, onClose }: { isOpen: boolean; onC
           {/* Submit */}
           <button type="submit" disabled={loading}
             className="w-full py-3.5 flex items-center justify-center gap-2 transition-all mt-1"
-            style={{ background: '#5E6AD2', color: '#000', fontSize: 11, fontFamily: '"Syne", sans-serif', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', opacity: loading ? 0.7 : 1, borderRadius: 2, boxShadow: loading ? 'none' : '0 4px 16px rgba(94,106,210,0.2)' }}>
+            style={{ background: '#BF4A2A', color: '#F4EFE6', fontSize: 11, fontFamily: '"Fraunces", serif', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', opacity: loading ? 0.7 : 1, borderRadius: 2, boxShadow: loading ? 'none' : '0 4px 16px rgba(191,74,42,0.2)' }}>
             {loading ? (
               <><Loader2 size={12} className="animate-spin" /><span>{uploadProgress || 'Creating…'}</span></>
             ) : 'Create Task'}

@@ -1,19 +1,19 @@
 export const colors = {
   // Obsidian surface scale
   bg: {
-    void:    '#030303',
-    app:     '#080808',
+    void:    '#EFEAE0',
+    app:     '#F4EFE6',
     surface: '#0e0e0e',
     raised:  '#141414',
-    editor:  '#1e1e1e',
-    tabBar:  '#252526',
+    editor:  '#E8E2D6',
+    tabBar:  '#DDD5C6',
   },
   // Warm text
   text: {
-    primary:  '#f7f3ee',
-    secondary: '#a09590',
-    muted:    '#5e5855',
-    dim:      '#3a3836',
+    primary:  '#1A1612',
+    secondary: '#6B645C',
+    muted:    '#9B948A',
+    dim:      '#C4BDB1',
     active:   '#ffffff',
   },
   // Signature accent: warm amber
@@ -26,23 +26,23 @@ export const colors = {
   },
   // Semantic
   status: {
-    green:  '#4ade80',
-    red:    '#f87171',
-    yellow: '#fbbf24',
+    green:  '#4A6B3A',
+    red:    '#B53C2A',
+    yellow: '#C99A2E',
   },
   // Borders
   border: {
-    faint:   'rgba(255,255,255,0.05)',
-    subtle:  'rgba(255,255,255,0.09)',
-    visible: 'rgba(255,255,255,0.16)',
+    faint:   'rgba(26,22,18,0.07)',
+    subtle:  'rgba(26,22,18,0.11)',
+    visible: 'rgba(26,22,18,0.18)',
     amber:   'rgba(245,158,11,0.3)',
   },
 } as const;
 
 export const typography = {
   font: {
-    sans:    '"DM Sans", ui-sans-serif, system-ui, sans-serif',
-    display: '"Syne", ui-sans-serif, system-ui, sans-serif',
+    sans:    '"Inter", ui-sans-serif, system-ui, sans-serif',
+    display: '"Fraunces", "Iowan Old Style", Georgia, serif',
     mono:    '"JetBrains Mono", ui-monospace, SFMono-Regular, monospace',
   },
   size: {
