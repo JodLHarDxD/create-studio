@@ -240,3 +240,54 @@ cd backend
 pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 ```
+
+---
+
+## Skill routing
+
+When user request matches one below, invoke via Skill tool. Project-scoped commands (`.claude/commands/tf-*`) outrank generic skills.
+
+### TeamForge-specific routes
+
+| User intent | Invoke |
+|-------------|--------|
+| "new feature" / "build X for TeamForge" | `/tf-feature` |
+| "bug" / "X isn't working" / "fix this" | `/tf-bug` |
+| "deploy" / "ship the app" / "go live" | `/tf-deploy` |
+| "add task field" / "add column" | Follow "Common Operations → Add a new task field". No skill needed. |
+| "add AI model" / "new provider" | Follow "Common Operations → Add a new AI model". No skill. |
+| "add page" / "new view" | Follow "Common Operations → Add a new page/view". No skill. |
+| RBAC / permissions question | Read "RBAC Rules" section. Never relax frontend OR RLS. |
+| "save API key in DB" / "persist credential" | REJECT. See "What NOT To Do". Keys live in localStorage only. |
+| Supabase RLS debugging | Follow "Debug Supabase RLS issues". |
+
+### General routes
+
+| User intent | Invoke |
+|-------------|--------|
+| Multi-domain workflow ("make it $1000 frontend", "ship with full review") | `/jodl-forge <goal>` |
+| One command, no follow-up | `/jodl-auto <goal>` |
+| Code review of branch / diff | `/review` |
+| Bug investigation | `/investigate` |
+| Live URL QA | `/qa <URL>` |
+| Brainstorm feature | `superpowers:brainstorming` |
+| Plan execution (multi-step) | `superpowers:writing-plans` → `superpowers:executing-plans` |
+| Commit + push + PR | `commit-commands:commit-push-pr` |
+| Find right skill (unsure) | `/jodl-retrieve <task>` |
+| Security audit | `/cso` |
+| Frontend visual polish | `frontend-design:frontend-design` then `/design-review` |
+| Performance audit | `chrome-devtools-mcp:debug-optimize-lcp` |
+| Accessibility check | `chrome-devtools-mcp:a11y-debugging` |
+
+### Hard constraints (override any skill output)
+
+1. **Supabase only.** Never reintroduce Firebase or Firestore.
+2. **API key isolation.** User key → localStorage → request payload. Never DB, never log, never frontend env.
+3. **Service role key.** Backend only. Never to frontend.
+4. **Single context.** `WorkspaceContext` is the only global state. No Redux/Zustand additions.
+5. **RBAC at two layers.** Frontend filter AND Supabase RLS. Never trust one alone.
+6. **Guest mode.** Must work with zero backend/Supabase connection.
+7. **Monaco `readOnly`.** Stays `false`. Members must edit their own files.
+8. **`resolve_key()` priority.** User-provided key > server env var. Never swap.
+
+If a skill's output violates any of these → reject, fix to comply, then proceed. Hard constraints outrank skill recommendations.

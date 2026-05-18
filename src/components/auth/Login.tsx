@@ -76,17 +76,26 @@ export default function Login() {
   };
 
   const inputStyle: React.CSSProperties = {
-    width: '100%', background: 'transparent', outline: 'none',
-    borderBottom: '1px solid rgba(255,255,255,0.1)',
-    padding: '11px 0', fontSize: 13,
-    fontFamily: '"DM Sans", sans-serif', color: '#f7f3ee',
-    transition: 'border-color 0.2s',
+    width: '100%',
+    background: 'rgba(255,255,255,0.04)',
+    border: '1px solid rgba(255,255,255,0.09)',
+    borderRadius: 2,
+    outline: 'none',
+    padding: '11px 14px',
+    fontSize: 13,
+    fontFamily: '"DM Sans", sans-serif',
+    color: '#f7f3ee',
+    transition: 'border-color 0.2s, background 0.2s',
   };
 
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) =>
-    (e.target.style.borderBottomColor = '#f59e0b');
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) =>
-    (e.target.style.borderBottomColor = 'rgba(255,255,255,0.1)');
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+    e.target.style.borderColor = 'rgba(245,158,11,0.45)';
+    e.target.style.background = 'rgba(255,255,255,0.06)';
+  };
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+    e.target.style.borderColor = 'rgba(255,255,255,0.09)';
+    e.target.style.background = 'rgba(255,255,255,0.04)';
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex overflow-hidden" style={{ background: '#030303' }}>
@@ -184,12 +193,12 @@ export default function Login() {
         }}
       >
         {/* Panel header */}
-        <div style={{ marginBottom: 40 }}>
-          <div style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#f7f3ee', marginBottom: 6 }}>
-            {mode === 'login' ? 'Sign in' : 'Create account'}
+        <div style={{ marginBottom: 36 }}>
+          <div style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 18, letterSpacing: '-0.01em', color: '#f7f3ee', marginBottom: 6 }}>
+            {mode === 'login' ? 'Welcome back' : 'Create account'}
           </div>
-          <div style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#3a3836' }}>
-            to CREATstudio workspace
+          <div style={{ fontSize: 12, fontFamily: '"DM Sans", sans-serif', color: '#5e5855' }}>
+            {mode === 'login' ? 'Sign in to your workspace' : 'Join CREATstudio'}
           </div>
         </div>
 
@@ -199,8 +208,8 @@ export default function Login() {
             <button key={m} onClick={() => { setMode(m); setError(''); }}
               className="pb-3 transition-all"
               style={{
-                fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700,
-                letterSpacing: '0.18em', textTransform: 'uppercase',
+                fontSize: 11, fontFamily: '"Syne", sans-serif', fontWeight: 700,
+                letterSpacing: '0.1em', textTransform: 'uppercase',
                 color: mode === m ? '#f59e0b' : '#3a3836',
                 borderBottom: `2px solid ${mode === m ? '#f59e0b' : 'transparent'}`,
                 marginBottom: -1,
@@ -227,33 +236,33 @@ export default function Login() {
           {mode === 'register' && (
             <>
               <div>
-                <label style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#5e5855', display: 'block', marginBottom: 8 }}>Full Name</label>
-                <input type="text" placeholder="Your name" value={fullName}
+                <label htmlFor="reg-name" className="form-label">Full Name</label>
+                <input id="reg-name" type="text" placeholder="Your name" value={fullName}
                   onChange={e => setFullName(e.target.value)} required
                   style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} />
               </div>
               <div>
-                <label style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#5e5855', display: 'block', marginBottom: 8 }}>Role</label>
-                <select value={role} onChange={e => setRole(e.target.value as any)}
-                  style={{ ...inputStyle, fontSize: 11, fontFamily: '"JetBrains Mono", monospace', color: '#a09590', letterSpacing: '0.08em' }}
+                <label htmlFor="reg-role" className="form-label">Role</label>
+                <select id="reg-role" value={role} onChange={e => setRole(e.target.value as any)}
+                  style={{ ...inputStyle, fontFamily: '"DM Sans", sans-serif' }}
                   onFocus={handleFocus as any} onBlur={handleBlur as any}>
-                  <option value="MEMBER" style={{ background: '#080808' }}>Member</option>
-                  <option value="ADMIN" style={{ background: '#080808' }}>Admin</option>
+                  <option value="MEMBER" style={{ background: '#0e0e0e' }}>Member</option>
+                  <option value="ADMIN" style={{ background: '#0e0e0e' }}>Admin</option>
                 </select>
               </div>
             </>
           )}
 
           <div>
-            <label style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#5e5855', display: 'block', marginBottom: 8 }}>Email</label>
-            <input type="email" placeholder="you@company.com" value={email}
+            <label htmlFor="auth-email" className="form-label">Email</label>
+            <input id="auth-email" type="email" placeholder="you@company.com" value={email}
               onChange={e => setEmail(e.target.value)} required
               style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} />
           </div>
 
           <div>
-            <label style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#5e5855', display: 'block', marginBottom: 8 }}>Password</label>
-            <input type="password" placeholder="••••••••" value={password}
+            <label htmlFor="auth-password" className="form-label">Password</label>
+            <input id="auth-password" type="password" placeholder="••••••••" value={password}
               onChange={e => setPassword(e.target.value)} required minLength={6}
               style={inputStyle} onFocus={handleFocus} onBlur={handleBlur} />
           </div>
@@ -261,39 +270,41 @@ export default function Login() {
           <motion.button
             type="submit"
             disabled={loading}
-            whileHover={{ scale: 1.01 }}
+            whileHover={{ opacity: loading ? 0.7 : 0.92 }}
             whileTap={{ scale: 0.99 }}
             transition={transitions.fast}
             style={{
               marginTop: 8,
-              padding: '16px',
+              padding: '14px 20px',
               background: '#f59e0b',
               color: '#000',
-              fontSize: 10,
+              fontSize: 11,
               fontFamily: '"Syne", sans-serif',
               fontWeight: 800,
-              letterSpacing: '0.3em',
+              letterSpacing: '0.15em',
               textTransform: 'uppercase',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: 8,
+              borderRadius: 2,
               opacity: loading ? 0.7 : 1,
               cursor: loading ? 'not-allowed' : 'pointer',
+              boxShadow: loading ? 'none' : '0 4px 16px rgba(245,158,11,0.25)',
             }}
           >
             {loading && <Loader2 size={13} className="animate-spin" />}
-            {mode === 'login' ? 'Authenticate' : 'Create Account'}
+            {mode === 'login' ? 'Sign In' : 'Create Account'}
           </motion.button>
         </form>
 
         {/* Guest */}
-        <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+        <div style={{ marginTop: 28, paddingTop: 22, borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
           <button onClick={handleGuest}
-            style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#3a3836', transition: 'color 0.15s' }}
+            style={{ fontSize: 11, fontFamily: '"DM Sans", sans-serif', color: '#3a3836', transition: 'color 0.2s' }}
             onMouseEnter={e => (e.currentTarget.style.color = '#f59e0b')}
             onMouseLeave={e => (e.currentTarget.style.color = '#3a3836')}>
-            Demo Guest Access → Admin View
+            Try Demo (Guest · Admin View)
           </button>
         </div>
       </motion.div>

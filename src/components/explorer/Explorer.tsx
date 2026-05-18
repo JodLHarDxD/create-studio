@@ -149,8 +149,7 @@ function FileTreeItem({
       className="w-full flex items-center gap-1.5 text-left outline-none transition-colors"
       style={{
         paddingLeft: `${depth * 12 + 22}px`, paddingTop: 3, paddingBottom: 3,
-        background: isActive ? 'rgba(245,158,11,0.06)' : 'transparent',
-        borderLeft: isActive ? '2px solid #f59e0b' : '2px solid transparent',
+        background: isActive ? 'rgba(245,158,11,0.07)' : 'transparent',
       }}
       onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}
       onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
@@ -453,7 +452,7 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
   const linkedTask = tasks.find(t => t.id === linkedTaskId);
 
   const sectionLabel = (text: string) => (
-    <span style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#3a3836' }}>{text}</span>
+    <span className="section-header">{text}</span>
   );
 
   return (
@@ -591,15 +590,18 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
 
         {tasksExpanded && (
           <>
-            <div className="flex gap-3 px-4 py-1.5 shrink-0" style={{ borderBottom: '1px solid var(--border-1)' }}>
+            <div className="flex gap-0 px-3 py-0 shrink-0" style={{ borderBottom: '1px solid var(--border-1)' }}>
               {(['ALL', 'TODO', 'DONE'] as const).map(f => (
                 <button key={f} onClick={() => setTaskFilter(f)}
+                  className="px-3 py-2 transition-colors"
                   style={{
-                    fontSize: 8, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.15em', textTransform: 'uppercase',
+                    fontSize: 10, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
                     color: taskFilter === f ? '#f59e0b' : '#3a3836',
-                    borderBottom: taskFilter === f ? '1px solid #f59e0b' : '1px solid transparent',
-                    paddingBottom: 1,
-                  }}>
+                    borderBottom: `2px solid ${taskFilter === f ? '#f59e0b' : 'transparent'}`,
+                    marginBottom: -1,
+                  }}
+                  onMouseEnter={e => { if (taskFilter !== f) (e.currentTarget as HTMLElement).style.color = '#a09590'; }}
+                  onMouseLeave={e => { if (taskFilter !== f) (e.currentTarget as HTMLElement).style.color = '#3a3836'; }}>
                   {f}
                 </button>
               ))}
@@ -628,19 +630,19 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 8 }}
                         transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-                        className="flex flex-col px-4 py-2 group transition-colors"
+                        className="flex flex-col px-4 py-3 group transition-colors"
                         style={{ borderBottom: '1px solid var(--border-1)' }}
                         onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.02)')}
                         onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                       >
-                        <div className="flex items-start gap-2">
-                          <div className="w-1.5 h-1.5 mt-1.5 rounded-sm shrink-0" style={{ background: statusDot.bg, border: (statusDot as any).border }} />
+                        <div className="flex items-start gap-2.5">
+                          <div className="w-1.5 h-1.5 mt-[5px] rounded-sm shrink-0" style={{ background: statusDot.bg, border: (statusDot as any).border }} />
                           <div className="flex flex-col min-w-0 flex-1">
-                            <div className="flex items-center gap-1.5">
+                            <div className="flex items-center gap-2">
                               <button
                                 onClick={() => setDetailTask(task)}
                                 className="truncate text-left transition-colors"
-                                style={{ fontSize: 11, color: task.status === 'DONE' ? '#3a3836' : '#a09590', textDecoration: task.status === 'DONE' ? 'line-through' : 'none', fontFamily: '"DM Sans", sans-serif' }}
+                                style={{ fontSize: 12, color: task.status === 'DONE' ? '#3a3836' : '#a09590', textDecoration: task.status === 'DONE' ? 'line-through' : 'none', fontFamily: '"DM Sans", sans-serif', fontWeight: 450, lineHeight: 1.4 }}
                                 onMouseEnter={e => { if (task.status !== 'DONE') (e.currentTarget as HTMLElement).style.color = '#f7f3ee'; }}
                                 onMouseLeave={e => { if (task.status !== 'DONE') (e.currentTarget as HTMLElement).style.color = '#a09590'; }}
                               >
@@ -650,22 +652,22 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                                 <button
                                   onClick={() => { setDiffMode('live'); setDiffTask(task); }}
                                   className="shrink-0 transition-all"
-                                  style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)', padding: '1px 5px' }}
+                                  style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)', padding: '2px 6px', borderRadius: 2 }}
                                   title="View live changes"
                                 >
                                   Live
                                 </button>
                               )}
                             </div>
-                            {task.description && <span className="line-clamp-1 mt-0.5" style={{ fontSize: 10, color: '#3a3836', fontFamily: '"DM Sans", sans-serif' }}>{task.description}</span>}
+                            {task.description && <span className="line-clamp-1 mt-1" style={{ fontSize: 11, color: '#3a3836', fontFamily: '"DM Sans", sans-serif', lineHeight: 1.4 }}>{task.description}</span>}
                             {assignee && (
-                              <div className="flex items-center gap-1 mt-1">
-                                <div className="w-3.5 h-3.5 rounded-full overflow-hidden flex items-center justify-center shrink-0" style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)', fontSize: 9, color: '#f59e0b', fontFamily: '"Syne", sans-serif', fontWeight: 700 }}>
+                              <div className="flex items-center gap-1.5 mt-1.5">
+                                <div className="w-4 h-4 rounded-full overflow-hidden flex items-center justify-center shrink-0" style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)', fontSize: 9, color: '#f59e0b', fontFamily: '"Syne", sans-serif', fontWeight: 700 }}>
                                   {assignee.avatar_url
                                     ? <img src={assignee.avatar_url} alt={assignee.full_name} className="w-full h-full object-cover" />
                                     : assignee.full_name[0]}
                                 </div>
-                                <span style={{ fontSize: 9, color: '#3a3836', fontFamily: '"JetBrains Mono", monospace' }}>{assignee.full_name}</span>
+                                <span style={{ fontSize: 10, color: '#3a3836', fontFamily: '"DM Sans", sans-serif' }}>{assignee.full_name}</span>
                               </div>
                             )}
 
@@ -690,11 +692,11 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-1.5 pl-3.5 mt-1.5 opacity-0 group-hover:opacity-100 transition-opacity flex-wrap">
+                        <div className="flex items-center gap-2 pl-4 mt-2 opacity-0 group-hover:opacity-100 transition-opacity flex-wrap">
                           {isAdmin && (
                             <select value={task.assignee_id || ''} onChange={e => updateTask(task.id, { assignee_id: e.target.value || null })}
                               className="outline-none transition-colors"
-                              style={{ background: '#0a0a0a', border: '1px solid var(--border-2)', fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#5e5855', padding: '1px 4px' }}>
+                              style={{ background: '#0e0e0e', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 2, fontSize: 10, fontFamily: '"DM Sans", sans-serif', color: '#5e5855', padding: '3px 6px' }}>
                               <option value="">Unassigned</option>
                               {users.map(u => <option key={u.id} value={u.id}>{u.full_name}</option>)}
                             </select>
@@ -702,34 +704,34 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                           {isAdmin && (
                             <select value={task.status} onChange={e => updateTask(task.id, { status: e.target.value })}
                               className="outline-none"
-                              style={{ background: '#0a0a0a', border: '1px solid var(--border-2)', fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#5e5855', padding: '1px 4px' }}>
-                              <option value="TODO">TODO</option>
-                              <option value="IN_PROGRESS">IN PROGRESS</option>
-                              <option value="DONE">DONE</option>
+                              style={{ background: '#0e0e0e', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 2, fontSize: 10, fontFamily: '"DM Sans", sans-serif', color: '#5e5855', padding: '3px 6px' }}>
+                              <option value="TODO">Todo</option>
+                              <option value="IN_PROGRESS">In Progress</option>
+                              <option value="DONE">Done</option>
                             </select>
                           )}
                           {!isAdmin && isUnassigned && task.status !== 'DONE' && (
                             <button onClick={() => updateTask(task.id, { assignee_id: currentUserId, status: 'IN_PROGRESS' })}
-                              style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)', padding: '2px 8px' }}>
+                              style={{ fontSize: 10, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)', padding: '3px 10px', borderRadius: 2 }}>
                               Take Task
                             </button>
                           )}
                           {!isAdmin && isMine && task.status === 'IN_PROGRESS' && (
                             <button onClick={() => updateTask(task.id, { status: 'DONE' })}
-                              style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#4ade80', border: '1px solid rgba(74,222,128,0.3)', padding: '2px 8px' }}>
+                              style={{ fontSize: 10, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#4ade80', border: '1px solid rgba(74,222,128,0.3)', padding: '3px 10px', borderRadius: 2 }}>
                               Mark Done
                             </button>
                           )}
                           {!isAdmin && isMine && task.status === 'TODO' && (
                             <button onClick={() => updateTask(task.id, { status: 'IN_PROGRESS' })}
-                              style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)', padding: '2px 8px' }}>
+                              style={{ fontSize: 10, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)', padding: '3px 10px', borderRadius: 2 }}>
                               Start
                             </button>
                           )}
                           {isAdmin && task.status === 'DONE' && (
                             <button
                               onClick={() => archiveTask(task.id)}
-                              style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#3a3836', border: '1px solid rgba(255,255,255,0.06)', padding: '2px 8px' }}
+                              style={{ fontSize: 10, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#3a3836', border: '1px solid rgba(255,255,255,0.07)', padding: '3px 10px', borderRadius: 2, transition: 'color 0.15s' }}
                               onMouseEnter={e => (e.currentTarget.style.color = '#f87171')}
                               onMouseLeave={e => (e.currentTarget.style.color = '#3a3836')}
                             >
@@ -743,7 +745,7 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                 </AnimatePresence>
               </LayoutGroup>
               {filteredTasks.length === 0 && (
-                <div className="px-4 py-5" style={{ fontSize: 10, color: '#3a3836', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>No tasks</div>
+                <div className="px-4 py-6" style={{ fontSize: 11, color: '#3a3836', fontFamily: '"DM Sans", sans-serif' }}>No tasks found</div>
               )}
             </div>
           </>

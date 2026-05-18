@@ -138,14 +138,6 @@
   pointer-events: none;
 }
 
-/* ── Amber gradient text ── */
-.text-gradient-amber {
-  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #f59e0b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 /* ── Amber glow shadow ── */
 .shadow-amber {
   box-shadow: 0 0 24px rgba(245,158,11,0.15), 0 0 48px rgba(245,158,11,0.06);
@@ -153,17 +145,89 @@
 
 /* ── Micro-label ── */
 .micro-label {
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  opacity: 0.4;
+  opacity: 0.45;
 }
 
 /* ── Panel chrome consistent border ── */
 .border-subtle {
   border-color: rgba(255, 255, 255, 0.05);
 }
+
+/* ── Glass surface — for dropdowns, overlays, floating panels ── */
+.glass {
+  background: rgba(12, 12, 12, 0.88);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+}
+
+/* ── Elevation shadow system ── */
+.shadow-float {
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.04) inset,
+    0 8px 24px rgba(0,0,0,0.5),
+    0 2px 6px rgba(0,0,0,0.35);
+}
+
+.shadow-deep {
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.03) inset,
+    0 24px 64px rgba(0,0,0,0.75),
+    0 8px 24px rgba(0,0,0,0.5);
+}
+
+/* ── Contained input — replaces bottom-border-only pattern ── */
+.input-contained {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 10px 14px;
+  font-size: 13px;
+  font-family: "DM Sans", sans-serif;
+  color: #f7f3ee;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s;
+  border-radius: 2px;
+}
+.input-contained:focus {
+  border-color: rgba(245, 158, 11, 0.45);
+  background: rgba(255,255,255,0.06);
+}
+.input-contained::placeholder {
+  color: rgba(160, 149, 144, 0.35);
+}
+
+/* ── Form label ── */
+.form-label {
+  display: block;
+  font-size: 10px;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5e5855;
+  margin-bottom: 7px;
+}
+
+/* ── Section heading ── */
+.section-header {
+  font-size: 10px;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5e5855;
+}
+
+/* ── Surface elevation utilities ── */
+.surface-1 { background: #080808; }
+.surface-2 { background: #0e0e0e; }
+.surface-3 { background: #141414; }
+.surface-4 { background: #1a1a1a; }
+.surface-5 { background: #222222; }
 
 /* ── Markdown body ── */
 .markdown-body {

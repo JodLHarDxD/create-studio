@@ -92,36 +92,26 @@ export default function Shell() {
                 title={`${label} (⌘${v[0].toUpperCase()})`}
                 className="relative w-10 h-10 flex items-center justify-center group"
               >
-                {/* Active amber indicator */}
-                {isActive && (
-                  <motion.div
-                    layoutId="activeViewIndicator"
-                    className="absolute left-0 top-2 bottom-2 rounded-r"
-                    style={{ width: 2.5, background: '#f59e0b' }}
-                    transition={transitions.spring}
-                  />
-                )}
-
-                {/* Icon container */}
-                <div
-                  className="w-8 h-8 flex items-center justify-center rounded transition-all duration-200"
+                {/* Icon container — active state via background tint + color, no side stripe */}
+                <motion.div
+                  className="w-9 h-9 flex items-center justify-center rounded transition-all duration-200"
                   style={{
-                    background: isActive ? 'rgba(245,158,11,0.08)' : 'transparent',
-                    color: isActive ? '#f59e0b' : undefined,
-                    opacity: isActive ? 1 : undefined,
+                    background: isActive ? 'rgba(245,158,11,0.12)' : 'transparent',
+                    border: isActive ? '1px solid rgba(245,158,11,0.18)' : '1px solid transparent',
                   }}
+                  onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)'; }}
+                  onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = isActive ? 'rgba(245,158,11,0.12)' : 'transparent'; }}
                 >
                   <Icon
-                    size={18}
-                    strokeWidth={1.5}
+                    size={17}
+                    strokeWidth={isActive ? 2 : 1.5}
                     style={{
-                      opacity: isActive ? 1 : 0.28,
+                      opacity: isActive ? 1 : 0.3,
                       color: isActive ? '#f59e0b' : '#f7f3ee',
                       transition: 'opacity 0.15s, color 0.15s',
                     }}
-                    className="group-hover:!opacity-80"
                   />
-                </div>
+                </motion.div>
               </button>
             );
           })}
@@ -164,6 +154,7 @@ export default function Shell() {
           <button
             onClick={logout}
             title="Logout"
+            aria-label="Logout"
             className="w-8 h-8 flex items-center justify-center transition-all duration-200"
             style={{ opacity: 0.18, color: '#f7f3ee' }}
             onMouseEnter={e => { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.color = '#f87171'; }}
@@ -257,15 +248,15 @@ export default function Shell() {
               className="w-1.5 h-1.5 rounded-full amber-pulse"
               style={{ background: '#f59e0b' }}
             />
-            <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 9, letterSpacing: '0.12em', color: '#f7f3ee' }}>
+            <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 9, letterSpacing: '0.1em', color: '#f7f3ee' }}>
               CREAT
             </span>
-            <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 300, fontSize: 9, letterSpacing: '0.06em', color: '#f59e0b', opacity: 0.75, marginLeft: -2 }}>
+            <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 300, fontSize: 8, letterSpacing: '0.06em', color: '#f59e0b', opacity: 0.8, marginLeft: -1 }}>
               studio
             </span>
           </div>
           <span style={{ color: 'var(--border-2)' }}>·</span>
-          <span style={{ color: 'var(--text-3)', letterSpacing: '0.08em' }}>
+          <span style={{ color: 'var(--text-3)' }}>
             {userRole}
           </span>
         </div>
@@ -275,14 +266,14 @@ export default function Shell() {
           <button
             onClick={() => setCmdOpen(true)}
             className="flex items-center gap-1.5 transition-colors duration-150"
-            style={{ color: 'var(--text-3)', letterSpacing: '0.08em' }}
+            style={{ color: 'var(--text-3)' }}
             onMouseEnter={e => (e.currentTarget.style.color = '#f59e0b')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
           >
             <Command size={9} />
             <span>⌘K</span>
           </button>
-          <span style={{ letterSpacing: '0.08em' }}>Supabase</span>
+          <span>Supabase</span>
           <motion.div
             className="w-1.5 h-1.5 rounded-full"
             style={{ background: '#4ade80' }}
