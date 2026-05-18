@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+﻿import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase, isSupabaseConfigured, Profile, Project, Task, ProjectFile, LocalFileView } from '@/lib/supabaseClient';
 import { getSelectedModel } from '@/lib/aiModels';
 

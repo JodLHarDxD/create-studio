@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+﻿import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { ChevronDown, ChevronRight, Plus, FolderOpen, X, Folder, CloudUpload, Loader2, Radio } from 'lucide-react';
 import { motion, AnimatePresence, LayoutGroup } from 'motion/react';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
@@ -125,11 +125,11 @@ function FileTreeItem({
           onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
           onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
         >
-          {expanded ? <ChevronDown size={11} className="shrink-0" style={{ color: '#5e5855' }} /> : <ChevronRight size={11} className="shrink-0" style={{ color: '#5e5855' }} />}
-          <Folder size={12} className="shrink-0" style={{ color: '#f59e0b', opacity: 0.6 }} />
-          <span className="truncate flex-1" style={{ fontSize: 11, color: '#a09590', fontFamily: '"DM Sans", sans-serif' }}>{node.name}</span>
+          {expanded ? <ChevronDown size={11} className="shrink-0" style={{ color: '#505068' }} /> : <ChevronRight size={11} className="shrink-0" style={{ color: '#505068' }} />}
+          <Folder size={12} className="shrink-0" style={{ color: '#5E6AD2', opacity: 0.6 }} />
+          <span className="truncate flex-1" style={{ fontSize: 11, color: '#8A8AA0', fontFamily: '"DM Sans", sans-serif' }}>{node.name}</span>
           {changedCount > 0 && (
-            <span className="mr-2 font-mono" style={{ fontSize: 9, background: 'rgba(245,158,11,0.12)', color: '#f59e0b', padding: '0 5px', borderRadius: 2 }}>
+            <span className="mr-2 font-mono" style={{ fontSize: 9, background: 'rgba(94,106,210,0.12)', color: '#5E6AD2', padding: '0 5px', borderRadius: 2 }}>
               {changedCount}
             </span>
           )}
@@ -149,14 +149,14 @@ function FileTreeItem({
       className="w-full flex items-center gap-1.5 text-left outline-none transition-colors"
       style={{
         paddingLeft: `${depth * 12 + 22}px`, paddingTop: 3, paddingBottom: 3,
-        background: isActive ? 'rgba(245,158,11,0.07)' : 'transparent',
+        background: isActive ? 'rgba(94,106,210,0.07)' : 'transparent',
       }}
       onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}
       onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
     >
       <FileColorDot name={node.name} />
-      <span className="truncate flex-1" style={{ fontSize: 11, color: isChanged ? '#f59e0b' : isActive ? '#f7f3ee' : '#a09590', fontFamily: '"DM Sans", sans-serif' }}>{node.name}</span>
-      {isChanged && <span className="mr-2" style={{ fontSize: 9, color: 'rgba(245,158,11,0.5)', fontFamily: '"JetBrains Mono", monospace' }}>M</span>}
+      <span className="truncate flex-1" style={{ fontSize: 11, color: isChanged ? '#5E6AD2' : isActive ? '#EBEBF0' : '#8A8AA0', fontFamily: '"DM Sans", sans-serif' }}>{node.name}</span>
+      {isChanged && <span className="mr-2" style={{ fontSize: 9, color: 'rgba(94,106,210,0.5)', fontFamily: '"JetBrains Mono", monospace' }}>M</span>}
     </button>
   );
 }
@@ -456,7 +456,7 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
   );
 
   return (
-    <div className="flex flex-col h-full overflow-hidden" style={{ color: '#a09590', fontSize: 12 }}>
+    <div className="flex flex-col h-full overflow-hidden" style={{ color: '#8A8AA0', fontSize: 12 }}>
       {/* Panel header */}
       <div className="px-4 py-2.5 shrink-0" style={{ borderBottom: '1px solid var(--border-1)' }}>
         {sectionLabel('Explorer')}
@@ -469,9 +469,9 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
             <button
               onClick={openFolder}
               className="w-full flex items-center gap-2 px-3 py-2 transition-colors"
-              style={{ color: '#3a3836', fontSize: 10, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#f59e0b')}
-              onMouseLeave={e => (e.currentTarget.style.color = '#3a3836')}
+              style={{ color: '#2E2E40', fontSize: 10, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#5E6AD2')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#2E2E40')}
             >
               <FolderOpen size={12} />
               Open Local Folder
@@ -492,11 +492,11 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
             >
               <div className="flex items-center gap-1.5 min-w-0">
                 {localExpanded
-                  ? <ChevronDown size={11} style={{ color: '#5e5855', flexShrink: 0 }} />
-                  : <ChevronRight size={11} style={{ color: '#5e5855', flexShrink: 0 }} />}
-                <span className="truncate max-w-[130px]" style={{ fontSize: 10, fontFamily: '"DM Sans", sans-serif', fontWeight: 600, color: '#f7f3ee', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{localDirHandle.name}</span>
+                  ? <ChevronDown size={11} style={{ color: '#505068', flexShrink: 0 }} />
+                  : <ChevronRight size={11} style={{ color: '#505068', flexShrink: 0 }} />}
+                <span className="truncate max-w-[130px]" style={{ fontSize: 10, fontFamily: '"DM Sans", sans-serif', fontWeight: 600, color: '#EBEBF0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{localDirHandle.name}</span>
                 {linkedTaskId && (
-                  <span className="flex items-center gap-1 shrink-0" style={{ fontSize: 8, color: '#f59e0b', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em' }}>
+                  <span className="flex items-center gap-1 shrink-0" style={{ fontSize: 8, color: '#5E6AD2', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em' }}>
                     <Radio size={8} className="animate-pulse" /> live
                   </span>
                 )}
@@ -504,7 +504,7 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
               <button
                 onClick={e => { e.stopPropagation(); closeFolder(); }}
                 className="opacity-0 group-hover:opacity-100 p-1 transition-opacity"
-                style={{ color: '#5e5855' }}
+                style={{ color: '#505068' }}
                 title="Close folder"
               >
                 <X size={10} />
@@ -513,13 +513,13 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
 
             {/* Sync banner — shown when member opens a folder and has a relevant task */}
             {!linkedTaskId && syncCandidateTask && (
-              <div className="mx-2 mb-1.5 px-3 py-2 flex items-center gap-2" style={{ border: '1px solid rgba(245,158,11,0.2)', background: 'rgba(245,158,11,0.04)' }}>
-                <CloudUpload size={10} style={{ color: '#f59e0b', flexShrink: 0, opacity: 0.7 }} />
+              <div className="mx-2 mb-1.5 px-3 py-2 flex items-center gap-2" style={{ border: '1px solid rgba(94,106,210,0.2)', background: 'rgba(94,106,210,0.04)' }}>
+                <CloudUpload size={10} style={{ color: '#5E6AD2', flexShrink: 0, opacity: 0.7 }} />
                 <div className="flex-1 min-w-0">
-                  <div className="truncate" style={{ fontSize: 9, color: '#f59e0b', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.08em' }}>
+                  <div className="truncate" style={{ fontSize: 9, color: '#5E6AD2', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.08em' }}>
                     {syncCandidateTask.title}
                   </div>
-                  <div style={{ fontSize: 8, color: '#5e5855', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.06em', marginTop: 2 }}>
+                  <div style={{ fontSize: 8, color: '#505068', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.06em', marginTop: 2 }}>
                     {syncCandidateTask.status === 'TODO' ? 'link folder → starts task' : 'link folder → sync progress'}
                   </div>
                 </div>
@@ -527,7 +527,7 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                   onClick={() => linkToTask(syncCandidateTask)}
                   disabled={syncing}
                   className="shrink-0 transition-all"
-                  style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)', padding: '2px 8px' }}
+                  style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#5E6AD2', border: '1px solid rgba(94,106,210,0.3)', padding: '2px 8px' }}
                 >
                   {syncing ? <Loader2 size={9} className="animate-spin" /> : syncCandidateTask.status === 'TODO' ? 'Start' : 'Link'}
                 </button>
@@ -536,7 +536,7 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
 
             {/* Linked task status */}
             {linkedTask && syncStatus && (
-              <div className="mx-2 mb-1 flex items-center gap-1.5 px-1" style={{ fontSize: 9, color: '#f59e0b', fontFamily: '"JetBrains Mono", monospace' }}>
+              <div className="mx-2 mb-1 flex items-center gap-1.5 px-1" style={{ fontSize: 9, color: '#5E6AD2', fontFamily: '"JetBrains Mono", monospace' }}>
                 <Radio size={8} className="animate-pulse shrink-0" />
                 <span className="truncate">{syncStatus}</span>
               </div>
@@ -545,7 +545,7 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
             {localExpanded && (
               <div className="overflow-y-auto custom-scrollbar" style={{ maxHeight: '45vh' }}>
                 {fileTree.length === 0 && (
-                  <div className="px-6 py-3" style={{ fontSize: 10, color: '#3a3836', fontStyle: 'italic' }}>Empty folder</div>
+                  <div className="px-6 py-3" style={{ fontSize: 10, color: '#2E2E40', fontStyle: 'italic' }}>Empty folder</div>
                 )}
                 {fileTree.map(node => (
                   <FileTreeItem
@@ -573,15 +573,15 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
           style={{ borderBottom: '1px solid var(--border-1)' }}
         >
           <div className="flex items-center gap-1.5">
-            {tasksExpanded ? <ChevronDown size={11} style={{ color: '#5e5855' }} /> : <ChevronRight size={11} style={{ color: '#5e5855' }} />}
+            {tasksExpanded ? <ChevronDown size={11} style={{ color: '#505068' }} /> : <ChevronRight size={11} style={{ color: '#505068' }} />}
             {sectionLabel('Tasks')}
-            <span style={{ fontSize: 9, color: '#3a3836', fontFamily: '"JetBrains Mono", monospace' }}>({filteredTasks.length})</span>
+            <span style={{ fontSize: 9, color: '#2E2E40', fontFamily: '"JetBrains Mono", monospace' }}>({filteredTasks.length})</span>
           </div>
           {isAdmin && (
             <button
               onClick={e => { e.stopPropagation(); onNewTask(); }}
               className="p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-              style={{ color: '#f59e0b' }}
+              style={{ color: '#5E6AD2' }}
             >
               <Plus size={12} />
             </button>
@@ -596,12 +596,12 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                   className="px-3 py-2 transition-colors"
                   style={{
                     fontSize: 10, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
-                    color: taskFilter === f ? '#f59e0b' : '#3a3836',
-                    borderBottom: `2px solid ${taskFilter === f ? '#f59e0b' : 'transparent'}`,
+                    color: taskFilter === f ? '#5E6AD2' : '#2E2E40',
+                    borderBottom: `2px solid ${taskFilter === f ? '#5E6AD2' : 'transparent'}`,
                     marginBottom: -1,
                   }}
-                  onMouseEnter={e => { if (taskFilter !== f) (e.currentTarget as HTMLElement).style.color = '#a09590'; }}
-                  onMouseLeave={e => { if (taskFilter !== f) (e.currentTarget as HTMLElement).style.color = '#3a3836'; }}>
+                  onMouseEnter={e => { if (taskFilter !== f) (e.currentTarget as HTMLElement).style.color = '#8A8AA0'; }}
+                  onMouseLeave={e => { if (taskFilter !== f) (e.currentTarget as HTMLElement).style.color = '#2E2E40'; }}>
                   {f}
                 </button>
               ))}
@@ -615,88 +615,109 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                     const isUnassigned = !task.assignee_id;
                     const assignee = users.find(u => u.id === task.assignee_id);
                     const isInProgress = task.status === 'IN_PROGRESS';
+                    const isDone = task.status === 'DONE';
 
-                    const statusDot = task.status === 'DONE'
-                      ? { bg: '#4ade80' }
-                      : isInProgress
-                      ? { bg: '#f59e0b' }
-                      : { bg: 'transparent', border: '1px solid #3a3836' };
+                    const statusColor = isDone ? '#4ade80' : isInProgress ? '#5E6AD2' : '#505068';
+                    const statusBg = isDone ? '#4ade80' : isInProgress ? '#5E6AD2' : 'transparent';
+                    const statusBorder = isDone || isInProgress ? 'none' : '1.5px solid #505068';
+
+                    const priorityColors: Record<string, string> = { HIGH: '#f87171', MED: '#fbbf24', LOW: '#505068' };
 
                     return (
                       <motion.div
                         key={task.id}
                         layout
-                        initial={{ opacity: 0, x: -8 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 8 }}
-                        transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-                        className="flex flex-col px-4 py-3 group transition-colors"
-                        style={{ borderBottom: '1px solid var(--border-1)' }}
-                        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.02)')}
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 4 }}
+                        transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                        className="group transition-colors cursor-pointer"
+                        style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}
+                        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.025)')}
                         onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                       >
-                        <div className="flex items-start gap-2.5">
-                          <div className="w-1.5 h-1.5 mt-[5px] rounded-sm shrink-0" style={{ background: statusDot.bg, border: (statusDot as any).border }} />
-                          <div className="flex flex-col min-w-0 flex-1">
-                            <div className="flex items-center gap-2">
-                              <button
-                                onClick={() => setDetailTask(task)}
-                                className="truncate text-left transition-colors"
-                                style={{ fontSize: 12, color: task.status === 'DONE' ? '#3a3836' : '#a09590', textDecoration: task.status === 'DONE' ? 'line-through' : 'none', fontFamily: '"DM Sans", sans-serif', fontWeight: 450, lineHeight: 1.4 }}
-                                onMouseEnter={e => { if (task.status !== 'DONE') (e.currentTarget as HTMLElement).style.color = '#f7f3ee'; }}
-                                onMouseLeave={e => { if (task.status !== 'DONE') (e.currentTarget as HTMLElement).style.color = '#a09590'; }}
-                              >
-                                {task.title}
-                              </button>
-                              {isAdmin && isInProgress && task.original_zip_path && (
-                                <button
-                                  onClick={() => { setDiffMode('live'); setDiffTask(task); }}
-                                  className="shrink-0 transition-all"
-                                  style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)', padding: '2px 6px', borderRadius: 2 }}
-                                  title="View live changes"
-                                >
-                                  Live
-                                </button>
-                              )}
-                            </div>
-                            {task.description && <span className="line-clamp-1 mt-1" style={{ fontSize: 11, color: '#3a3836', fontFamily: '"DM Sans", sans-serif', lineHeight: 1.4 }}>{task.description}</span>}
+                        {/* Main row */}
+                        <div className="flex items-center gap-3 px-4 py-3">
+                          {/* Status indicator */}
+                          <div className="shrink-0" style={{
+                            width: 8, height: 8, borderRadius: '50%',
+                            background: statusBg,
+                            border: statusBorder,
+                            boxShadow: isInProgress ? '0 0 6px rgba(94,106,210,0.5)' : isDone ? '0 0 6px rgba(74,222,128,0.3)' : 'none',
+                          }} />
+
+                          {/* Title */}
+                          <button
+                            onClick={() => setDetailTask(task)}
+                            className="flex-1 text-left truncate transition-colors"
+                            style={{
+                              fontSize: 13,
+                              fontFamily: '"DM Sans", sans-serif',
+                              fontWeight: isDone ? 400 : 500,
+                              color: isDone ? '#505068' : '#EBEBF0',
+                              textDecoration: isDone ? 'line-through' : 'none',
+                              lineHeight: 1.4,
+                            }}
+                          >
+                            {task.title}
+                          </button>
+
+                          {/* Right meta */}
+                          <div className="flex items-center gap-2 shrink-0">
+                            {task.priority && (
+                              <span style={{
+                                width: 6, height: 6, borderRadius: '50%',
+                                background: priorityColors[task.priority] || '#505068',
+                                display: 'inline-block', flexShrink: 0,
+                              }} title={task.priority} />
+                            )}
                             {assignee && (
-                              <div className="flex items-center gap-1.5 mt-1.5">
-                                <div className="w-4 h-4 rounded-full overflow-hidden flex items-center justify-center shrink-0" style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)', fontSize: 9, color: '#f59e0b', fontFamily: '"Syne", sans-serif', fontWeight: 700 }}>
-                                  {assignee.avatar_url
-                                    ? <img src={assignee.avatar_url} alt={assignee.full_name} className="w-full h-full object-cover" />
-                                    : assignee.full_name[0]}
-                                </div>
-                                <span style={{ fontSize: 10, color: '#3a3836', fontFamily: '"DM Sans", sans-serif' }}>{assignee.full_name}</span>
+                              <div className="w-5 h-5 rounded-full overflow-hidden flex items-center justify-center shrink-0"
+                                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)', fontSize: 9, color: '#8A8AA0', fontFamily: '"Syne", sans-serif', fontWeight: 700 }}
+                                title={assignee.full_name}>
+                                {assignee.avatar_url
+                                  ? <img src={assignee.avatar_url} alt={assignee.full_name} className="w-full h-full object-cover" />
+                                  : assignee.full_name[0]}
                               </div>
                             )}
-
-                            {/* Progress bar — shown for IN_PROGRESS tasks with a ZIP attached */}
-                            {task.status === 'IN_PROGRESS' && task.original_zip_path && (
-                              <div className="flex items-center gap-2 mt-1.5">
-                                <div className="flex-1 overflow-hidden" style={{ height: 2, background: 'rgba(255,255,255,0.05)', borderRadius: 1 }}>
-                                  <div
-                                    className="h-full transition-all duration-700"
-                                    style={{
-                                      width: `${linkedTaskId === task.id ? localProgress : (task.progress ?? 0)}%`,
-                                      background: 'rgba(245,158,11,0.55)',
-                                      borderRadius: 1,
-                                    }}
-                                  />
-                                </div>
-                                <span style={{ fontSize: 8, fontFamily: '"JetBrains Mono", monospace', color: '#5e5855', minWidth: 26, textAlign: 'right' }}>
-                                  {linkedTaskId === task.id ? localProgress : (task.progress ?? 0)}%
-                                </span>
-                              </div>
+                            {isAdmin && isInProgress && task.original_zip_path && (
+                              <button
+                                onClick={e => { e.stopPropagation(); setDiffMode('live'); setDiffTask(task); }}
+                                className="opacity-0 group-hover:opacity-100 shrink-0 transition-all"
+                                style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#5E6AD2', border: '1px solid rgba(94,106,210,0.3)', padding: '2px 6px', borderRadius: 2 }}
+                              >
+                                Live
+                              </button>
                             )}
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2 pl-4 mt-2 opacity-0 group-hover:opacity-100 transition-opacity flex-wrap">
+                        {/* Description */}
+                        {task.description && (
+                          <div className="px-4 pb-2 pl-[52px]">
+                            <span className="line-clamp-1" style={{ fontSize: 11, color: '#505068', fontFamily: '"DM Sans", sans-serif', lineHeight: 1.4 }}>{task.description}</span>
+                          </div>
+                        )}
+
+                        {/* Progress bar */}
+                        {isInProgress && task.original_zip_path && (
+                          <div className="px-4 pb-2.5 pl-[52px] flex items-center gap-2">
+                            <div className="flex-1 overflow-hidden" style={{ height: 2, background: 'rgba(255,255,255,0.06)', borderRadius: 1 }}>
+                              <div className="h-full transition-all duration-700"
+                                style={{ width: `${linkedTaskId === task.id ? localProgress : (task.progress ?? 0)}%`, background: '#5E6AD2', borderRadius: 1 }} />
+                            </div>
+                            <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#505068', minWidth: 26, textAlign: 'right' }}>
+                              {linkedTaskId === task.id ? localProgress : (task.progress ?? 0)}%
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Action row */}
+                        <div className="flex items-center gap-2 px-4 pb-2.5 pl-[52px] opacity-0 group-hover:opacity-100 transition-opacity flex-wrap">
                           {isAdmin && (
                             <select value={task.assignee_id || ''} onChange={e => updateTask(task.id, { assignee_id: e.target.value || null })}
-                              className="outline-none transition-colors"
-                              style={{ background: '#0e0e0e', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 2, fontSize: 10, fontFamily: '"DM Sans", sans-serif', color: '#5e5855', padding: '3px 6px' }}>
+                              className="outline-none"
+                              style={{ background: '#111118', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 3, fontSize: 10, fontFamily: '"DM Sans", sans-serif', color: '#8A8AA0', padding: '3px 6px' }}>
                               <option value="">Unassigned</option>
                               {users.map(u => <option key={u.id} value={u.id}>{u.full_name}</option>)}
                             </select>
@@ -704,36 +725,35 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                           {isAdmin && (
                             <select value={task.status} onChange={e => updateTask(task.id, { status: e.target.value })}
                               className="outline-none"
-                              style={{ background: '#0e0e0e', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 2, fontSize: 10, fontFamily: '"DM Sans", sans-serif', color: '#5e5855', padding: '3px 6px' }}>
+                              style={{ background: '#111118', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 3, fontSize: 10, fontFamily: '"DM Sans", sans-serif', color: '#8A8AA0', padding: '3px 6px' }}>
                               <option value="TODO">Todo</option>
                               <option value="IN_PROGRESS">In Progress</option>
                               <option value="DONE">Done</option>
                             </select>
                           )}
-                          {!isAdmin && isUnassigned && task.status !== 'DONE' && (
+                          {!isAdmin && isUnassigned && !isDone && (
                             <button onClick={() => updateTask(task.id, { assignee_id: currentUserId, status: 'IN_PROGRESS' })}
-                              style={{ fontSize: 10, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)', padding: '3px 10px', borderRadius: 2 }}>
-                              Take Task
+                              style={{ fontSize: 10, fontFamily: '"DM Sans", sans-serif', fontWeight: 600, color: '#5E6AD2', border: '1px solid rgba(94,106,210,0.3)', padding: '3px 10px', borderRadius: 3 }}>
+                              Take
                             </button>
                           )}
-                          {!isAdmin && isMine && task.status === 'IN_PROGRESS' && (
+                          {!isAdmin && isMine && isInProgress && (
                             <button onClick={() => updateTask(task.id, { status: 'DONE' })}
-                              style={{ fontSize: 10, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#4ade80', border: '1px solid rgba(74,222,128,0.3)', padding: '3px 10px', borderRadius: 2 }}>
-                              Mark Done
+                              style={{ fontSize: 10, fontFamily: '"DM Sans", sans-serif', fontWeight: 600, color: '#4ade80', border: '1px solid rgba(74,222,128,0.3)', padding: '3px 10px', borderRadius: 3 }}>
+                              Done
                             </button>
                           )}
                           {!isAdmin && isMine && task.status === 'TODO' && (
                             <button onClick={() => updateTask(task.id, { status: 'IN_PROGRESS' })}
-                              style={{ fontSize: 10, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)', padding: '3px 10px', borderRadius: 2 }}>
+                              style={{ fontSize: 10, fontFamily: '"DM Sans", sans-serif', fontWeight: 600, color: '#5E6AD2', border: '1px solid rgba(94,106,210,0.3)', padding: '3px 10px', borderRadius: 3 }}>
                               Start
                             </button>
                           )}
-                          {isAdmin && task.status === 'DONE' && (
-                            <button
-                              onClick={() => archiveTask(task.id)}
-                              style={{ fontSize: 10, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#3a3836', border: '1px solid rgba(255,255,255,0.07)', padding: '3px 10px', borderRadius: 2, transition: 'color 0.15s' }}
+                          {isAdmin && isDone && (
+                            <button onClick={() => archiveTask(task.id)}
+                              style={{ fontSize: 10, fontFamily: '"DM Sans", sans-serif', fontWeight: 600, color: '#505068', border: '1px solid rgba(255,255,255,0.07)', padding: '3px 10px', borderRadius: 3, transition: 'color 0.15s' }}
                               onMouseEnter={e => (e.currentTarget.style.color = '#f87171')}
-                              onMouseLeave={e => (e.currentTarget.style.color = '#3a3836')}
+                              onMouseLeave={e => (e.currentTarget.style.color = '#505068')}
                             >
                               Clear
                             </button>
@@ -745,7 +765,7 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                 </AnimatePresence>
               </LayoutGroup>
               {filteredTasks.length === 0 && (
-                <div className="px-4 py-6" style={{ fontSize: 11, color: '#3a3836', fontFamily: '"DM Sans", sans-serif' }}>No tasks found</div>
+                <div className="px-4 py-8 text-center" style={{ fontSize: 11, color: '#505068', fontFamily: '"DM Sans", sans-serif' }}>No tasks found</div>
               )}
             </div>
           </>

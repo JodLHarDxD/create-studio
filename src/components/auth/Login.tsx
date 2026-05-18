@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
@@ -84,12 +84,12 @@ export default function Login() {
     padding: '11px 14px',
     fontSize: 13,
     fontFamily: '"DM Sans", sans-serif',
-    color: '#f7f3ee',
+    color: '#EBEBF0',
     transition: 'border-color 0.2s, background 0.2s',
   };
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
-    e.target.style.borderColor = 'rgba(245,158,11,0.45)';
+    e.target.style.borderColor = 'rgba(94,106,210,0.45)';
     e.target.style.background = 'rgba(255,255,255,0.06)';
   };
   const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -112,7 +112,7 @@ export default function Login() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           className="relative z-10"
         >
-          <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#3a3836' }}>
+          <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#2E2E40' }}>
             v2.0 — Developer Workspace
           </span>
         </motion.div>
@@ -131,7 +131,7 @@ export default function Login() {
               fontStyle: 'italic',
               fontSize: 'clamp(72px, 9vw, 130px)',
               letterSpacing: '-0.03em',
-              color: '#f7f3ee',
+              color: '#EBEBF0',
               textTransform: 'uppercase',
             }}>
               CREAT
@@ -141,7 +141,7 @@ export default function Login() {
               fontWeight: 900,
               fontSize: 'clamp(50px, 6.3vw, 91px)',
               letterSpacing: '-0.03em',
-              color: '#f59e0b',
+              color: '#5E6AD2',
               textTransform: 'uppercase',
             }}>
               STUDIO
@@ -153,7 +153,7 @@ export default function Login() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            style={{ marginTop: 32, fontSize: 13, fontFamily: '"DM Sans", sans-serif', color: '#5e5855', lineHeight: 1.7, maxWidth: 340 }}
+            style={{ marginTop: 32, fontSize: 13, fontFamily: '"DM Sans", sans-serif', color: '#505068', lineHeight: 1.7, maxWidth: 340 }}
           >
             Precision-built for teams that ship. Task management, live code review, and AI assistance — unified.
           </motion.p>
@@ -163,7 +163,7 @@ export default function Login() {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-            style={{ marginTop: 40, height: 1, width: 80, background: 'linear-gradient(90deg, #f59e0b, transparent)', transformOrigin: 'left' }}
+            style={{ marginTop: 40, height: 1, width: 80, background: 'linear-gradient(90deg, #5E6AD2, transparent)', transformOrigin: 'left' }}
           />
         </div>
 
@@ -173,7 +173,7 @@ export default function Login() {
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
           className="relative z-10"
-          style={{ fontSize: 8, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.2em', color: '#3a3836', textTransform: 'uppercase' }}
+          style={{ fontSize: 8, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.2em', color: '#2E2E40', textTransform: 'uppercase' }}
         >
           creat.studio © 2025
         </motion.div>
@@ -188,16 +188,16 @@ export default function Login() {
         style={{
           width: 420,
           background: '#080808',
-          borderLeft: '1px solid rgba(245,158,11,0.1)',
+          borderLeft: '1px solid rgba(94,106,210,0.1)',
           padding: '64px 52px',
         }}
       >
         {/* Panel header */}
         <div style={{ marginBottom: 36 }}>
-          <div style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 18, letterSpacing: '-0.01em', color: '#f7f3ee', marginBottom: 6 }}>
+          <div style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 18, letterSpacing: '-0.01em', color: '#EBEBF0', marginBottom: 6 }}>
             {mode === 'login' ? 'Welcome back' : 'Create account'}
           </div>
-          <div style={{ fontSize: 12, fontFamily: '"DM Sans", sans-serif', color: '#5e5855' }}>
+          <div style={{ fontSize: 12, fontFamily: '"DM Sans", sans-serif', color: '#505068' }}>
             {mode === 'login' ? 'Sign in to your workspace' : 'Join CREATstudio'}
           </div>
         </div>
@@ -210,8 +210,8 @@ export default function Login() {
               style={{
                 fontSize: 11, fontFamily: '"Syne", sans-serif', fontWeight: 700,
                 letterSpacing: '0.1em', textTransform: 'uppercase',
-                color: mode === m ? '#f59e0b' : '#3a3836',
-                borderBottom: `2px solid ${mode === m ? '#f59e0b' : 'transparent'}`,
+                color: mode === m ? '#5E6AD2' : '#2E2E40',
+                borderBottom: `2px solid ${mode === m ? '#5E6AD2' : 'transparent'}`,
                 marginBottom: -1,
               }}>
               {m === 'login' ? 'Sign In' : 'Register'}
@@ -276,7 +276,7 @@ export default function Login() {
             style={{
               marginTop: 8,
               padding: '14px 20px',
-              background: '#f59e0b',
+              background: '#5E6AD2',
               color: '#000',
               fontSize: 11,
               fontFamily: '"Syne", sans-serif',
@@ -290,7 +290,7 @@ export default function Login() {
               borderRadius: 2,
               opacity: loading ? 0.7 : 1,
               cursor: loading ? 'not-allowed' : 'pointer',
-              boxShadow: loading ? 'none' : '0 4px 16px rgba(245,158,11,0.25)',
+              boxShadow: loading ? 'none' : '0 4px 16px rgba(94,106,210,0.25)',
             }}
           >
             {loading && <Loader2 size={13} className="animate-spin" />}
@@ -301,9 +301,9 @@ export default function Login() {
         {/* Guest */}
         <div style={{ marginTop: 28, paddingTop: 22, borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
           <button onClick={handleGuest}
-            style={{ fontSize: 11, fontFamily: '"DM Sans", sans-serif', color: '#3a3836', transition: 'color 0.2s' }}
-            onMouseEnter={e => (e.currentTarget.style.color = '#f59e0b')}
-            onMouseLeave={e => (e.currentTarget.style.color = '#3a3836')}>
+            style={{ fontSize: 11, fontFamily: '"DM Sans", sans-serif', color: '#2E2E40', transition: 'color 0.2s' }}
+            onMouseEnter={e => (e.currentTarget.style.color = '#5E6AD2')}
+            onMouseLeave={e => (e.currentTarget.style.color = '#2E2E40')}>
             Try Demo (Guest · Admin View)
           </button>
         </div>

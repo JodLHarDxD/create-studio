@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { FileCode, BarChart3, UserCircle, LogOut, Command, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
@@ -75,10 +75,10 @@ export default function Shell() {
         >
           <div
             className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.12), transparent 70%)' }}
+            style={{ background: 'radial-gradient(circle, rgba(94,106,210,0.12), transparent 70%)' }}
           />
-          <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 11, letterSpacing: '-0.02em', color: '#f7f3ee', lineHeight: 1 }}>CR</span>
-          <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 300, fontSize: 7.5, letterSpacing: '0.04em', color: '#f59e0b', lineHeight: 1, opacity: 0.8 }}>st</span>
+          <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 11, letterSpacing: '-0.02em', color: '#EBEBF0', lineHeight: 1 }}>CR</span>
+          <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 300, fontSize: 7.5, letterSpacing: '0.04em', color: '#5E6AD2', lineHeight: 1, opacity: 0.8 }}>st</span>
         </button>
 
         {/* Nav items */}
@@ -96,18 +96,18 @@ export default function Shell() {
                 <motion.div
                   className="w-9 h-9 flex items-center justify-center rounded transition-all duration-200"
                   style={{
-                    background: isActive ? 'rgba(245,158,11,0.12)' : 'transparent',
-                    border: isActive ? '1px solid rgba(245,158,11,0.18)' : '1px solid transparent',
+                    background: isActive ? 'rgba(94,106,210,0.12)' : 'transparent',
+                    border: isActive ? '1px solid rgba(94,106,210,0.18)' : '1px solid transparent',
                   }}
                   onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)'; }}
-                  onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = isActive ? 'rgba(245,158,11,0.12)' : 'transparent'; }}
+                  onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = isActive ? 'rgba(94,106,210,0.12)' : 'transparent'; }}
                 >
                   <Icon
                     size={17}
                     strokeWidth={isActive ? 2 : 1.5}
                     style={{
                       opacity: isActive ? 1 : 0.3,
-                      color: isActive ? '#f59e0b' : '#f7f3ee',
+                      color: isActive ? '#5E6AD2' : '#EBEBF0',
                       transition: 'opacity 0.15s, color 0.15s',
                     }}
                   />
@@ -136,9 +136,9 @@ export default function Shell() {
             <div
               className="w-7 h-7 rounded-full overflow-hidden shrink-0 flex items-center justify-center text-[10px] font-bold"
               style={{
-                background: 'rgba(245,158,11,0.1)',
-                border: '1.5px solid rgba(245,158,11,0.35)',
-                color: '#f59e0b',
+                background: 'rgba(94,106,210,0.1)',
+                border: '1.5px solid rgba(94,106,210,0.35)',
+                color: '#5E6AD2',
                 fontFamily: '"Syne", sans-serif',
                 fontWeight: 700,
               }}
@@ -156,9 +156,9 @@ export default function Shell() {
             title="Logout"
             aria-label="Logout"
             className="w-8 h-8 flex items-center justify-center transition-all duration-200"
-            style={{ opacity: 0.18, color: '#f7f3ee' }}
+            style={{ opacity: 0.18, color: '#EBEBF0' }}
             onMouseEnter={e => { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.color = '#f87171'; }}
-            onMouseLeave={e => { e.currentTarget.style.opacity = '0.18'; e.currentTarget.style.color = '#f7f3ee'; }}
+            onMouseLeave={e => { e.currentTarget.style.opacity = '0.18'; e.currentTarget.style.color = '#EBEBF0'; }}
           >
             <LogOut size={14} strokeWidth={1.5} />
           </button>
@@ -246,12 +246,12 @@ export default function Shell() {
           <div className="flex items-center gap-2">
             <div
               className="w-1.5 h-1.5 rounded-full amber-pulse"
-              style={{ background: '#f59e0b' }}
+              style={{ background: '#5E6AD2' }}
             />
-            <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 9, letterSpacing: '0.1em', color: '#f7f3ee' }}>
+            <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 9, letterSpacing: '0.1em', color: '#EBEBF0' }}>
               CREAT
             </span>
-            <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 300, fontSize: 8, letterSpacing: '0.06em', color: '#f59e0b', opacity: 0.8, marginLeft: -1 }}>
+            <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 300, fontSize: 8, letterSpacing: '0.06em', color: '#5E6AD2', opacity: 0.8, marginLeft: -1 }}>
               studio
             </span>
           </div>
@@ -267,7 +267,7 @@ export default function Shell() {
             onClick={() => setCmdOpen(true)}
             className="flex items-center gap-1.5 transition-colors duration-150"
             style={{ color: 'var(--text-3)' }}
-            onMouseEnter={e => (e.currentTarget.style.color = '#f59e0b')}
+            onMouseEnter={e => (e.currentTarget.style.color = '#5E6AD2')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
           >
             <Command size={9} />

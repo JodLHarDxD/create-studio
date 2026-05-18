@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+﻿import React, { useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, Tooltip, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { cn } from '@/lib/utils';
@@ -7,40 +7,41 @@ import { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { Task } from '@/lib/supabaseClient';
 
-function StatCard({ label, value, sub, icon: Icon, accent, amber }: any) {
+function StatCard({ label, value, sub, icon: Icon, accent, highlight }: any) {
   return (
     <div
       className="relative group p-6 transition-all duration-200"
       style={{
-        background: amber ? 'linear-gradient(135deg, rgba(245,158,11,0.06) 0%, rgba(245,158,11,0.02) 100%)' : '#090909',
-        border: `1px solid ${amber ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.07)'}`,
-        borderTop: amber ? '2px solid rgba(245,158,11,0.5)' : undefined,
+        background: highlight ? 'rgba(94,106,210,0.07)' : '#0D0D13',
+        border: `1px solid ${highlight ? 'rgba(94,106,210,0.2)' : 'rgba(255,255,255,0.07)'}`,
+        borderRadius: 4,
       }}
-      onMouseEnter={e => { e.currentTarget.style.borderColor = amber ? 'rgba(245,158,11,0.4)' : 'rgba(255,255,255,0.14)'; }}
-      onMouseLeave={e => { e.currentTarget.style.borderColor = amber ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.07)'; }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = highlight ? 'rgba(94,106,210,0.35)' : 'rgba(255,255,255,0.13)'; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = highlight ? 'rgba(94,106,210,0.2)' : 'rgba(255,255,255,0.07)'; }}
     >
-      <div className="flex items-start justify-between mb-5">
-        <div style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', color: amber ? '#f59e0b' : '#5e5855', textTransform: 'uppercase' }}>
+      <div className="flex items-start justify-between mb-4">
+        <div style={{ fontSize: 10, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.1em', color: highlight ? '#5E6AD2' : '#505068', textTransform: 'uppercase' }}>
           {label}
         </div>
-        {Icon && <Icon size={13} style={{ opacity: amber ? 0.5 : 0.18, color: amber ? '#f59e0b' : undefined }} />}
+        {Icon && <Icon size={14} style={{ opacity: highlight ? 0.6 : 0.2, color: highlight ? '#5E6AD2' : '#8A8AA0' }} />}
       </div>
       <div
         style={{
           fontFamily: '"Syne", sans-serif',
           fontWeight: 800,
-          fontSize: 42,
+          fontSize: 44,
           lineHeight: 1,
-          letterSpacing: '-0.02em',
-          marginBottom: 6,
-          color: amber ? '#f59e0b' : '#f7f3ee',
+          letterSpacing: '-0.03em',
+          marginBottom: 8,
+          color: highlight ? '#5E6AD2' : '#EBEBF0',
+          fontVariantNumeric: 'tabular-nums',
         }}
         className={cn(accent || '')}
       >
         {value}
       </div>
       {sub && (
-        <div style={{ fontSize: 10, color: '#3a3836', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: '"JetBrains Mono", monospace' }}>
+        <div style={{ fontSize: 10, color: '#505068', letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: '"JetBrains Mono", monospace' }}>
           {sub}
         </div>
       )}
@@ -86,11 +87,11 @@ function CompletedTaskRow({ task, assigneeName, assigneeInitial, assigneeEmail, 
       <div className="flex-1 min-w-0">
         {/* Title row */}
         <div className="flex items-start gap-3 mb-2">
-          <span style={{ fontSize: 13, fontFamily: '"Syne", sans-serif', fontWeight: 700, color: '#f7f3ee', lineHeight: 1.3 }} className="flex-1">
+          <span style={{ fontSize: 13, fontFamily: '"Syne", sans-serif', fontWeight: 700, color: '#EBEBF0', lineHeight: 1.3 }} className="flex-1">
             {task.title}
           </span>
           {task.patched_zip_path && (
-            <span style={{ fontSize: 8, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.2)', padding: '2px 6px', flexShrink: 0 }}>
+            <span style={{ fontSize: 8, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#5E6AD2', border: '1px solid rgba(94,106,210,0.2)', padding: '2px 6px', flexShrink: 0 }}>
               zip delivered
             </span>
           )}
@@ -98,7 +99,7 @@ function CompletedTaskRow({ task, assigneeName, assigneeInitial, assigneeEmail, 
 
         {/* Description */}
         {task.description && (
-          <p style={{ fontSize: 11, fontFamily: '"DM Sans", sans-serif', color: '#5e5855', lineHeight: 1.6, marginBottom: 12 }}
+          <p style={{ fontSize: 11, fontFamily: '"DM Sans", sans-serif', color: '#505068', lineHeight: 1.6, marginBottom: 12 }}
             className="line-clamp-2">
             {task.description}
           </p>
@@ -107,23 +108,23 @@ function CompletedTaskRow({ task, assigneeName, assigneeInitial, assigneeEmail, 
         {/* Who did it — the important part */}
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-2 px-2.5 py-1"
-            style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.15)' }}>
+            style={{ background: 'rgba(94,106,210,0.06)', border: '1px solid rgba(94,106,210,0.15)' }}>
             <div className="w-5 h-5 rounded-full overflow-hidden flex items-center justify-center shrink-0"
-              style={{ background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.3)' }}>
+              style={{ background: 'rgba(94,106,210,0.15)', border: '1px solid rgba(94,106,210,0.3)' }}>
               {assigneeAvatar
                 ? <img src={assigneeAvatar} alt={assigneeName} className="w-full h-full object-cover" />
-                : <span style={{ fontSize: 9, color: '#f59e0b', fontFamily: '"Syne", sans-serif', fontWeight: 800 }}>{assigneeInitial}</span>}
+                : <span style={{ fontSize: 9, color: '#5E6AD2', fontFamily: '"Syne", sans-serif', fontWeight: 800 }}>{assigneeInitial}</span>}
             </div>
-            <span style={{ fontSize: 11, fontFamily: '"DM Sans", sans-serif', fontWeight: 600, color: '#f7f3ee' }}>
+            <span style={{ fontSize: 11, fontFamily: '"DM Sans", sans-serif', fontWeight: 600, color: '#EBEBF0' }}>
               {assigneeName}
             </span>
-            <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#3a3836' }}>
+            <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#2E2E40' }}>
               {assigneeEmail}
             </span>
           </div>
 
           {task.due_date && (
-            <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#3a3836', letterSpacing: '0.08em' }}>
+            <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#2E2E40', letterSpacing: '0.08em' }}>
               {new Date(task.due_date).toLocaleDateString()}
             </span>
           )}
@@ -133,7 +134,7 @@ function CompletedTaskRow({ task, assigneeName, assigneeInitial, assigneeEmail, 
               onClick={downloadPatch}
               disabled={downloading}
               className="ml-auto flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
-              style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.25)', padding: '3px 10px' }}
+              style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#5E6AD2', border: '1px solid rgba(94,106,210,0.25)', padding: '3px 10px' }}
             >
               {downloading ? <Loader2 size={9} className="animate-spin" /> : <Download size={9} />}
               patched.zip
@@ -179,16 +180,16 @@ export default function Dashboard() {
   }, [users, tasks, userRole]);
 
   return (
-    <div className="flex-1 overflow-y-auto bg-[#0a0a0a] custom-scrollbar pb-12">
+    <div className="flex-1 overflow-y-auto custom-scrollbar pb-12" style={{ background: '#09090E' }}>
       <div className="max-w-6xl mx-auto p-10">
 
         {/* Header */}
         <div className="flex items-center gap-5 mb-10">
           <div>
-            <h1 style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 28, letterSpacing: '-0.02em', color: '#f7f3ee', lineHeight: 1 }}>
+            <h1 style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 28, letterSpacing: '-0.02em', color: '#EBEBF0', lineHeight: 1 }}>
               Analytics
             </h1>
-            <div style={{ fontSize: 10, color: '#5e5855', letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: '"JetBrains Mono", monospace', marginTop: 4 }}>
+            <div style={{ fontSize: 10, color: '#505068', letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: '"JetBrains Mono", monospace', marginTop: 4 }}>
               {userRole} · Live
             </div>
           </div>
@@ -203,7 +204,7 @@ export default function Dashboard() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
-          <StatCard label="Total Tasks" value={allVisible.length} icon={Clock} amber />
+          <StatCard label="Total Tasks" value={allVisible.length} icon={Clock} highlight />
           <StatCard label="Completed" value={done.length} icon={CheckCircle} accent="text-green-400" />
           <StatCard label="In Progress" value={inProgress.length} icon={Clock} accent="text-blue-400" />
           <StatCard label="Efficiency" value={`${efficiency}%`} icon={Users}
@@ -212,47 +213,47 @@ export default function Dashboard() {
 
         {/* Charts — admin only */}
         {userRole === 'ADMIN' ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-white/5 border border-white/10 mb-8">
-            <div className="bg-black p-8">
-              <div style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', color: '#5e5855', textTransform: 'uppercase', marginBottom: 24 }}>Throughput Velocity</div>
-              <div className="h-56">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-8">
+            <div className="p-7" style={{ background: '#0D0D13', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 4 }}>
+              <div style={{ fontSize: 10, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.1em', color: '#505068', textTransform: 'uppercase', marginBottom: 24 }}>Throughput</div>
+              <div className="h-52">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={pieData} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={3} dataKey="value" stroke="none">
-                      <Cell fill="#f59e0b" />
-                      <Cell fill="#4f8ef7" />
-                      <Cell fill="rgba(255,255,255,0.07)" />
+                    <Pie data={pieData} cx="50%" cy="50%" innerRadius={58} outerRadius={86} paddingAngle={4} dataKey="value" stroke="none">
+                      <Cell fill="#4ade80" />
+                      <Cell fill="#5E6AD2" />
+                      <Cell fill="rgba(255,255,255,0.06)" />
                     </Pie>
-                    <Tooltip contentStyle={{ backgroundColor: '#0a0a0a', border: '1px solid rgba(245,158,11,0.2)', fontSize: '10px', fontFamily: '"JetBrains Mono", monospace', color: '#f7f3ee' }} />
+                    <Tooltip contentStyle={{ backgroundColor: '#111118', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 4, fontSize: '11px', fontFamily: '"DM Sans", sans-serif', color: '#EBEBF0' }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <div className="flex gap-5 mt-4">
+              <div className="flex gap-5 mt-3">
                 {pieData.map((d, i) => (
-                  <div key={d.name} className="flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 rounded-full" style={{ background: ['#f59e0b', '#4f8ef7', 'rgba(255,255,255,0.12)'][i] }} />
-                    <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#5e5855', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{d.name} <span style={{ color: '#a09590' }}>{d.value}</span></span>
+                  <div key={d.name} className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full" style={{ background: ['#4ade80', '#5E6AD2', 'rgba(255,255,255,0.15)'][i] }} />
+                    <span style={{ fontSize: 10, fontFamily: '"DM Sans", sans-serif', color: '#505068' }}>{d.name} <span style={{ color: '#8A8AA0', fontWeight: 600 }}>{d.value}</span></span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-black p-8">
-              <div style={{ fontSize: 9, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', color: '#5e5855', textTransform: 'uppercase', marginBottom: 24 }}>Load Distribution</div>
-              <div className="h-56">
+            <div className="p-7" style={{ background: '#0D0D13', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 4 }}>
+              <div style={{ fontSize: 10, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.1em', color: '#505068', textTransform: 'uppercase', marginBottom: 24 }}>Load Distribution</div>
+              <div className="h-52">
                 {userLoad.length > 0 ? (
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={userLoad} barGap={2}>
+                    <BarChart data={userLoad} barGap={3}>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                      <XAxis dataKey="name" tick={{ fontSize: 9, fill: '#5e5855', fontFamily: '"JetBrains Mono", monospace' }} tickFormatter={v => String(v).toUpperCase()} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fontSize: 9, fill: '#5e5855', fontFamily: '"JetBrains Mono", monospace' }} axisLine={false} tickLine={false} />
-                      <Tooltip contentStyle={{ backgroundColor: '#0a0a0a', border: '1px solid rgba(245,158,11,0.2)', fontSize: '10px', fontFamily: '"JetBrains Mono", monospace', color: '#f7f3ee' }} />
-                      <Bar dataKey="total" name="Total" fill="rgba(245,158,11,0.15)" radius={[2, 2, 0, 0]} />
-                      <Bar dataKey="done" name="Done" fill="#f59e0b" radius={[2, 2, 0, 0]} />
+                      <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#505068', fontFamily: '"DM Sans", sans-serif' }} tickFormatter={v => String(v)} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fontSize: 10, fill: '#505068', fontFamily: '"DM Sans", sans-serif' }} axisLine={false} tickLine={false} />
+                      <Tooltip contentStyle={{ backgroundColor: '#111118', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 4, fontSize: '11px', fontFamily: '"DM Sans", sans-serif', color: '#EBEBF0' }} />
+                      <Bar dataKey="total" name="Total" fill="rgba(94,106,210,0.18)" radius={[3, 3, 0, 0]} />
+                      <Bar dataKey="done" name="Done" fill="#5E6AD2" radius={[3, 3, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
-                  <div className="h-full flex items-center justify-center" style={{ fontSize: 10, color: '#3a3836', textTransform: 'uppercase', letterSpacing: '0.15em', fontFamily: '"JetBrains Mono", monospace' }}>No assignment data</div>
+                  <div className="h-full flex items-center justify-center" style={{ fontSize: 11, color: '#2E2E42', fontFamily: '"DM Sans", sans-serif' }}>No assignment data</div>
                 )}
               </div>
             </div>
@@ -300,7 +301,7 @@ export default function Dashboard() {
                   Completed Work
                 </h2>
               </div>
-              <span style={{ fontSize: 8, fontFamily: '"JetBrains Mono", monospace', color: '#3a3836' }}>
+              <span style={{ fontSize: 8, fontFamily: '"JetBrains Mono", monospace', color: '#2E2E40' }}>
                 {completedTasks.length} {completedTasks.length === 1 ? 'task' : 'tasks'} delivered
               </span>
             </div>
@@ -309,8 +310,8 @@ export default function Dashboard() {
               const assignee = users.find(u => u.id === task.assignee_id);
               if (!assignee) return (
                 <div key={task.id} className="px-6 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                  <span style={{ fontSize: 12, fontFamily: '"Syne", sans-serif', fontWeight: 700, color: '#f7f3ee' }}>{task.title}</span>
-                  <span style={{ fontSize: 9, color: '#3a3836', marginLeft: 12, fontFamily: '"JetBrains Mono", monospace' }}>unassigned</span>
+                  <span style={{ fontSize: 12, fontFamily: '"Syne", sans-serif', fontWeight: 700, color: '#EBEBF0' }}>{task.title}</span>
+                  <span style={{ fontSize: 9, color: '#2E2E40', marginLeft: 12, fontFamily: '"JetBrains Mono", monospace' }}>unassigned</span>
                 </div>
               );
               return (
@@ -344,7 +345,7 @@ export default function Dashboard() {
                   <span className="flex-1 text-[11px] font-bold uppercase tracking-wide truncate">{task.title}</span>
                   {assignee && (
                     <span className="text-[9px] hidden sm:block truncate max-w-[110px]"
-                      style={{ color: '#a09590', fontFamily: '"DM Sans", sans-serif' }}>
+                      style={{ color: '#8A8AA0', fontFamily: '"DM Sans", sans-serif' }}>
                       {assignee.full_name}
                     </span>
                   )}

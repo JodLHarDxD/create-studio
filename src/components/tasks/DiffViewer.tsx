@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+﻿import React, { useState, useEffect, useMemo } from 'react';
 import { DiffEditor } from '@monaco-editor/react';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { supabase } from '@/lib/supabaseClient';
@@ -127,17 +127,17 @@ function DiffTreeItem({
         <button
           onClick={() => setExpanded(p => !p)}
           className="w-full flex items-center gap-1.5 py-[3px] outline-none transition-colors"
-          style={{ paddingLeft: `${depth * 12 + 6}px`, fontSize: 11, color: '#a09590', fontFamily: '"DM Sans", sans-serif' }}
+          style={{ paddingLeft: `${depth * 12 + 6}px`, fontSize: 11, color: '#8A8AA0', fontFamily: '"DM Sans", sans-serif' }}
           onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
           onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
         >
           {expanded
-            ? <ChevronDown size={11} style={{ color: '#5e5855', flexShrink: 0 }} />
-            : <ChevronRight size={11} style={{ color: '#5e5855', flexShrink: 0 }} />}
-          <Folder size={11} style={{ color: '#f59e0b', opacity: 0.6, flexShrink: 0 }} />
+            ? <ChevronDown size={11} style={{ color: '#505068', flexShrink: 0 }} />
+            : <ChevronRight size={11} style={{ color: '#505068', flexShrink: 0 }} />}
+          <Folder size={11} style={{ color: '#5E6AD2', opacity: 0.6, flexShrink: 0 }} />
           <span className="truncate flex-1 text-left">{node.name}</span>
           {node.changedCount > 0 && (
-            <span className="mr-2" style={{ fontSize: 9, background: 'rgba(245,158,11,0.12)', color: '#f59e0b', padding: '0 5px', fontFamily: '"JetBrains Mono", monospace' }}>
+            <span className="mr-2" style={{ fontSize: 9, background: 'rgba(94,106,210,0.12)', color: '#5E6AD2', padding: '0 5px', fontFamily: '"JetBrains Mono", monospace' }}>
               {node.changedCount}
             </span>
           )}
@@ -154,7 +154,7 @@ function DiffTreeItem({
   const isDeleted = node.entry && node.entry.original && !node.entry.patched;
   const isModified = node.entry?.changed && !isNew && !isDeleted;
 
-  const fileColor = isModified ? '#f59e0b' : isNew ? '#4ade80' : isDeleted ? '#f87171' : '#5e5855';
+  const fileColor = isModified ? '#5E6AD2' : isNew ? '#4ade80' : isDeleted ? '#f87171' : '#505068';
 
   return (
     <button
@@ -162,8 +162,8 @@ function DiffTreeItem({
       className="w-full flex items-center gap-1.5 py-[3px] text-left outline-none transition-colors"
       style={{
         paddingLeft: `${depth * 12 + 22}px`,
-        background: isSelected ? 'rgba(245,158,11,0.07)' : 'transparent',
-        borderLeft: isSelected ? '2px solid #f59e0b' : '2px solid transparent',
+        background: isSelected ? 'rgba(94,106,210,0.07)' : 'transparent',
+        borderLeft: isSelected ? '2px solid #5E6AD2' : '2px solid transparent',
       }}
       onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}
       onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = 'transparent'; }}
@@ -171,7 +171,7 @@ function DiffTreeItem({
       <span className="truncate flex-1" style={{ fontSize: 11, color: fileColor, fontFamily: '"DM Sans", sans-serif' }}>
         {node.name}
       </span>
-      {isModified && <span className="mr-2 shrink-0" style={{ fontSize: 9, color: 'rgba(245,158,11,0.5)', fontFamily: '"JetBrains Mono", monospace' }}>M</span>}
+      {isModified && <span className="mr-2 shrink-0" style={{ fontSize: 9, color: 'rgba(94,106,210,0.5)', fontFamily: '"JetBrains Mono", monospace' }}>M</span>}
       {isNew && <span className="mr-2 shrink-0" style={{ fontSize: 9, color: 'rgba(74,222,128,0.5)', fontFamily: '"JetBrains Mono", monospace' }}>A</span>}
       {isDeleted && <span className="mr-2 shrink-0" style={{ fontSize: 9, color: 'rgba(248,113,113,0.5)', fontFamily: '"JetBrains Mono", monospace' }}>D</span>}
     </button>
@@ -245,26 +245,26 @@ export default function DiffViewer() {
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#1e1e1e]">
       {/* Tab bar */}
       <div className="h-9 flex items-center shrink-0" style={{ background: '#252526', borderBottom: '1px solid #1e1e1e' }}>
-        <div className="h-full px-4 flex items-center gap-2 bg-[#1e1e1e]" style={{ borderTop: '2px solid #f59e0b' }}>
-          <FileDiff size={13} style={{ color: '#f59e0b', opacity: 0.7 }} />
-          <span className="truncate max-w-[220px]" style={{ fontSize: 13, color: '#f7f3ee', fontFamily: '"DM Sans", sans-serif' }}>{diffTask.title}</span>
+        <div className="h-full px-4 flex items-center gap-2 bg-[#1e1e1e]" style={{ borderTop: '2px solid #5E6AD2' }}>
+          <FileDiff size={13} style={{ color: '#5E6AD2', opacity: 0.7 }} />
+          <span className="truncate max-w-[220px]" style={{ fontSize: 13, color: '#EBEBF0', fontFamily: '"DM Sans", sans-serif' }}>{diffTask.title}</span>
           {isLive && (
-            <span className="flex items-center gap-1" style={{ fontSize: 9, color: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)', padding: '1px 6px', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em' }}>
+            <span className="flex items-center gap-1" style={{ fontSize: 9, color: '#5E6AD2', border: '1px solid rgba(94,106,210,0.3)', padding: '1px 6px', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em' }}>
               <Radio size={8} className="animate-pulse" /> LIVE
             </span>
           )}
           {!isLive && changedCount > 0 && (
-            <span style={{ fontSize: 9, background: '#f59e0b', color: '#000', padding: '1px 6px', fontFamily: '"JetBrains Mono", monospace', fontWeight: 700 }}>
+            <span style={{ fontSize: 9, background: '#5E6AD2', color: '#000', padding: '1px 6px', fontFamily: '"JetBrains Mono", monospace', fontWeight: 700 }}>
               {changedCount} changed
             </span>
           )}
-          <button onClick={() => setDiffTask(null)} className="p-0.5 transition-opacity" style={{ opacity: 0.3, color: '#f7f3ee' }}
+          <button onClick={() => setDiffTask(null)} className="p-0.5 transition-opacity" style={{ opacity: 0.3, color: '#EBEBF0' }}
             onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
             onMouseLeave={e => (e.currentTarget.style.opacity = '0.3')}>
             <X size={13} />
           </button>
         </div>
-        <span className="ml-auto px-4" style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#5e5855', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+        <span className="ml-auto px-4" style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#505068', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
           {isLive ? 'LIVE DIFF' : 'DIFF VIEW'}
         </span>
       </div>
@@ -284,7 +284,7 @@ export default function DiffViewer() {
         <div className="flex-1 flex overflow-hidden">
           {/* Hierarchical file tree */}
           <div className="w-64 shrink-0 flex flex-col overflow-hidden" style={{ background: '#252526', borderRight: '1px solid #1e1e1e' }}>
-            <div className="px-4 py-2 shrink-0" style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3a3836', borderBottom: '1px solid #1e1e1e' }}>
+            <div className="px-4 py-2 shrink-0" style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#2E2E40', borderBottom: '1px solid #1e1e1e' }}>
               {diffs.length} files · {changedCount} modified
             </div>
             <div className="flex-1 overflow-y-auto custom-scrollbar py-1">

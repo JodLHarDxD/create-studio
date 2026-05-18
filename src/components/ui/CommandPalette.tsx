@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+﻿import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import {
@@ -177,7 +177,7 @@ export default function CommandPalette({ isOpen, onClose, onNewTask, onOpenFolde
               style={{
                 background: 'linear-gradient(160deg, #111111 0%, #0a0a0a 100%)',
                 border: '1px solid rgba(255,255,255,0.1)',
-                boxShadow: '0 0 0 1px rgba(245,158,11,0.08), 0 24px 48px rgba(0,0,0,0.9), 0 8px 16px rgba(0,0,0,0.6)',
+                boxShadow: '0 0 0 1px rgba(94,106,210,0.08), 0 24px 48px rgba(0,0,0,0.9), 0 8px 16px rgba(0,0,0,0.6)',
               }}
             >
               {/* Search input */}
@@ -185,7 +185,7 @@ export default function CommandPalette({ isOpen, onClose, onNewTask, onOpenFolde
                 className="flex items-center gap-3.5 px-5 py-4"
                 style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
               >
-                <Search size={15} style={{ color: '#f59e0b', opacity: 0.7, flexShrink: 0 }} />
+                <Search size={15} style={{ color: '#5E6AD2', opacity: 0.7, flexShrink: 0 }} />
                 <input
                   ref={inputRef}
                   value={query}
@@ -194,7 +194,7 @@ export default function CommandPalette({ isOpen, onClose, onNewTask, onOpenFolde
                   placeholder="Search commands, files, tasks…"
                   className="flex-1 bg-transparent outline-none text-[14px] placeholder:text-white/20"
                   style={{
-                    color: '#f7f3ee',
+                    color: '#EBEBF0',
                     fontFamily: '"DM Sans", sans-serif',
                     fontWeight: 400,
                   }}
@@ -210,7 +210,7 @@ export default function CommandPalette({ isOpen, onClose, onNewTask, onOpenFolde
               {/* Results */}
               <div className="overflow-y-auto custom-scrollbar" style={{ maxHeight: 380 }}>
                 {filtered.length === 0 ? (
-                  <div className="px-5 py-10 text-center" style={{ color: '#5e5855', fontSize: 13 }}>
+                  <div className="px-5 py-10 text-center" style={{ color: '#505068', fontSize: 13 }}>
                     No commands found for "{query}"
                   </div>
                 ) : (
@@ -218,7 +218,7 @@ export default function CommandPalette({ isOpen, onClose, onNewTask, onOpenFolde
                     <div key={group} className="py-1">
                       <div
                         className="px-5 pt-3 pb-1.5 font-display"
-                        style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#5e5855' }}
+                        style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#505068' }}
                       >
                         {group}
                       </div>
@@ -232,23 +232,23 @@ export default function CommandPalette({ isOpen, onClose, onNewTask, onOpenFolde
                             onClick={cmd.action}
                             className="w-full flex items-center gap-3.5 px-5 py-2.5 text-left transition-all duration-100"
                             style={{
-                              background: isActive ? 'rgba(245,158,11,0.07)' : 'transparent',
-                              borderLeft: isActive ? '2px solid #f59e0b' : '2px solid transparent',
+                              background: isActive ? 'rgba(94,106,210,0.07)' : 'transparent',
+                              borderLeft: isActive ? '2px solid #5E6AD2' : '2px solid transparent',
                               borderRight: '2px solid transparent',
                             }}
                           >
-                            <span className="shrink-0" style={{ color: isActive ? '#f59e0b' : '#5e5855', transition: 'color 0.1s' }}>
+                            <span className="shrink-0" style={{ color: isActive ? '#5E6AD2' : '#505068', transition: 'color 0.1s' }}>
                               {cmd.icon}
                             </span>
                             <div className="flex-1 min-w-0">
                               <div
                                 className="truncate"
-                                style={{ fontSize: 13, color: isActive ? '#f7f3ee' : '#a09590', fontWeight: isActive ? 500 : 400 }}
+                                style={{ fontSize: 13, color: isActive ? '#EBEBF0' : '#8A8AA0', fontWeight: isActive ? 500 : 400 }}
                               >
                                 {cmd.label}
                               </div>
                               {cmd.description && (
-                                <div className="truncate" style={{ fontSize: 11, color: '#3a3836', marginTop: 1 }}>
+                                <div className="truncate" style={{ fontSize: 11, color: '#2E2E40', marginTop: 1 }}>
                                   {cmd.description}
                                 </div>
                               )}
@@ -257,16 +257,16 @@ export default function CommandPalette({ isOpen, onClose, onNewTask, onOpenFolde
                               <kbd
                                 className="text-[10px] px-1.5 py-0.5 font-mono shrink-0"
                                 style={{
-                                  border: `1px solid ${isActive ? 'rgba(245,158,11,0.3)' : 'rgba(255,255,255,0.1)'}`,
+                                  border: `1px solid ${isActive ? 'rgba(94,106,210,0.3)' : 'rgba(255,255,255,0.1)'}`,
                                   borderRadius: 3,
-                                  color: isActive ? '#f59e0b' : '#5e5855',
+                                  color: isActive ? '#5E6AD2' : '#505068',
                                 }}
                               >
                                 {cmd.shortcut}
                               </kbd>
                             )}
                             {isActive && (
-                              <ChevronRight size={12} style={{ color: '#f59e0b', opacity: 0.5, flexShrink: 0 }} />
+                              <ChevronRight size={12} style={{ color: '#5E6AD2', opacity: 0.5, flexShrink: 0 }} />
                             )}
                           </button>
                         );
@@ -282,7 +282,7 @@ export default function CommandPalette({ isOpen, onClose, onNewTask, onOpenFolde
                 style={{
                   borderTop: '1px solid rgba(255,255,255,0.06)',
                   fontSize: 10,
-                  color: '#3a3836',
+                  color: '#2E2E40',
                   fontFamily: '"JetBrains Mono", monospace',
                 }}
               >
@@ -290,8 +290,8 @@ export default function CommandPalette({ isOpen, onClose, onNewTask, onOpenFolde
                 <span>↵ select</span>
                 <span>esc close</span>
                 <div className="ml-auto flex items-center gap-0.5">
-                  <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 9, color: '#5e5855', letterSpacing: '0.05em' }}>CREAT</span>
-                  <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 300, fontSize: 8, color: '#f59e0b', opacity: 0.5, letterSpacing: '0.02em' }}>studio</span>
+                  <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 9, color: '#505068', letterSpacing: '0.05em' }}>CREAT</span>
+                  <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 300, fontSize: 8, color: '#5E6AD2', opacity: 0.5, letterSpacing: '0.02em' }}>studio</span>
                 </div>
               </div>
             </motion.div>

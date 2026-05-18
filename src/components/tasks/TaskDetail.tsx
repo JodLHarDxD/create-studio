@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { X, ExternalLink, Download, Upload, File, Loader2, GitCompare, Radio } from 'lucide-react';
 import { supabase, Task } from '@/lib/supabaseClient';

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+﻿import React, { useMemo } from 'react';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { Github, Zap, CheckCircle2, Clock, Circle, Crown, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -25,25 +25,25 @@ export default function TeamPage() {
   const admins      = users.filter(u => u.role === 'ADMIN').length;
 
   return (
-    <div className="flex-1 overflow-auto custom-scrollbar" style={{ background: '#050505', color: '#f7f3ee' }}>
+    <div className="flex-1 overflow-auto custom-scrollbar" style={{ background: '#050505', color: '#EBEBF0' }}>
 
       {/* ── Header ── */}
       <div className="relative overflow-hidden" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         {/* Background grid */}
         <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'linear-gradient(rgba(245,158,11,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(245,158,11,0.03) 1px, transparent 1px)',
+          backgroundImage: 'linear-gradient(rgba(94,106,210,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(94,106,210,0.03) 1px, transparent 1px)',
           backgroundSize: '48px 48px',
         }} />
 
         <div className="relative px-12 py-10 flex items-end justify-between gap-8">
           <div>
-            <div style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: '#f59e0b', marginBottom: 10 }}>
+            <div style={{ fontSize: 8, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: '#5E6AD2', marginBottom: 10 }}>
               Internal Directory
             </div>
-            <h1 style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 52, letterSpacing: '-0.03em', lineHeight: 0.9, color: '#f7f3ee' }}>
+            <h1 style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 52, letterSpacing: '-0.03em', lineHeight: 0.9, color: '#EBEBF0' }}>
               THE TEAM
             </h1>
-            <div style={{ marginTop: 14, fontSize: 11, fontFamily: '"JetBrains Mono", monospace', color: '#3a3836', letterSpacing: '0.08em' }}>
+            <div style={{ marginTop: 14, fontSize: 11, fontFamily: '"JetBrains Mono", monospace', color: '#2E2E40', letterSpacing: '0.08em' }}>
               {members.length} operative{members.length !== 1 ? 's' : ''} · {admins} admin{admins !== 1 ? 's' : ''}
             </div>
           </div>
@@ -56,8 +56,8 @@ export default function TeamPage() {
               { label: 'In Flight', value: totalActive },
             ].map(({ label, value, amber }) => (
               <div key={label} className="px-6 py-4 flex flex-col gap-1" style={{ background: '#0a0a0a', borderRight: '1px solid rgba(255,255,255,0.04)' }}>
-                <div style={{ fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#3a3836' }}>{label}</div>
-                <div style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 28, letterSpacing: '-0.02em', color: amber ? '#f59e0b' : '#f7f3ee', lineHeight: 1 }}>{value}</div>
+                <div style={{ fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#2E2E40' }}>{label}</div>
+                <div style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 28, letterSpacing: '-0.02em', color: amber ? '#5E6AD2' : '#EBEBF0', lineHeight: 1 }}>{value}</div>
               </div>
             ))}
           </div>
@@ -67,12 +67,12 @@ export default function TeamPage() {
       {/* ── Column headers ── */}
       <div className="px-12 py-3 flex items-center gap-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', background: '#080808' }}>
         <div style={{ width: 32, flexShrink: 0 }} />
-        <div className="flex-1" style={{ fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#3a3836' }}>Operative</div>
-        <div className="hidden md:block" style={{ width: 72, textAlign: 'center', fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#3a3836' }}>Done</div>
-        <div className="hidden md:block" style={{ width: 72, textAlign: 'center', fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#3a3836' }}>Active</div>
-        <div className="hidden lg:block" style={{ width: 72, textAlign: 'center', fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#3a3836' }}>Assigned</div>
-        <div style={{ width: 120, fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#3a3836' }}>Completion</div>
-        <div style={{ width: 60, textAlign: 'right', fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#3a3836' }}>Score</div>
+        <div className="flex-1" style={{ fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#2E2E40' }}>Operative</div>
+        <div className="hidden md:block" style={{ width: 72, textAlign: 'center', fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#2E2E40' }}>Done</div>
+        <div className="hidden md:block" style={{ width: 72, textAlign: 'center', fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#2E2E40' }}>Active</div>
+        <div className="hidden lg:block" style={{ width: 72, textAlign: 'center', fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#2E2E40' }}>Assigned</div>
+        <div style={{ width: 120, fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#2E2E40' }}>Completion</div>
+        <div style={{ width: 60, textAlign: 'right', fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#2E2E40' }}>Score</div>
       </div>
 
       {/* ── Member rows ── */}
@@ -88,15 +88,15 @@ export default function TeamPage() {
               className="px-12 py-5 flex items-center gap-4 group transition-colors duration-150"
               style={{
                 borderBottom: '1px solid rgba(255,255,255,0.03)',
-                background: isMe ? 'rgba(245,158,11,0.02)' : 'transparent',
+                background: isMe ? 'rgba(94,106,210,0.02)' : 'transparent',
               }}
-              onMouseEnter={e => (e.currentTarget.style.background = isMe ? 'rgba(245,158,11,0.04)' : 'rgba(255,255,255,0.015)')}
-              onMouseLeave={e => (e.currentTarget.style.background = isMe ? 'rgba(245,158,11,0.02)' : 'transparent')}
+              onMouseEnter={e => (e.currentTarget.style.background = isMe ? 'rgba(94,106,210,0.04)' : 'rgba(255,255,255,0.015)')}
+              onMouseLeave={e => (e.currentTarget.style.background = isMe ? 'rgba(94,106,210,0.02)' : 'transparent')}
             >
               {/* Rank */}
               <div style={{ width: 32, flexShrink: 0, textAlign: 'center' }}>
                 {idx === 0 ? (
-                  <Crown size={14} style={{ color: '#f59e0b', margin: '0 auto' }} />
+                  <Crown size={14} style={{ color: '#5E6AD2', margin: '0 auto' }} />
                 ) : (
                   <span style={{ fontSize: 10, fontFamily: '"JetBrains Mono", monospace', color: '#2a2826' }}>
                     {String(idx + 1).padStart(2, '0')}
@@ -110,12 +110,12 @@ export default function TeamPage() {
                 <div className="relative shrink-0">
                   <div className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center"
                     style={{
-                      background: 'rgba(245,158,11,0.08)',
-                      border: isMe ? '2px solid rgba(245,158,11,0.5)' : '1px solid rgba(255,255,255,0.07)',
+                      background: 'rgba(94,106,210,0.08)',
+                      border: isMe ? '2px solid rgba(94,106,210,0.5)' : '1px solid rgba(255,255,255,0.07)',
                     }}>
                     {member.avatar_url
                       ? <img src={member.avatar_url} alt={member.full_name} className="w-full h-full object-cover" />
-                      : <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 16, color: '#f59e0b' }}>
+                      : <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 16, color: '#5E6AD2' }}>
                           {member.full_name[0]?.toUpperCase()}
                         </span>
                     }
@@ -133,20 +133,20 @@ export default function TeamPage() {
                 {/* Name + meta */}
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 14, color: '#f7f3ee', letterSpacing: '-0.01em' }}>
+                    <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 14, color: '#EBEBF0', letterSpacing: '-0.01em' }}>
                       {member.full_name}
                     </span>
                     {isMe && (
-                      <span style={{ fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)', padding: '1px 5px' }}>
+                      <span style={{ fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#5E6AD2', border: '1px solid rgba(94,106,210,0.3)', padding: '1px 5px' }}>
                         you
                       </span>
                     )}
                     <span style={{
                       fontSize: 7, fontFamily: '"Syne", sans-serif', fontWeight: 700, letterSpacing: '0.2em',
                       textTransform: 'uppercase', padding: '1px 6px',
-                      color: isAdmin ? '#f59e0b' : '#5e5855',
-                      border: isAdmin ? '1px solid rgba(245,158,11,0.25)' : '1px solid rgba(255,255,255,0.06)',
-                      background: isAdmin ? 'rgba(245,158,11,0.05)' : 'transparent',
+                      color: isAdmin ? '#5E6AD2' : '#505068',
+                      border: isAdmin ? '1px solid rgba(94,106,210,0.25)' : '1px solid rgba(255,255,255,0.06)',
+                      background: isAdmin ? 'rgba(94,106,210,0.05)' : 'transparent',
                     }}>
                       {member.role}
                     </span>
@@ -158,21 +158,21 @@ export default function TeamPage() {
                   </div>
 
                   <div className="flex items-center gap-3 mt-1 flex-wrap">
-                    <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#3a3836' }}>
+                    <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#2E2E40' }}>
                       {member.email}
                     </span>
                     {member.bio && (
-                      <span style={{ fontSize: 9, fontFamily: '"DM Sans", sans-serif', color: '#5e5855' }} className="truncate max-w-[200px]">
+                      <span style={{ fontSize: 9, fontFamily: '"DM Sans", sans-serif', color: '#505068' }} className="truncate max-w-[200px]">
                         · {member.bio}
                       </span>
                     )}
                     {member.github_url && (
                       <a href={member.github_url} target="_blank" rel="noopener noreferrer"
                         className="flex items-center gap-1 transition-colors"
-                        style={{ fontSize: 9, color: '#3a3836' }}
+                        style={{ fontSize: 9, color: '#2E2E40' }}
                         onClick={e => e.stopPropagation()}
-                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#f7f3ee'}
-                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#3a3836'}>
+                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#EBEBF0'}
+                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#2E2E40'}>
                         <Github size={10} /> github
                       </a>
                     )}
@@ -198,7 +198,7 @@ export default function TeamPage() {
 
               {/* Assigned */}
               <div className="hidden lg:flex flex-col items-center shrink-0" style={{ width: 72 }}>
-                <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 22, letterSpacing: '-0.02em', color: '#3a3836', lineHeight: 1 }}>
+                <span style={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 22, letterSpacing: '-0.02em', color: '#2E2E40', lineHeight: 1 }}>
                   {member.assigned}
                 </span>
                 <span style={{ fontSize: 7, fontFamily: '"JetBrains Mono", monospace', color: '#2a2826', letterSpacing: '0.12em', marginTop: 2 }}>TOTAL</span>
@@ -207,12 +207,12 @@ export default function TeamPage() {
               {/* Completion bar */}
               <div className="shrink-0" style={{ width: 120 }}>
                 <div className="flex items-center justify-between mb-1.5">
-                  <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: member.rate > 0 ? '#f59e0b' : '#2a2826' }}>
+                  <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: member.rate > 0 ? '#5E6AD2' : '#2a2826' }}>
                     {member.rate}%
                   </span>
                 </div>
                 <div className="w-full h-px" style={{ background: 'rgba(255,255,255,0.06)' }}>
-                  <div style={{ width: `${member.rate}%`, height: '100%', background: member.rate >= 80 ? '#4ade80' : member.rate >= 40 ? '#f59e0b' : '#3a3836', transition: 'width 0.6s ease' }} />
+                  <div style={{ width: `${member.rate}%`, height: '100%', background: member.rate >= 80 ? '#4ade80' : member.rate >= 40 ? '#5E6AD2' : '#2E2E40', transition: 'width 0.6s ease' }} />
                 </div>
               </div>
 
@@ -221,7 +221,7 @@ export default function TeamPage() {
                 <span style={{
                   fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: 18,
                   letterSpacing: '-0.02em', lineHeight: 1,
-                  color: idx === 0 ? '#f59e0b' : idx === 1 ? '#a0a0a0' : idx === 2 ? '#8b7355' : '#2a2826',
+                  color: idx === 0 ? '#5E6AD2' : idx === 1 ? '#a0a0a0' : idx === 2 ? '#8b7355' : '#2a2826',
                 }}>
                   {member.score}
                 </span>
@@ -246,7 +246,7 @@ export default function TeamPage() {
           { label: 'Completion %', value: '×1' },
         ].map(({ label, value }) => (
           <div key={label} className="flex items-center gap-2">
-            <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#f59e0b' }}>{value}</span>
+            <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#5E6AD2' }}>{value}</span>
             <span style={{ fontSize: 8, fontFamily: '"DM Sans", sans-serif', color: '#2a2826' }}>{label}</span>
           </div>
         ))}

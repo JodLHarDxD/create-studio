@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { WorkspaceProvider } from './contexts/WorkspaceContext';
 import Shell from './components/layout/Shell';
