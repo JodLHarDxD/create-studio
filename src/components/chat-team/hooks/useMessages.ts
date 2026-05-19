@@ -9,16 +9,19 @@ export function useMessages(type: MessageContextType | null, id: string | null) 
   const fetchMessages = useCallback(async () => {
     if (!type || !id) { setMessages([]); return; }
     setLoading(true);
-    const { data, error } = await supabase
-      .from('messages')
-      .select('*')
-      .eq('context_type', type)
-      .eq('context_id', id)
-      .order('created_at', { ascending: true })
-      .limit(200);
-    if (error) console.error('useMessages fetch:', error);
-    if (data) setMessages(data as Message[]);
-    setLoading(false);
+    try {
+      const { data, error } = await supabase
+        .from('messages')
+        .select('*')
+        .eq('context_type', type)
+        .eq('context_id', id)
+        .order('created_at', { ascending: true })
+        .limit(200);
+      if (error) console.error('useMessages fetch:', error);
+      if (data) setMessages(data as Message[]);
+    } finally {
+      setLoading(false);
+    }
   }, [type, id]);
 
   useEffect(() => { fetchMessages(); }, [fetchMessages]);
