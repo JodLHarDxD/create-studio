@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="CREATstudio — A studio for teams that ship.">
+  <title>CREATstudio</title>
+  <defs>
+    <radialGradient id="og-bg" cx="50%" cy="40%" r="70%">
+      <stop offset="0%"   stop-color="#18181b" />
+      <stop offset="60%"  stop-color="#0a0a0c" />
+      <stop offset="100%" stop-color="#09090b" />
+    </radialGradient>
+
+    <radialGradient id="og-sphere" cx="38%" cy="32%" r="70%">
+      <stop offset="0%" stop-color="#27272a" />
+      <stop offset="35%" stop-color="#18181b" />
+      <stop offset="70%" stop-color="#09090b" />
+      <stop offset="100%" stop-color="#000000" />
+    </radialGradient>
+    <radialGradient id="og-rim" cx="30%" cy="22%" r="40%">
+      <stop offset="0%"  stop-color="#ffffff" stop-opacity="0.55" />
+      <stop offset="40%" stop-color="#ffffff" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="og-emerald" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#34d399" stop-opacity="0" />
+      <stop offset="80%"  stop-color="#34d399" stop-opacity="0" />
+      <stop offset="92%"  stop-color="#34d399" stop-opacity="0.40" />
+      <stop offset="100%" stop-color="#34d399" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="og-violet" cx="72%" cy="78%" r="35%">
+      <stop offset="0%"   stop-color="#8b5cf6" stop-opacity="0.30" />
+      <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0" />
+    </radialGradient>
+    <filter id="og-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" />
+    </filter>
+    <filter id="og-bgblob" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="60" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#og-bg)" />
+
+  <!-- Ambient background spheres -->
+  <circle cx="180" cy="510" r="120" fill="#8b5cf6" opacity="0.10" filter="url(#og-bgblob)" />
+  <circle cx="1080" cy="120" r="140" fill="#34d399" opacity="0.10" filter="url(#og-bgblob)" />
+
+  <!-- Top masthead -->
+  <text x="80" y="80"
+    font-family="'JetBrains Mono', monospace"
+    font-size="14"
+    fill="#34d399"
+    style="letter-spacing:0.25em; text-transform: uppercase;"
+  >● Volume 01 — Cinematic Edition</text>
+
+  <text x="1120" y="80"
+    text-anchor="end"
+    font-family="'JetBrains Mono', monospace"
+    font-size="14"
+    fill="#71717a"
+    style="letter-spacing:0.25em; text-transform: uppercase;"
+  >Neural Engineering Console</text>
+
+  <!-- Centerpiece: mark + wordmark lockup -->
+  <g transform="translate(220, 200)">
+    <!-- Obsidian sphere -->
+    <g transform="translate(0, 30)">
+      <circle cx="80" cy="80" r="92" fill="url(#og-emerald)" filter="url(#og-glow)" />
+      <circle cx="80" cy="80" r="80" fill="url(#og-sphere)" />
+      <circle cx="80" cy="80" r="80" fill="url(#og-violet)" />
+      <circle cx="80" cy="80" r="80" fill="url(#og-rim)" />
+      <circle cx="80" cy="80" r="80" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1.2" />
+      <text
+        x="80" y="106"
+        text-anchor="middle"
+        font-family="'Playfair Display', Georgia, serif"
+        font-style="italic"
+        font-weight="400"
+        font-size="92"
+        fill="#34d399"
+        style="letter-spacing:-0.04em; mix-blend-mode: screen;"
+      >c</text>
+    </g>
+
+    <!-- Wordmark + tagline -->
+    <g transform="translate(220, 0)">
+      <text
+        x="0" y="170"
+        font-family="'Playfair Display', Georgia, serif"
+        font-style="italic"
+        font-weight="400"
+        font-size="180"
+        fill="#f4f4f5"
+        style="letter-spacing:-0.03em;"
+      >creat</text>
+      <text
+        x="510" y="78"
+        font-family="'JetBrains Mono', monospace"
+        font-weight="300"
+        font-size="32"
+        fill="#34d399"
+        style="letter-spacing:0.05em;"
+      >/studio</text>
+    </g>
+  </g>
+
+  <!-- Hairline rule -->
+  <line x1="80" y1="490" x2="1120" y2="490" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+
+  <!-- Bottom tagline -->
+  <text
+    x="80" y="545"
+    font-family="'Playfair Display', Georgia, serif"
+    font-style="italic"
+    font-weight="400"
+    font-size="30"
+    fill="#d4d4d8"
+  >A studio for teams that ship.</text>
+
+  <text
+    x="1120" y="545"
+    text-anchor="end"
+    font-family="'JetBrains Mono', monospace"
+    font-size="13"
+    fill="#71717a"
+    style="letter-spacing:0.25em; text-transform: uppercase;"
+  >№ 001 / Cinematic Edition</text>
+</svg>
