@@ -24,18 +24,19 @@ export default function TeamChatPanel() {
     if (data) setChannels(data as Channel[]);
   }, [activeProject, loginState]);
 
+  useEffect(() => { setChannels([]); }, [activeProject]);
   useEffect(() => { fetchChannels(); }, [fetchChannels]);
 
   // Realtime channel list updates
   useEffect(() => {
-    if (!activeProject) return;
+    if (!activeProject || loginState === 'guest') return;
     const ch = supabase.channel(`channels:${activeProject.id}`)
       .on('postgres_changes',
         { event: '*', schema: 'public', table: 'channels', filter: `project_id=eq.${activeProject.id}` },
         () => fetchChannels())
       .subscribe();
     return () => { supabase.removeChannel(ch); };
-  }, [activeProject, fetchChannels]);
+  }, [fetchChannels, loginState]);
 
   const { messages } = useMessages(activeContext?.type ?? null, activeContext?.id ?? null);
 
