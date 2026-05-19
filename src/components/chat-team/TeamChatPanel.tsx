@@ -8,14 +8,7 @@ import ContextList from './ContextList';
 import ContextHeader from './ContextHeader';
 import MessageList from './MessageList';
 import MessageComposer from './MessageComposer';
-import { DEMO_CHANNEL_ID } from './constants';
-
-export { DEMO_CHANNEL_ID };
-
-const DEMO_CHANNELS: Channel[] = [
-  { id: DEMO_CHANNEL_ID, project_id: 'demo', name: 'general', description: 'Project chat',
-    created_by: 'demo-1', archived: false, created_at: new Date().toISOString() },
-];
+import { DEMO_CHANNELS } from './lib/demoChat';
 
 export default function TeamChatPanel() {
   const { activeProject, users, currentUserId, loginState } = useWorkspace();
