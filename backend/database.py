@@ -7,9 +7,10 @@ load_dotenv()
 SUPABASE_URL = os.getenv("SUPABASE_URL") or os.getenv("VITE_SUPABASE_URL", "")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
 
-def get_supabase_client() -> Client:
+def get_supabase_client() -> Client | None:
     if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
         print("Warning: Supabase credentials missing. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.")
+        return None
     return create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
 supabase_client = get_supabase_client()

@@ -42,6 +42,8 @@ def build_system_prompt(req: ChatRequest, rag_context: str = "") -> str:
 async def get_rag_context(project_id: str, query_embedding: list) -> tuple[str, list]:
     try:
         from backend.database import supabase_client
+        if supabase_client is None:
+            return "", []
         result = supabase_client.rpc("match_project_files", {
             "query_embedding": query_embedding,
             "match_threshold": 0.5,
@@ -351,6 +353,8 @@ async def save_file_with_embedding(
 ):
     try:
         from backend.database import supabase_client
+        if supabase_client is None:
+            raise HTTPException(503, "Supabase not configured. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY env vars.")
 
         # User-provided key takes priority over server env var
         google_key = request.google_key or os.getenv("GEMINI_API_KEY", "")
