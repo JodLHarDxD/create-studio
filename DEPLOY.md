@@ -142,14 +142,48 @@ After deployment, verify each:
 
 ---
 
-## Railway → Render Migration (if Railway unavailable)
+## Railway Replacement Without Breaking Production
 
-1. Go to [render.com](https://render.com) → New Web Service
-2. Connect GitHub repo
-3. Runtime: Python 3
-4. Build command: `pip install -r backend/requirements.txt`
-5. Start command: `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
-6. Set same env vars as Railway
-7. Update `VITE_API_URL` in Vercel to new Render URL
+The Vercel frontend only needs one backend URL: `VITE_API_URL`. You can safely replace Railway by deploying the same FastAPI backend somewhere else, testing it, and only then repointing Vercel.
 
-Note: Render free tier sleeps after 15min inactivity. Use Koyeb.com for always-on free tier.
+Do not delete Railway until the replacement backend responds at `/health` and the Vercel app works after redeploy.
+
+### Option A: Render
+
+This repo includes `render.yaml` for a Render web service.
+
+1. Push `render.yaml` to GitHub.
+2. Go to [render.com](https://render.com) → New → Blueprint.
+3. Connect this repo and deploy the blueprint.
+4. When Render asks for secret values, copy the same backend env vars from Railway:
+   - `SUPABASE_URL`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `GEMINI_API_KEY`
+   - `OPENAI_API_KEY`
+   - `ANTHROPIC_API_KEY`
+5. After deploy, open:
+   `https://your-render-service.onrender.com/health`
+6. It should return:
+   `{"status":"operational","service":"CREATstudio API"}`
+7. In Vercel → Project → Settings → Environment Variables, change:
+   `VITE_API_URL=https://your-render-service.onrender.com`
+8. Redeploy the Vercel frontend.
+
+Render free web services can sleep when idle, so the first request after inactivity may be slow. Use a paid Render instance or another always-on host if this is production.
+
+### Option B: Koyeb
+
+Koyeb can also deploy this backend as a Python/FastAPI web service.
+
+Use:
+
+- Build command: `pip install -r backend/requirements.txt`
+- Run command: `python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
+- Health path: `/health`
+- Same backend env vars listed above
+
+After it is live, set Vercel `VITE_API_URL` to the new Koyeb public URL and redeploy.
+
+### Safe Rollback
+
+If the new backend fails, set Vercel `VITE_API_URL` back to the old Railway URL and redeploy. No database data is moved because Supabase remains the source of truth.
