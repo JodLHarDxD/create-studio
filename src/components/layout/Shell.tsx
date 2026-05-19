@@ -66,7 +66,7 @@ export default function Shell() {
         {/* Forge mark — opens command palette */}
         <button
           onClick={() => setCmdOpen(true)}
-          title="FORGE — Command Palette (⌘K)"
+          title="CREATstudio — Command Palette (⌘K)"
           className="mb-6 w-10 h-10 flex items-center justify-center border border-white/[0.08] hover:border-emerald-400/40 transition-colors duration-500 group relative"
         >
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-emerald-500/10 to-violet-500/10" />
@@ -210,10 +210,10 @@ export default function Shell() {
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full amber-pulse" style={{ background: '#34d399' }} />
             <span style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontSize: 12, letterSpacing: '0.02em', color: '#f4f4f5' }}>
-              forge
+              CREAT
             </span>
-            <span className="ml-1.5 text-[9px] tracking-[0.25em] uppercase text-zinc-500">
-              Neural Console
+            <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.05em', color: '#34d399', marginLeft: 1 }}>
+              /studio
             </span>
           </div>
           <span className="text-zinc-700">·</span>

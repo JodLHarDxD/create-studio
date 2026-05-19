@@ -75,7 +75,7 @@ export default function Profile() {
     }
   };
 
-  const displayEmail = profile?.email || 'unknown@forge.dev';
+  const displayEmail = profile?.email || 'unknown@creat.studio';
 
   const inputStyle: React.CSSProperties = {
     width: '100%', background: 'transparent', outline: 'none',

@@ -71,7 +71,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         </motion.span>
       </div>
 
-      {/* Centerpiece — giant italic FORGE wordmark */}
+      {/* Centerpiece — giant italic CREATstudio wordmark */}
       <div className="flex-1 flex items-center justify-center relative z-10">
         <motion.div
           initial={{ opacity: 0, filter: 'blur(10px)' }}
@@ -92,20 +92,18 @@ export default function Preloader({ onComplete }: PreloaderProps) {
               color: '#27272a',
             }}
           >
-            forge
+            creat
             <span
               style={{
-                fontFamily: '"JetBrains Mono", monospace',
+                fontFamily: '"Inter", sans-serif',
                 fontStyle: 'normal',
                 fontWeight: 300,
-                letterSpacing: '0.05em',
-                fontSize: '0.32em',
+                letterSpacing: '-0.02em',
                 color: '#52525b',
-                marginLeft: '0.15em',
-                verticalAlign: 'top',
+                marginLeft: '0.05em',
               }}
             >
-              /neural
+              /studio
             </span>
           </h1>
 
@@ -126,21 +124,19 @@ export default function Preloader({ onComplete }: PreloaderProps) {
                 textShadow: '0 0 40px rgba(52,211,153,0.35)',
               }}
             >
-              forge
+              creat
               <span
                 style={{
-                  fontFamily: '"JetBrains Mono", monospace',
+                  fontFamily: '"Inter", sans-serif',
                   fontStyle: 'normal',
                   fontWeight: 300,
-                  letterSpacing: '0.05em',
-                  fontSize: '0.32em',
+                  letterSpacing: '-0.02em',
                   color: '#8b5cf6',
-                  marginLeft: '0.15em',
-                  verticalAlign: 'top',
+                  marginLeft: '0.05em',
                   opacity: 0.9,
                 }}
               >
-                /neural
+                /studio
               </span>
             </h1>
           </motion.div>
@@ -168,7 +164,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
             className="font-display italic text-zinc-200"
             style={{ fontSize: 16, letterSpacing: '-0.01em' }}
           >
-            A console for teams that ship at speed.
+            A studio for teams that ship.
           </motion.span>
 
           <div className="flex items-baseline gap-3">

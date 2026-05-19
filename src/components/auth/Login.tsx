@@ -71,7 +71,7 @@ export default function Login() {
 
   const handleGuest = () => {
     setCurrentUserId('demo-1'); setUserRole('ADMIN'); setLoginState('guest');
-    setProfile({ id: 'demo-1', email: 'admin@forge.dev', full_name: 'Admin Demo', role: 'ADMIN', created_at: new Date().toISOString() });
+    setProfile({ id: 'demo-1', email: 'admin@creat.studio', full_name: 'Admin Demo', role: 'ADMIN', created_at: new Date().toISOString() });
   };
 
   return (
@@ -151,8 +151,9 @@ export default function Login() {
           transition={{ delay: 1.2 }}
           className="flex justify-between items-baseline pt-8 border-t border-white/[0.06]"
         >
-          <span className="font-display italic text-sm text-zinc-400">
-            forge / neural console
+          <span className="text-sm text-zinc-400 flex items-baseline gap-1">
+            <span className="font-display italic text-zinc-300">CREAT</span>
+            <span className="font-mono text-[10px] tracking-[0.10em] text-emerald-400/80">/studio</span>
           </span>
           <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-600">
             №&nbsp;001 / Cinematic Edition
@@ -174,7 +175,7 @@ export default function Login() {
         {/* Panel header */}
         <div className="mt-3 mb-10">
           <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500 mb-4">
-            {mode === 'login' ? 'Returning Operator' : 'New To Forge'}
+            {mode === 'login' ? 'Returning' : 'New To Studio'}
           </div>
           <h2
             className="font-display text-zinc-100"
@@ -242,7 +243,7 @@ export default function Login() {
           <div>
             <label htmlFor="auth-email" className="form-label">Email</label>
             <input
-              id="auth-email" type="email" placeholder="you@forge.dev" value={email}
+              id="auth-email" type="email" placeholder="you@creat.studio" value={email}
               onChange={e => setEmail(e.target.value)} required
               className="input-contained"
             />
