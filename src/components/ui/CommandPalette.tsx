@@ -270,9 +270,8 @@ export default function CommandPalette({ isOpen, onClose, onNewTask, onOpenFolde
                 <span>↑↓ navigate</span>
                 <span>↵ select</span>
                 <span>esc close</span>
-                <div className="ml-auto flex items-baseline gap-1">
-                  <span className="font-display italic text-zinc-200 text-[12px]">CREAT</span>
-                  <span className="font-mono text-[9px] tracking-[0.10em] text-emerald-400/80">/studio</span>
+                <div className="ml-auto">
+                  <span className="font-display italic text-zinc-200 text-[13px]">creat</span>
                 </div>
               </div>
             </motion.div>

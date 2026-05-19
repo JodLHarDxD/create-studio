@@ -95,12 +95,14 @@ export default function Preloader({ onComplete }: PreloaderProps) {
             creat
             <span
               style={{
-                fontFamily: '"Inter", sans-serif',
+                fontFamily: '"JetBrains Mono", monospace',
                 fontStyle: 'normal',
                 fontWeight: 300,
-                letterSpacing: '-0.02em',
+                letterSpacing: '0.05em',
+                fontSize: '0.32em',
                 color: '#52525b',
-                marginLeft: '0.05em',
+                marginLeft: '0.15em',
+                verticalAlign: 'top',
               }}
             >
               /studio
@@ -127,12 +129,14 @@ export default function Preloader({ onComplete }: PreloaderProps) {
               creat
               <span
                 style={{
-                  fontFamily: '"Inter", sans-serif',
+                  fontFamily: '"JetBrains Mono", monospace',
                   fontStyle: 'normal',
                   fontWeight: 300,
-                  letterSpacing: '-0.02em',
+                  letterSpacing: '0.05em',
+                  fontSize: '0.32em',
                   color: '#8b5cf6',
-                  marginLeft: '0.05em',
+                  marginLeft: '0.15em',
+                  verticalAlign: 'top',
                   opacity: 0.9,
                 }}
               >

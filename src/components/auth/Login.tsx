@@ -151,9 +151,8 @@ export default function Login() {
           transition={{ delay: 1.2 }}
           className="flex justify-between items-baseline pt-8 border-t border-white/[0.06]"
         >
-          <span className="text-sm text-zinc-400 flex items-baseline gap-1">
-            <span className="font-display italic text-zinc-300">CREAT</span>
-            <span className="font-mono text-[10px] tracking-[0.10em] text-emerald-400/80">/studio</span>
+          <span className="font-display italic text-[15px] text-zinc-300">
+            creat
           </span>
           <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-600">
             №&nbsp;001 / Cinematic Edition

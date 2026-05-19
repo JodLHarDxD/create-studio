@@ -179,9 +179,9 @@ export default function EditorPanel() {
         <div className="text-center select-none">
           <div
             className="font-display italic text-emerald-400/[0.06]"
-            style={{ fontSize: 160, lineHeight: 1, letterSpacing: '-0.04em' }}
+            style={{ fontSize: 200, lineHeight: 1, letterSpacing: '-0.04em' }}
           >
-            CREATstudio
+            creat
           </div>
           <div className="mt-6 text-[10px] font-mono text-zinc-500 tracking-[0.25em] uppercase">
             Open a folder or select a file

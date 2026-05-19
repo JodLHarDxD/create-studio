@@ -209,11 +209,8 @@ export default function Shell() {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full amber-pulse" style={{ background: '#34d399' }} />
-            <span style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontSize: 12, letterSpacing: '0.02em', color: '#f4f4f5' }}>
-              CREAT
-            </span>
-            <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.05em', color: '#34d399', marginLeft: 1 }}>
-              /studio
+            <span style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontSize: 13, letterSpacing: '-0.01em', color: '#f4f4f5' }}>
+              creat
             </span>
           </div>
           <span className="text-zinc-700">·</span>
