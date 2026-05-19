@@ -9,8 +9,10 @@ import ContextHeader from './ContextHeader';
 import MessageList from './MessageList';
 import MessageComposer from './MessageComposer';
 
+export const DEMO_CHANNEL_ID = 'demo-ch-general' as const;
+
 const DEMO_CHANNELS: Channel[] = [
-  { id: 'demo-ch-general', project_id: 'demo', name: 'general', description: 'Project chat',
+  { id: DEMO_CHANNEL_ID, project_id: 'demo', name: 'general', description: 'Project chat',
     created_by: 'demo-1', archived: false, created_at: new Date().toISOString() },
 ];
 
