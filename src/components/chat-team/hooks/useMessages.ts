@@ -2,16 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import type { Message, MessageContextType } from '@/lib/supabaseClient';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
-import { DEMO_CHANNEL_ID } from '../TeamChatPanel';
-
-const DEMO_MESSAGES: Message[] = [
-  { id: 'dm1', context_type: 'channel', context_id: DEMO_CHANNEL_ID, author_id: 'demo-1',
-    body: 'Welcome to the CREATstudio chat. Type away.', command: null, replies_to: null,
-    model_id: null, created_at: new Date(Date.now() - 3600_000).toISOString(), edited_at: null },
-  { id: 'dm2', context_type: 'channel', context_id: DEMO_CHANNEL_ID, author_id: 'demo-2',
-    body: 'Setting up RAG pipeline now.', command: null, replies_to: null,
-    model_id: null, created_at: new Date(Date.now() - 1800_000).toISOString(), edited_at: null },
-];
+import { DEMO_CHANNEL_ID, DEMO_MESSAGES } from '../lib/demoChat';
 
 export function useMessages(type: MessageContextType | null, id: string | null) {
   const { loginState } = useWorkspace();
