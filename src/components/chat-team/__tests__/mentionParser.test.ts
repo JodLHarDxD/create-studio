@@ -22,4 +22,7 @@ describe('extractMentions', () => {
   it('ignores unknown @names', () => {
     expect(extractMentions('@Ghost', users as any)).toEqual([]);
   });
+  it('returns both user ids for multiple distinct mentions in order of appearance', () => {
+    expect(extractMentions('@Alice and @Bob are here', users as any)).toEqual(['u1', 'u2']);
+  });
 });
