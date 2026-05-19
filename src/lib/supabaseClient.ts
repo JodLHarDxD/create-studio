@@ -26,6 +26,7 @@ export interface Profile {
   github_url?: string;
   avatar_url?: string | null;
   created_at: string;
+  is_bot?: boolean;
 }
 
 export interface Project {
@@ -75,4 +76,65 @@ export interface LocalFileView {
   objectUrl?: string;
   mimeType: string;
   lastModified: number;
+}
+
+export const BOT_USER_ID = '00000000-0000-0000-0000-000000000a1c' as const;
+
+export interface Channel {
+  id: string;
+  project_id: string;
+  name: string;
+  description: string;
+  created_by: string | null;
+  archived: boolean;
+  created_at: string;
+}
+
+export interface DMThread {
+  id: string;
+  user_a_id: string;
+  user_b_id: string;
+  created_at: string;
+}
+
+export type MessageContextType = 'channel' | 'dm' | 'task';
+
+export interface Message {
+  id: string;
+  context_type: MessageContextType;
+  context_id: string;
+  author_id: string;
+  body: string;
+  command: string | null;
+  replies_to: string | null;
+  model_id: string | null;
+  created_at: string;
+  edited_at: string | null;
+}
+
+export interface MessageReaction {
+  message_id: string;
+  user_id: string;
+  emoji: string;
+}
+
+export interface MessageMention {
+  message_id: string;
+  mentioned_user_id: string;
+}
+
+export interface MessageAttachment {
+  id: string;
+  message_id: string;
+  storage_path: string;
+  file_name: string;
+  mime_type: string | null;
+  size_bytes: number | null;
+}
+
+export interface ReadState {
+  user_id: string;
+  context_type: string;
+  context_id: string;
+  last_read_at: string;
 }

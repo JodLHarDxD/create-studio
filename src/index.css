@@ -441,3 +441,50 @@
 .ink-fade-in {
   animation: ink-fade-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   Team Chat dark+lavender skin
+   Scoped: wrap the right chat panel + task drawer with
+   data-skin="chat-dark" — the rest of the site keeps cream.
+   ════════════════════════════════════════════════════════════════ */
+[data-skin="chat-dark"] {
+  --bg-base:       #0E1014;
+  --bg-card:       #1A1D24;
+  --bg-elevated:   #222630;
+  --border-chat:   rgba(255,255,255,0.06);
+  --text-1-chat:   #FFFFFF;
+  --text-2-chat:   #A8ADB8;
+  --text-3-chat:   #6B7080;
+  --accent:        #C5B8FF;
+  --accent-2:      #E8E2A8;
+  --success-chat:  #7ED4A8;
+  --danger-chat:   #FF8B8B;
+  --radius-card:   16px;
+  --radius-chip:   10px;
+
+  font-family: "Inter", "General Sans", ui-sans-serif, system-ui, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-1-chat);
+}
+
+[data-skin="chat-dark"] *,
+[data-skin="chat-dark"] *::before,
+[data-skin="chat-dark"] *::after {
+  border-color: var(--border-chat);
+}
+
+[data-skin="chat-dark"] .tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+[data-skin="chat-dark"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+[data-skin="chat-dark"] ::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+}
+[data-skin="chat-dark"] ::-webkit-scrollbar-track {
+  background: transparent;
+}
