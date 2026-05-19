@@ -16,8 +16,12 @@ export default function NewChannelModal({ isOpen, onClose, onCreated }: Props) {
 
   const submit = async () => {
     if (!activeProject || !currentUserId) return;
-    const clean = name.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-').slice(0, 32);
-    if (!clean) { setErr('Name required'); return; }
+    const clean = name.trim().toLowerCase()
+      .replace(/[^a-z0-9-]/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .replace(/-{2,}/g, '-')
+      .slice(0, 32);
+    if (!clean) { setErr('Name must contain at least one letter or number'); return; }
     setBusy(true); setErr(null);
     const { error } = await supabase.from('channels').insert({
       project_id: activeProject.id,
@@ -49,35 +53,37 @@ export default function NewChannelModal({ isOpen, onClose, onCreated }: Props) {
             <X size={16} />
           </button>
         </div>
-        <input
-          autoFocus value={name} onChange={e => setName(e.target.value)}
-          placeholder="channel-name"
-          style={{
-            width: '100%', padding: '10px 12px', marginBottom: 12,
-            background: 'var(--bg-elevated)', border: '1px solid var(--border-chat)',
-            borderRadius: 'var(--radius-chip)', color: 'var(--text-1-chat)', fontSize: 13,
-          }}
-        />
-        <input
-          value={description} onChange={e => setDescription(e.target.value)}
-          placeholder="Description (optional)"
-          style={{
-            width: '100%', padding: '10px 12px', marginBottom: 16,
-            background: 'var(--bg-elevated)', border: '1px solid var(--border-chat)',
-            borderRadius: 'var(--radius-chip)', color: 'var(--text-1-chat)', fontSize: 13,
-          }}
-        />
-        {err && <div style={{ color: 'var(--danger-chat)', fontSize: 12, marginBottom: 12 }}>{err}</div>}
-        <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-          <button onClick={onClose} style={{
-            padding: '8px 14px', background: 'transparent', color: 'var(--text-2-chat)',
-            border: '1px solid var(--border-chat)', borderRadius: 'var(--radius-chip)', cursor: 'pointer',
-          }}>Cancel</button>
-          <button onClick={submit} disabled={busy} style={{
-            padding: '8px 14px', background: 'var(--accent)', color: '#0E1014',
-            border: 'none', borderRadius: 'var(--radius-chip)', cursor: 'pointer', fontWeight: 600,
-          }}>{busy ? 'Creating…' : 'Create'}</button>
-        </div>
+        <form onSubmit={e => { e.preventDefault(); submit(); }}>
+          <input
+            autoFocus value={name} onChange={e => setName(e.target.value)}
+            placeholder="channel-name"
+            style={{
+              width: '100%', padding: '10px 12px', marginBottom: 12,
+              background: 'var(--bg-elevated)', border: '1px solid var(--border-chat)',
+              borderRadius: 'var(--radius-chip)', color: 'var(--text-1-chat)', fontSize: 13,
+            }}
+          />
+          <input
+            value={description} onChange={e => setDescription(e.target.value)}
+            placeholder="Description (optional)"
+            style={{
+              width: '100%', padding: '10px 12px', marginBottom: 16,
+              background: 'var(--bg-elevated)', border: '1px solid var(--border-chat)',
+              borderRadius: 'var(--radius-chip)', color: 'var(--text-1-chat)', fontSize: 13,
+            }}
+          />
+          {err && <div style={{ color: 'var(--danger-chat)', fontSize: 12, marginBottom: 12 }}>{err}</div>}
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+            <button type="button" onClick={onClose} style={{
+              padding: '8px 14px', background: 'transparent', color: 'var(--text-2-chat)',
+              border: '1px solid var(--border-chat)', borderRadius: 'var(--radius-chip)', cursor: 'pointer',
+            }}>Cancel</button>
+            <button type="submit" disabled={busy} style={{
+              padding: '8px 14px', background: 'var(--accent)', color: '#0E1014',
+              border: 'none', borderRadius: 'var(--radius-chip)', cursor: 'pointer', fontWeight: 600,
+            }}>{busy ? 'Creating…' : 'Create'}</button>
+          </div>
+        </form>
       </div>
     </div>
   );
