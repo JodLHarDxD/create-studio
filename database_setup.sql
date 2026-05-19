@@ -217,6 +217,9 @@ CREATE TABLE IF NOT EXISTS read_state (
 -- ── Helpers ──────────────────────────────────────────────────────────
 CREATE OR REPLACE FUNCTION is_project_member(p_project uuid)
 RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER AS $$
+  -- Phase 1: p_project is intentionally unused. All authenticated users are treated as
+  -- project members (single-project assumption). Replace with project_members join before
+  -- adding multi-project support.
   SELECT EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid());
 $$;
 
@@ -232,7 +235,9 @@ CREATE POLICY "channels_select" ON channels FOR SELECT USING (is_project_member(
 DROP POLICY IF EXISTS "channels_insert" ON channels;
 CREATE POLICY "channels_insert" ON channels FOR INSERT WITH CHECK (is_admin() AND is_project_member(project_id));
 DROP POLICY IF EXISTS "channels_update" ON channels;
-CREATE POLICY "channels_update" ON channels FOR UPDATE USING (is_admin() OR created_by = auth.uid());
+CREATE POLICY "channels_update" ON channels FOR UPDATE
+  USING (is_admin() OR created_by = auth.uid())
+  WITH CHECK (is_admin() OR created_by = auth.uid());
 
 -- ── RLS: messages (Phase 1 supports channel + task; dm added in Phase 2) ──
 ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
@@ -245,7 +250,19 @@ CREATE POLICY "messages_select" ON messages FOR SELECT USING (
   END
 );
 DROP POLICY IF EXISTS "messages_insert" ON messages;
-CREATE POLICY "messages_insert" ON messages FOR INSERT WITH CHECK (author_id = auth.uid());
+CREATE POLICY "messages_insert" ON messages FOR INSERT WITH CHECK (
+  author_id = auth.uid()
+  AND (
+    CASE context_type
+      WHEN 'channel' THEN EXISTS (
+        SELECT 1 FROM channels c WHERE c.id = context_id AND is_project_member(c.project_id)
+      )
+      WHEN 'dm'   THEN false
+      WHEN 'task' THEN is_project_member(task_project_id(context_id))
+      ELSE false
+    END
+  )
+);
 DROP POLICY IF EXISTS "messages_update_own" ON messages;
 CREATE POLICY "messages_update_own" ON messages FOR UPDATE
   USING (author_id = auth.uid() AND created_at > NOW() - INTERVAL '15 minutes');
@@ -255,7 +272,9 @@ CREATE POLICY "messages_delete_own" ON messages FOR DELETE USING (author_id = au
 -- ── RLS: read_state ──────────────────────────────────────────────────
 ALTER TABLE read_state ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "read_state_all" ON read_state;
-CREATE POLICY "read_state_all" ON read_state FOR ALL USING (user_id = auth.uid());
+CREATE POLICY "read_state_all" ON read_state FOR ALL
+  USING (user_id = auth.uid())
+  WITH CHECK (user_id = auth.uid());
 
 -- ── get_unread_summary RPC ───────────────────────────────────────────
 CREATE OR REPLACE FUNCTION get_unread_summary(p_user uuid, p_project uuid)
@@ -279,6 +298,7 @@ LANGUAGE sql STABLE SECURITY DEFINER AS $$
     ON m.context_type = ctxs.ctype AND m.context_id = ctxs.cid
     AND m.created_at > COALESCE(rs.last_read_at, 'epoch')
     AND m.author_id <> p_user
+  WHERE p_user = auth.uid()   -- prevents caller from querying other users' unread state
   GROUP BY ctxs.ctype, ctxs.cid;
 $$;
 
