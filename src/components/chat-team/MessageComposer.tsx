@@ -1,4 +1,4 @@
-import React, { useState, KeyboardEvent } from 'react';
+import React, { useState, useRef, KeyboardEvent } from 'react';
 import { Send } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
 import type { MessageContextType } from '@/lib/supabaseClient';
@@ -13,14 +13,16 @@ export default function MessageComposer({ contextType, contextId }: Props) {
   const { currentUserId, loginState } = useWorkspace();
   const [value, setValue] = useState('');
   const [sending, setSending] = useState(false);
+  const sendingRef = useRef(false); // synchronous guard against keydown repeat races
 
   const send = async () => {
     const body = value.trim();
-    if (!body || !currentUserId || sending) return;
+    if (!body || !currentUserId || sendingRef.current) return;
     if (loginState === 'guest') {
       setValue('');
       return;
     }
+    sendingRef.current = true;
     setSending(true);
     const { error } = await supabase.from('messages').insert({
       context_type: contextType,
@@ -28,6 +30,7 @@ export default function MessageComposer({ contextType, contextId }: Props) {
       author_id: currentUserId,
       body,
     });
+    sendingRef.current = false;
     setSending(false);
     if (error) { console.error('send:', error); return; }
     setValue('');

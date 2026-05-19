@@ -7,7 +7,7 @@ interface Props {
   isMine: boolean;
 }
 
-export default function MessageItem({ message, author, isMine }: Props) {
+export default function MessageItem({ message, author, isMine: _isMine }: Props) {
   const ts = new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const isBot = author?.is_bot === true;
 
