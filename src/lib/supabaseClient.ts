@@ -78,7 +78,7 @@ export interface LocalFileView {
   lastModified: number;
 }
 
-export const BOT_USER_ID = '00000000-0000-0000-0000-000000000a1c';
+export const BOT_USER_ID = '00000000-0000-0000-0000-000000000a1c' as const;
 
 export interface Channel {
   id: string;
@@ -134,7 +134,7 @@ export interface MessageAttachment {
 
 export interface ReadState {
   user_id: string;
-  context_type: MessageContextType;
+  context_type: string;
   context_id: string;
   last_read_at: string;
 }
