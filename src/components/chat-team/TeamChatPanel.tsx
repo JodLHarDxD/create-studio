@@ -9,6 +9,11 @@ import ContextHeader from './ContextHeader';
 import MessageList from './MessageList';
 import MessageComposer from './MessageComposer';
 
+const DEMO_CHANNELS: Channel[] = [
+  { id: 'demo-ch-general', project_id: 'demo', name: 'general', description: 'Project chat',
+    created_by: 'demo-1', archived: false, created_at: new Date().toISOString() },
+];
+
 export default function TeamChatPanel() {
   const { activeProject, users, currentUserId, loginState } = useWorkspace();
   const { activeContext } = useChat();
@@ -16,7 +21,8 @@ export default function TeamChatPanel() {
   const [channels, setChannels] = useState<Channel[]>([]);
 
   const fetchChannels = useCallback(async () => {
-    if (!activeProject || loginState === 'guest') return;
+    if (loginState === 'guest') { setChannels(DEMO_CHANNELS); return; }
+    if (!activeProject) return;
     const { data } = await supabase.from('channels')
       .select('*')
       .eq('project_id', activeProject.id)
@@ -24,7 +30,9 @@ export default function TeamChatPanel() {
     if (data) setChannels(data as Channel[]);
   }, [activeProject, loginState]);
 
-  useEffect(() => { setChannels([]); }, [activeProject]);
+  useEffect(() => {
+    if (loginState !== 'guest') setChannels([]);
+  }, [activeProject, loginState]);
   useEffect(() => { fetchChannels(); }, [fetchChannels]);
 
   // Realtime channel list updates
