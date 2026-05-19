@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { X, Loader2, Link, Upload, File } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
@@ -63,42 +63,32 @@ export default function NewTaskModal({ isOpen, onClose }: { isOpen: boolean; onC
     } finally { setLoading(false); setUploadProgress(''); }
   };
 
-  const fieldStyle: React.CSSProperties = {
-    width: '100%',
-    background: 'rgba(26,22,18,0.05)',
-    border: '1px solid rgba(26,22,18,0.11)',
-    borderRadius: 2,
-    outline: 'none',
-    padding: '10px 12px',
-    fontSize: 13,
-    fontFamily: '"Inter", sans-serif',
-    color: '#1A1612',
-    transition: 'border-color 0.2s, background 0.2s',
-  };
-
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    e.target.style.borderColor = 'rgba(191,74,42,0.45)';
-    e.target.style.background = 'rgba(26,22,18,0.08)';
-  };
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    e.target.style.borderColor = 'rgba(26,22,18,0.11)';
-    e.target.style.background = 'rgba(26,22,18,0.05)';
-  };
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(26,22,18,0.35)', backdropFilter: 'blur(8px)' }}>
-      <div className="w-[500px]" style={{ background: '#FBF8F2', border: '1px solid rgba(26,22,18,0.13)', borderRadius: 3, boxShadow: '0 24px 56px rgba(26,22,18,0.18), 0 6px 16px rgba(26,22,18,0.08)' }}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{ background: 'rgba(9,9,11,0.72)', backdropFilter: 'blur(12px) saturate(1.2)' }}
+      onClick={onClose}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        className="w-[520px] border border-white/[0.10] bg-zinc-950/95 backdrop-blur-2xl shadow-deep"
+      >
         {/* Header */}
-        <div className="flex justify-between items-center px-7 py-5" style={{ borderBottom: '1px solid rgba(26,22,18,0.08)' }}>
-          <div>
-            <div style={{ fontFamily: '"Fraunces", serif', fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em', color: '#1A1612' }}>New Task</div>
+        <div className="flex justify-between items-center px-7 py-5 border-b border-white/[0.06]">
+          <div className="flex items-center gap-3">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 amber-pulse" />
+            <div>
+              <div className="font-display italic text-zinc-100 text-[20px]">New task.</div>
+              <div className="font-mono text-[9px] tracking-[0.25em] uppercase text-zinc-500 mt-0.5">
+                Initialize node
+              </div>
+            </div>
           </div>
-          <button onClick={onClose}
+          <button
+            onClick={onClose}
             aria-label="Close modal"
-            className="w-8 h-8 flex items-center justify-center rounded transition-all"
-            style={{ color: '#9B948A', background: 'transparent' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#1A1612'; (e.currentTarget as HTMLElement).style.background = 'rgba(26,22,18,0.07)'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#9B948A'; (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
+            className="w-8 h-8 flex items-center justify-center transition-all text-zinc-500 hover:text-red-400 hover:bg-white/[0.04]"
+          >
             <X size={15} />
           </button>
         </div>
@@ -107,31 +97,40 @@ export default function NewTaskModal({ isOpen, onClose }: { isOpen: boolean; onC
           {/* Title */}
           <div>
             <label className="form-label">Title *</label>
-            <input placeholder="What needs to be done?" value={form.title} required
+            <input
+              placeholder="What needs to be done?"
+              value={form.title}
+              required
               onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
-              style={{ ...fieldStyle, fontSize: 14, fontFamily: '"Fraunces", serif', fontWeight: 600 }}
-              onFocus={handleFocus} onBlur={handleBlur} />
+              className="input-contained"
+              style={{ fontSize: 15, fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontWeight: 400 }}
+            />
           </div>
 
           {/* Description */}
           <div>
             <label className="form-label">Description</label>
-            <textarea placeholder="Additional context…" value={form.description} rows={2}
+            <textarea
+              placeholder="Additional context…"
+              value={form.description}
+              rows={2}
               onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
-              className="w-full outline-none resize-none custom-scrollbar transition-all"
-              style={{ ...fieldStyle }}
-              onFocus={handleFocus as any} onBlur={handleBlur as any} />
+              className="input-contained custom-scrollbar resize-none"
+            />
           </div>
 
           {/* URL */}
           <div>
             <label className="form-label">Reference URL</label>
             <div className="relative flex items-center">
-              <Link size={12} className="absolute" style={{ color: '#C4BDB1', left: 12 }} />
-              <input placeholder="https://…" value={form.url}
+              <Link size={12} className="absolute left-3 text-zinc-500" />
+              <input
+                placeholder="https://…"
+                value={form.url}
                 onChange={e => setForm(p => ({ ...p, url: e.target.value }))}
-                style={{ ...fieldStyle, paddingLeft: 34 }}
-                onFocus={handleFocus} onBlur={handleBlur} />
+                className="input-contained"
+                style={{ paddingLeft: 32 }}
+              />
             </div>
           </div>
 
@@ -140,51 +139,57 @@ export default function NewTaskModal({ isOpen, onClose }: { isOpen: boolean; onC
             <label className="form-label">Codebase ZIP</label>
             <div
               onClick={() => fileRef.current?.click()}
-              className="flex items-center gap-3 cursor-pointer transition-all"
-              style={{ padding: '11px 14px', border: `1px dashed ${zipFile ? 'rgba(191,74,42,0.35)' : 'rgba(26,22,18,0.11)'}`, background: zipFile ? 'rgba(191,74,42,0.04)' : 'rgba(26,22,18,0.03)', borderRadius: 2 }}
-              onMouseEnter={e => { if (!zipFile) (e.currentTarget as HTMLElement).style.borderColor = 'rgba(26,22,18,0.22)'; }}
-              onMouseLeave={e => { if (!zipFile) (e.currentTarget as HTMLElement).style.borderColor = 'rgba(26,22,18,0.11)'; }}
+              className="flex items-center gap-3 cursor-pointer transition-all px-3.5 py-3"
+              style={{
+                border: `1px dashed ${zipFile ? 'rgba(52,211,153,0.40)' : 'rgba(255,255,255,0.10)'}`,
+                background: zipFile ? 'rgba(52,211,153,0.04)' : 'rgba(24,24,27,0.40)',
+              }}
             >
               {zipFile ? (
                 <>
-                  <File size={13} style={{ color: '#BF4A2A', flexShrink: 0 }} />
-                  <span className="truncate flex-1" style={{ fontSize: 12, color: '#6B645C', fontFamily: '"JetBrains Mono", monospace' }}>{zipFile.name}</span>
-                  <button type="button" onClick={e => { e.stopPropagation(); setZipFile(null); }} style={{ color: '#C4BDB1', transition: 'color 0.15s' }}
-                    onMouseEnter={e => (e.currentTarget.style.color = '#B53C2A')}
-                    onMouseLeave={e => (e.currentTarget.style.color = '#C4BDB1')}>
+                  <File size={13} className="text-emerald-400 flex-shrink-0" strokeWidth={1.5} />
+                  <span className="truncate flex-1 text-[12px] text-emerald-300 font-mono">{zipFile.name}</span>
+                  <button
+                    type="button"
+                    onClick={e => { e.stopPropagation(); setZipFile(null); }}
+                    className="text-zinc-500 hover:text-red-400 transition-colors"
+                  >
                     <X size={12} />
                   </button>
                 </>
               ) : (
                 <>
-                  <Upload size={13} style={{ color: '#C4BDB1', flexShrink: 0 }} />
-                  <span style={{ fontSize: 11, fontFamily: '"Inter", sans-serif', color: '#C4BDB1' }}>Upload .zip file</span>
+                  <Upload size={13} className="text-zinc-500 flex-shrink-0" strokeWidth={1.5} />
+                  <span className="text-[11px] text-zinc-500 font-mono tracking-wide">Upload .zip file</span>
                 </>
               )}
             </div>
-            <input ref={fileRef} type="file" accept=".zip" className="hidden"
-              onChange={e => setZipFile(e.target.files?.[0] ?? null)} />
+            <input ref={fileRef} type="file" accept=".zip" className="hidden" onChange={e => setZipFile(e.target.files?.[0] ?? null)} />
           </div>
 
           {/* Assignee + Priority */}
           <div className="flex gap-4">
             <div className="flex-1">
               <label className="form-label">Assignee</label>
-              <select value={form.assignee_id} onChange={e => setForm(p => ({ ...p, assignee_id: e.target.value }))}
-                style={{ ...fieldStyle }}
-                onFocus={handleFocus as any} onBlur={handleBlur as any}>
-                <option value="" style={{ background: '#0e0e0e' }}>Unassigned</option>
-                {users.map(u => <option key={u.id} value={u.id} style={{ background: '#0e0e0e' }}>{u.full_name}</option>)}
+              <select
+                value={form.assignee_id}
+                onChange={e => setForm(p => ({ ...p, assignee_id: e.target.value }))}
+                className="input-contained cursor-pointer"
+              >
+                <option value="">Unassigned</option>
+                {users.map(u => <option key={u.id} value={u.id}>{u.full_name}</option>)}
               </select>
             </div>
             <div style={{ width: 120 }}>
               <label className="form-label">Priority</label>
-              <select value={form.priority} onChange={e => setForm(p => ({ ...p, priority: e.target.value as any }))}
-                style={{ ...fieldStyle }}
-                onFocus={handleFocus as any} onBlur={handleBlur as any}>
-                <option value="LOW" style={{ background: '#0e0e0e' }}>Low</option>
-                <option value="MED" style={{ background: '#0e0e0e' }}>Medium</option>
-                <option value="HIGH" style={{ background: '#0e0e0e' }}>High</option>
+              <select
+                value={form.priority}
+                onChange={e => setForm(p => ({ ...p, priority: e.target.value as any }))}
+                className="input-contained cursor-pointer"
+              >
+                <option value="LOW">Low</option>
+                <option value="MED">Medium</option>
+                <option value="HIGH">High</option>
               </select>
             </div>
           </div>
@@ -192,18 +197,31 @@ export default function NewTaskModal({ isOpen, onClose }: { isOpen: boolean; onC
           {/* Due date */}
           <div>
             <label className="form-label">Due Date</label>
-            <input type="date" value={form.due_date} onChange={e => setForm(p => ({ ...p, due_date: e.target.value }))}
-              style={{ ...fieldStyle, colorScheme: 'dark' }}
-              onFocus={handleFocus} onBlur={handleBlur} />
+            <input
+              type="date"
+              value={form.due_date}
+              onChange={e => setForm(p => ({ ...p, due_date: e.target.value }))}
+              className="input-contained"
+              style={{ colorScheme: 'dark' }}
+            />
           </div>
 
           {/* Submit */}
-          <button type="submit" disabled={loading}
-            className="w-full py-3.5 flex items-center justify-center gap-2 transition-all mt-1"
-            style={{ background: '#BF4A2A', color: '#F4EFE6', fontSize: 11, fontFamily: '"Fraunces", serif', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', opacity: loading ? 0.7 : 1, borderRadius: 2, boxShadow: loading ? 'none' : '0 4px 16px rgba(191,74,42,0.2)' }}>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3.5 flex items-center justify-center gap-2 transition-all mt-2 font-mono text-[10px] tracking-[0.25em] uppercase font-semibold border"
+            style={{
+              background: loading ? 'rgba(52,211,153,0.20)' : '#34d399',
+              color: '#09090b',
+              borderColor: '#34d399',
+              opacity: loading ? 0.7 : 1,
+              boxShadow: loading ? 'none' : '0 8px 24px rgba(52,211,153,0.25)',
+            }}
+          >
             {loading ? (
               <><Loader2 size={12} className="animate-spin" /><span>{uploadProgress || 'Creating…'}</span></>
-            ) : 'Create Task'}
+            ) : 'Initialize Task'}
           </button>
         </form>
       </div>

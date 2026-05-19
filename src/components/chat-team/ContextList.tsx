@@ -55,7 +55,7 @@ export default function ContextList({ channels, onRefetchChannels }: Props) {
             </span>
             {u > 0 && (
               <span className="tabular" style={{
-                background: 'var(--accent)', color: '#0E1014',
+                background: 'var(--accent)', color: '#09090b',
                 fontSize: 10, fontWeight: 700, padding: '1px 6px',
                 borderRadius: 999, minWidth: 16, textAlign: 'center',
               }}>{u}</span>

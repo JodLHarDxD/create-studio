@@ -5,8 +5,8 @@ import './index.css';
 
 // Surface any crash visibly on the page so we can diagnose the white-screen issue
 function showFatalError(msg: string) {
-  document.body.style.cssText = 'margin:0;background:#EFEAE0;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:monospace';
-  document.body.innerHTML = `<pre style="color:#B53C2A;font-size:13px;max-width:90vw;white-space:pre-wrap;padding:32px;border:1px solid rgba(181,60,42,0.3)">${msg}</pre>`;
+  document.body.style.cssText = 'margin:0;background:#09090b;color:#f4f4f5;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:"JetBrains Mono",monospace';
+  document.body.innerHTML = `<pre style="color:#f87171;font-size:12px;max-width:90vw;white-space:pre-wrap;padding:32px;border:1px solid rgba(248,113,113,0.3);background:rgba(248,113,113,0.04)">${msg}</pre>`;
 }
 
 window.onerror = (_msg, _src, _line, _col, err) => {

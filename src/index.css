@@ -1,388 +1,395 @@
 @import "tailwindcss";
 
+/*
+ * ══════════════════════════════════════════════════════════════════
+ * FORGE — Dark Luxury Editorial Cinematic
+ * Source spec: design-master/design.md
+ * Aesthetic: obsidian zinc base, emerald + violet glow accents,
+ *            editorial serif (Playfair) + Inter + JetBrains Mono,
+ *            cinematic eases, hairline borders, no rounding.
+ * ══════════════════════════════════════════════════════════════════
+ */
+
 @theme {
   /* ── Typography ── */
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-sans:    "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", "Iowan Old Style", Georgia, serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* ── Editorial paper surfaces ── */
-  --color-paper:     #F4EFE6;
-  --color-surface-1: #EFEAE0;
-  --color-surface-2: #E8E2D6;
-  --color-surface-3: #DDD5C6;
-  --color-surface-4: #C9C0AE;
-  --color-surface-5: #B6AC97;
-  --color-editor:    #FBF8F2;
-  --color-tabbar:    #ECE6DA;
+  /* ── Obsidian surface scale ── */
+  --color-void:      #09090b;
+  --color-app:       #0a0a0c;
+  --color-surface:   #18181b;
+  --color-raised:    #1c1c20;
+  --color-editor:    #0a0a0c;
+  --color-tabbar:    #101013;
 
-  /* ── Espresso ink scale ── */
-  --color-text-1: #1A1612;
-  --color-text-2: #6B645C;
-  --color-text-3: #9B948A;
-  --color-text-4: #C4BDB1;
+  /* Paper alias for legacy code paths — points to void now */
+  --color-paper:     #09090b;
+  --color-surface-1: #101013;
+  --color-surface-2: #18181b;
+  --color-surface-3: #1c1c20;
+  --color-surface-4: #27272a;
+  --color-surface-5: #3f3f46;
 
-  /* ── Terracotta accent (editorial signature) ── */
-  --color-terracotta:      #BF4A2A;
-  --color-terracotta-dim:  rgba(191,74,42,0.10);
-  --color-terracotta-glow: rgba(191,74,42,0.05);
+  /* ── Zinc text scale ── */
+  --color-text-1: #f4f4f5;
+  --color-text-2: #d4d4d8;
+  --color-text-3: #a1a1aa;
+  --color-text-4: #71717a;
 
-  /* legacy aliases (keep old class names working) */
-  --color-amber:      #BF4A2A;
-  --color-amber-dim:  rgba(191,74,42,0.10);
-  --color-amber-glow: rgba(191,74,42,0.05);
+  /* ── Cinematic accents ── */
+  --color-emerald:      #34d399;
+  --color-emerald-dim:  rgba(52,211,153,0.10);
+  --color-emerald-glow: rgba(52,211,153,0.35);
 
-  /* ── Editorial blue (rare, hairlines only) ── */
-  --color-blue:     #2A4A6B;
-  --color-blue-dim: rgba(42,74,107,0.10);
+  --color-violet:       #8b5cf6;
+  --color-violet-dim:   rgba(139,92,246,0.10);
+  --color-violet-glow:  rgba(139,92,246,0.30);
+
+  /* legacy accent aliases — point to emerald (kept so old classes resolve) */
+  --color-terracotta:      #34d399;
+  --color-terracotta-dim:  rgba(52,211,153,0.10);
+  --color-terracotta-glow: rgba(52,211,153,0.05);
+  --color-amber:      #fbbf24;
+  --color-amber-dim:  rgba(251,191,36,0.10);
+  --color-amber-glow: rgba(251,191,36,0.05);
+
+  --color-blue:     #60a5fa;
+  --color-blue-dim: rgba(96,165,250,0.10);
 
   /* ── Semantic ── */
-  --color-green:  #4A6B3A;
-  --color-red:    #B53C2A;
-  --color-yellow: #C99A2E;
+  --color-green:  #34d399;
+  --color-red:    #f87171;
+  --color-yellow: #fbbf24;
 
-  /* ── Hairline borders (espresso overlay) ── */
-  --color-border-1: rgba(26,22,18,0.07);
-  --color-border-2: rgba(26,22,18,0.13);
-  --color-border-3: rgba(26,22,18,0.22);
-  --color-border-amber: rgba(191,74,42,0.35);
-
-  /* void alias for legacy refs */
-  --color-void: #F4EFE6;
+  /* ── Hairline borders ── */
+  --color-border-1: rgba(255,255,255,0.04);
+  --color-border-2: rgba(255,255,255,0.06);
+  --color-border-3: rgba(255,255,255,0.12);
+  --color-border-amber: rgba(52,211,153,0.40);
 }
 
-/* ── Shorthand CSS variables for inline styles ── */
 :root {
-  --accent:      #BF4A2A;
-  --accent-dim:  rgba(191,74,42,0.10);
-  --accent-glow: rgba(191,74,42,0.05);
-  --paper:       #F4EFE6;
-  --surface-1:   #EFEAE0;
-  --surface-2:   #E8E2D6;
-  --surface-3:   #DDD5C6;
-  --surface-4:   #C9C0AE;
-  --surface-5:   #B6AC97;
-  --text-1:      #1A1612;
-  --text-2:      #6B645C;
-  --text-3:      #9B948A;
-  --border-1:    rgba(26,22,18,0.07);
-  --border-2:    rgba(26,22,18,0.13);
-  --border-3:    rgba(26,22,18,0.22);
+  --accent:        #34d399;
+  --accent-dim:    rgba(52,211,153,0.10);
+  --accent-glow:   rgba(52,211,153,0.35);
+  --accent-2:      #8b5cf6;
+  --accent-2-dim:  rgba(139,92,246,0.10);
+  --accent-2-glow: rgba(139,92,246,0.30);
+  --paper:         #09090b;
+  --surface-1:     #101013;
+  --surface-2:     #18181b;
+  --surface-3:     #1c1c20;
+  --surface-4:     #27272a;
+  --surface-5:     #3f3f46;
+  --text-1:        #f4f4f5;
+  --text-2:        #d4d4d8;
+  --text-3:        #a1a1aa;
+  --border-1:      rgba(255,255,255,0.04);
+  --border-2:      rgba(255,255,255,0.06);
+  --border-3:      rgba(255,255,255,0.12);
 }
 
 @layer base {
-  * {
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
 
   html {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ss01" 1;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   }
 
   body {
-    background:
-      radial-gradient(ellipse 90% 70% at 50% -10%, rgba(191,74,42,0.04) 0%, transparent 55%),
-      #F4EFE6;
-    color: #1A1612;
+    background: #09090b;
+    color: #f4f4f5;
     font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
-    font-feature-settings: "ss01" 1, "cv11" 1;
   }
 
-  /* Terracotta text selection */
   ::selection {
-    background: rgba(191, 74, 42, 0.22);
-    color: #1A1612;
+    background: rgba(52, 211, 153, 0.30);
+    color: #ffffff;
   }
 
-  /* Subtle focus rings */
   :focus-visible {
-    outline: 1.5px solid rgba(191, 74, 42, 0.55);
+    outline: 1.5px solid rgba(52, 211, 153, 0.55);
     outline-offset: 2px;
   }
 
   /* Hairline scrollbar */
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
+  .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(26,22,18,0.10);
-    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 0;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(191,74,42,0.35);
+    background: rgba(52,211,153,0.35);
   }
 }
 
 /* ── Display font utilities ── */
 .font-display {
-  font-family: "Fraunces", "Iowan Old Style", Georgia, serif;
-  font-feature-settings: "ss01" 1, "ss02" 1;
+  font-family: "Playfair Display", "Iowan Old Style", Georgia, serif;
+  font-feature-settings: "lnum" 1;
 }
 .font-display-italic {
-  font-family: "Fraunces", "Iowan Old Style", Georgia, serif;
+  font-family: "Playfair Display", "Iowan Old Style", Georgia, serif;
   font-style: italic;
-  font-feature-settings: "ss01" 1, "ss02" 1, "swsh" 1;
 }
 
-/* ── CREATstudio brand wordmark — editorial ── */
+/* ── FORGE wordmark — editorial serif ── */
 .brand-creat {
-  font-family: "Fraunces", serif;
+  font-family: "Playfair Display", serif;
   font-style: italic;
   font-weight: 400;
   letter-spacing: -0.015em;
-  color: #1A1612;
-  font-feature-settings: "ss01" 1, "swsh" 1;
+  color: #f4f4f5;
 }
 .brand-studio {
-  font-family: "Inter", sans-serif;
+  font-family: "JetBrains Mono", monospace;
   font-weight: 400;
-  letter-spacing: 0;
-  color: #6B645C;
+  letter-spacing: 0.25em;
+  font-size: 9px;
+  text-transform: uppercase;
+  color: #71717a;
 }
 
 /* ── Hairline grid overlay ── */
 .grid-overlay {
   background-image:
-    linear-gradient(rgba(26,22,18,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(26,22,18,0.025) 1px, transparent 1px);
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
   background-size: 48px 48px;
   pointer-events: none;
 }
 
-/* ── Accent glow shadow ── */
+/* ── Cinematic glow shadows ── */
 .shadow-amber {
-  box-shadow: 0 1px 0 rgba(26,22,18,0.04), 0 8px 24px rgba(191,74,42,0.08);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.04),
+    0 8px 24px rgba(52,211,153,0.18);
 }
 
 /* ── Micro-label — JetBrains Mono uppercase ── */
 .micro-label {
   font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 400;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.20em;
   text-transform: uppercase;
-  color: #6B645C;
+  color: #71717a;
 }
 
 /* ── Panel chrome consistent border ── */
-.border-subtle {
-  border-color: rgba(26, 22, 18, 0.07);
-}
+.border-subtle { border-color: rgba(255,255,255,0.06); }
 
-/* ── Paper-glass surface — floating panels ── */
+/* ── Obsidian-glass panel ── */
 .glass {
-  background: rgba(244, 239, 230, 0.92);
-  backdrop-filter: blur(20px) saturate(1.2);
-  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  background: rgba(24, 24, 27, 0.55);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(255,255,255,0.06);
 }
 
-/* ── Elevation shadows — soft, paper-natural ── */
+/* ── Elevation shadows ── */
 .shadow-float {
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.6) inset,
-    0 6px 20px rgba(26,22,18,0.08),
-    0 2px 4px rgba(26,22,18,0.04);
+    0 1px 0 rgba(255,255,255,0.04) inset,
+    0 12px 40px rgba(0,0,0,0.6),
+    0 4px 12px rgba(0,0,0,0.4);
 }
 
 .shadow-deep {
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.5) inset,
-    0 20px 56px rgba(26,22,18,0.18),
-    0 8px 20px rgba(26,22,18,0.08);
+    0 1px 0 rgba(255,255,255,0.04) inset,
+    0 32px 80px rgba(0,0,0,0.7),
+    0 12px 28px rgba(0,0,0,0.5);
 }
 
-/* ── Contained input — paper card style ── */
+/* ── Contained input — obsidian card style ── */
 .input-contained {
   width: 100%;
-  background: #FBF8F2;
-  border: 1px solid rgba(26,22,18,0.13);
+  background: rgba(24, 24, 27, 0.5);
+  border: 1px solid rgba(255,255,255,0.08);
   padding: 11px 14px;
   font-size: 14px;
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  color: #1A1612;
+  color: #f4f4f5;
   outline: none;
-  transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
-  border-radius: 2px;
+  transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
+  border-radius: 0;
 }
 .input-contained:hover {
-  border-color: rgba(26,22,18,0.22);
+  border-color: rgba(255,255,255,0.18);
 }
 .input-contained:focus {
-  border-color: rgba(191, 74, 42, 0.55);
-  background: #FFFEFB;
-  box-shadow: 0 0 0 3px rgba(191,74,42,0.08);
+  border-color: rgba(52, 211, 153, 0.55);
+  background: rgba(24, 24, 27, 0.75);
+  box-shadow: 0 0 0 3px rgba(52,211,153,0.10);
 }
 .input-contained::placeholder {
-  color: rgba(26,22,18,0.32);
-  font-style: italic;
+  color: rgba(255,255,255,0.30);
 }
 
 /* ── Form label — mono micro ── */
 .form-label {
   display: block;
-  font-size: 11px;
+  font-size: 10px;
   font-family: "JetBrains Mono", monospace;
   font-weight: 400;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.20em;
   text-transform: uppercase;
-  color: #9B948A;
+  color: #71717a;
   margin-bottom: 8px;
 }
 
 /* ── Section heading ── */
 .section-header {
-  font-size: 11px;
+  font-size: 10px;
   font-family: "JetBrains Mono", monospace;
   font-weight: 400;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.20em;
   text-transform: uppercase;
-  color: #9B948A;
+  color: #71717a;
 }
 
 /* ── Surface elevation utilities ── */
-.surface-1 { background: #EFEAE0; }
-.surface-2 { background: #E8E2D6; }
-.surface-3 { background: #DDD5C6; }
-.surface-4 { background: #C9C0AE; }
-.surface-5 { background: #B6AC97; }
+.surface-1 { background: #101013; }
+.surface-2 { background: #18181b; }
+.surface-3 { background: #1c1c20; }
+.surface-4 { background: #27272a; }
+.surface-5 { background: #3f3f46; }
 
 /* ── Editorial body copy ── */
 .markdown-body {
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.7;
   font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
-  color: #1A1612;
+  color: #d4d4d8;
 }
 .markdown-body p {
   margin-bottom: 1.4rem;
-  color: rgba(26,22,18,0.82);
+  color: rgba(244,244,245,0.78);
 }
 .markdown-body pre {
-  background-color: #ECE6DA;
+  background-color: #0a0a0c;
   padding: 1rem;
-  border: 1px solid rgba(26,22,18,0.08);
+  border: 1px solid rgba(255,255,255,0.06);
   overflow-x: auto;
   margin-bottom: 1.5rem;
-  border-radius: 2px;
+  border-radius: 0;
 }
 .markdown-body code {
-  color: #1A1612;
+  color: #34d399;
   font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 13px;
+  font-size: 12px;
 }
 .markdown-body h1, .markdown-body h2, .markdown-body h3 {
-  font-family: "Fraunces", serif;
+  font-family: "Playfair Display", serif;
   font-weight: 500;
   letter-spacing: -0.015em;
   margin-bottom: 0.85rem;
-  color: #1A1612;
+  color: #f4f4f5;
 }
 
 /* ── Editorial heading utilities ── */
 .heading-huge {
-  font-family: "Fraunces", serif;
-  font-style: italic;
+  font-family: "Playfair Display", serif;
   font-size: clamp(3.5rem, 10vw, 9rem);
   line-height: 0.92;
-  font-weight: 400;
+  font-weight: 300;
   letter-spacing: -0.025em;
-  color: #1A1612;
-  font-feature-settings: "ss01" 1, "swsh" 1;
+  color: #f4f4f5;
 }
 
 .heading-display {
-  font-family: "Fraunces", serif;
-  font-weight: 500;
+  font-family: "Playfair Display", serif;
+  font-weight: 400;
   letter-spacing: -0.018em;
-  color: #1A1612;
+  color: #f4f4f5;
 }
 
 /* ── Editorial link — hairline underline ── */
 .link-editorial {
-  color: #1A1612;
+  color: #f4f4f5;
   text-decoration: none;
-  border-bottom: 1px solid rgba(26,22,18,0.22);
+  border-bottom: 1px solid rgba(255,255,255,0.22);
   padding-bottom: 1px;
   transition: border-color 0.25s, color 0.25s;
 }
 .link-editorial:hover {
-  color: #BF4A2A;
-  border-bottom-color: #BF4A2A;
+  color: #34d399;
+  border-bottom-color: #34d399;
 }
 
 /* ── Editorial button — primary ── */
 .btn-editorial {
-  font-family: "Inter", sans-serif;
-  font-size: 13px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
   font-weight: 500;
-  letter-spacing: 0;
-  padding: 10px 18px;
-  background: #1A1612;
-  color: #F4EFE6;
-  border: 1px solid #1A1612;
-  border-radius: 2px;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  background: #f4f4f5;
+  color: #09090b;
+  border: 1px solid #f4f4f5;
+  border-radius: 0;
   cursor: pointer;
-  transition: background 0.25s, color 0.25s, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
 .btn-editorial:hover {
-  background: #BF4A2A;
-  border-color: #BF4A2A;
-  transform: translateY(-1px);
-}
-.btn-editorial:active {
-  transform: translateY(0);
+  background: #34d399;
+  border-color: #34d399;
+  color: #09090b;
 }
 
 .btn-editorial-ghost {
-  font-family: "Inter", sans-serif;
-  font-size: 13px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
   font-weight: 500;
-  padding: 10px 18px;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  padding: 12px 20px;
   background: transparent;
-  color: #1A1612;
-  border: 1px solid rgba(26,22,18,0.22);
-  border-radius: 2px;
+  color: #f4f4f5;
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 0;
   cursor: pointer;
-  transition: background 0.25s, border-color 0.25s, color 0.25s;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
 }
 .btn-editorial-ghost:hover {
-  background: rgba(26,22,18,0.04);
-  border-color: #1A1612;
+  background: rgba(255,255,255,0.04);
+  border-color: #34d399;
+  color: #34d399;
 }
 
 /* ── Hairline rule ── */
 .rule-hairline {
   border: 0;
-  border-top: 1px solid rgba(26,22,18,0.13);
+  border-top: 1px solid rgba(255,255,255,0.08);
   margin: 0;
 }
 
 /* ── Interactive card hover ── */
 .hover-lift {
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.25s;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s;
 }
 .hover-lift:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(26,22,18,0.10), 0 2px 6px rgba(26,22,18,0.05);
-  border-color: rgba(26,22,18,0.22);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 4px 12px rgba(52,211,153,0.08);
+  border-color: rgba(255,255,255,0.18);
 }
 
 /* ── Italic emphasis utility ── */
 .italic-display {
-  font-family: "Fraunces", serif;
+  font-family: "Playfair Display", serif;
   font-style: italic;
   font-weight: 400;
-  font-feature-settings: "ss01" 1, "swsh" 1;
 }
 
 /* ── Keyframes ── */
@@ -404,8 +411,8 @@
 }
 
 @keyframes amber-pulse {
-  0%, 100% { opacity: 0.7; box-shadow: 0 0 6px rgba(191,74,42,0.35); }
-  50%       { opacity: 1;   box-shadow: 0 0 14px rgba(191,74,42,0.55); }
+  0%, 100% { opacity: 0.7; box-shadow: 0 0 8px rgba(52,211,153,0.45); }
+  50%       { opacity: 1;   box-shadow: 0 0 18px rgba(52,211,153,0.65); }
 }
 
 @keyframes float-y {
@@ -426,43 +433,35 @@
 .grain-overlay {
   animation: grain-shift 8s steps(10) infinite;
   pointer-events: none;
-  mix-blend-mode: multiply;
-  opacity: 0.04;
+  mix-blend-mode: overlay;
+  opacity: 0.06;
 }
 
-.amber-pulse {
-  animation: amber-pulse 2.4s ease-in-out infinite;
-}
+.amber-pulse { animation: amber-pulse 2.4s ease-in-out infinite; }
+.reveal-up   { animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.ink-fade-in { animation: ink-fade-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
-.reveal-up {
-  animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.ink-fade-in {
-  animation: ink-fade-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   Team Chat dark+lavender skin
-   Scoped: wrap the right chat panel + task drawer with
-   data-skin="chat-dark" — the rest of the site keeps cream.
-   ════════════════════════════════════════════════════════════════ */
+/* ──────────────────────────────────────────────────────────────────
+ * Chat-team scope — was an island theme; now collapses to the same
+ * dark luxury palette so the whole app stays coherent.
+ * data-skin="chat-dark" kept as a no-op selector for back-compat.
+ * ──────────────────────────────────────────────────────────────── */
 [data-skin="chat-dark"] {
-  --bg-base:       #0E1014;
-  --bg-card:       #1A1D24;
-  --bg-elevated:   #222630;
+  --bg-base:       #09090b;
+  --bg-card:       #18181b;
+  --bg-elevated:   #1c1c20;
   --border-chat:   rgba(255,255,255,0.06);
-  --text-1-chat:   #FFFFFF;
-  --text-2-chat:   #A8ADB8;
-  --text-3-chat:   #6B7080;
-  --accent:        #C5B8FF;
-  --accent-2:      #E8E2A8;
-  --success-chat:  #7ED4A8;
-  --danger-chat:   #FF8B8B;
-  --radius-card:   16px;
-  --radius-chip:   10px;
+  --text-1-chat:   #f4f4f5;
+  --text-2-chat:   #a1a1aa;
+  --text-3-chat:   #71717a;
+  --accent:        #34d399;
+  --accent-2:      #8b5cf6;
+  --success-chat:  #34d399;
+  --danger-chat:   #f87171;
+  --radius-card:   0px;
+  --radius-chip:   0px;
 
-  font-family: "Inter", "General Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
   background: var(--bg-base);
   color: var(--text-1-chat);
 }
@@ -473,18 +472,14 @@
   border-color: var(--border-chat);
 }
 
-[data-skin="chat-dark"] .tabular {
-  font-variant-numeric: tabular-nums;
-}
+[data-skin="chat-dark"] .tabular { font-variant-numeric: tabular-nums; }
 
-[data-skin="chat-dark"] ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+[data-skin="chat-dark"] ::-webkit-scrollbar { width: 8px; height: 8px; }
 [data-skin="chat-dark"] ::-webkit-scrollbar-thumb {
   background: rgba(255,255,255,0.08);
-  border-radius: 4px;
+  border-radius: 0;
 }
-[data-skin="chat-dark"] ::-webkit-scrollbar-track {
-  background: transparent;
-}
+[data-skin="chat-dark"] ::-webkit-scrollbar-track { background: transparent; }
+
+/* ── Vertical-align text fix for RevealText spans ── */
+.vertical-align-bottom { vertical-align: bottom; }

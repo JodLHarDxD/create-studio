@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { X, ExternalLink, Download, Upload, File, Loader2, GitCompare, Radio } from 'lucide-react';
 import { supabase, Task } from '@/lib/supabaseClient';
@@ -15,7 +15,7 @@ async function getSignedUrl(path: string): Promise<string | null> {
   return data?.signedUrl ?? null;
 }
 
-export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
+export default function TaskDetail({ task, onClose }: Props) {
   const { loginState, currentUserId, userRole, refetchTasks, setDiffTask, setDiffMode } = useWorkspace();
   const [uploading, setUploading] = useState(false);
   const [downloadingOrig, setDownloadingOrig] = useState(false);
@@ -23,21 +23,14 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const isAdmin = userRole === 'ADMIN';
-  const canUploadPatch = loginState !== 'guest' && (
-    isAdmin || task.assignee_id === currentUserId
-  );
+  const canUploadPatch = loginState !== 'guest' && (isAdmin || task.assignee_id === currentUserId);
 
   const handleDownloadOriginal = async () => {
     if (!task.original_zip_path) return;
     setDownloadingOrig(true);
     try {
       const url = await getSignedUrl(task.original_zip_path);
-      if (url) {
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${task.title.replace(/\s+/g, '-')}-original.zip`;
-        a.click();
-      }
+      if (url) { const a = document.createElement('a'); a.href = url; a.download = `${task.title.replace(/\s+/g, '-')}-original.zip`; a.click(); }
     } finally { setDownloadingOrig(false); }
   };
 
@@ -46,12 +39,7 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
     setDownloadingPatch(true);
     try {
       const url = await getSignedUrl(task.patched_zip_path);
-      if (url) {
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${task.title.replace(/\s+/g, '-')}-patched.zip`;
-        a.click();
-      }
+      if (url) { const a = document.createElement('a'); a.href = url; a.download = `${task.title.replace(/\s+/g, '-')}-patched.zip`; a.click(); }
     } finally { setDownloadingPatch(false); }
   };
 
@@ -64,9 +52,7 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
       if (upErr) throw upErr;
 
       const { error: updateErr } = await supabase.from('tasks').update({
-        patched_zip_path: path,
-        status: 'DONE',
-        updated_at: new Date().toISOString(),
+        patched_zip_path: path, status: 'DONE', updated_at: new Date().toISOString(),
       }).eq('id', task.id);
       if (updateErr) throw updateErr;
 
@@ -79,26 +65,42 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
 
   const hasBothZips = task.original_zip_path && task.patched_zip_path;
 
-  const statusColor = task.status === 'DONE'
-    ? 'bg-[#1A1612] text-[#F4EFE6] border-[#1A1612]'
-    : task.status === 'IN_PROGRESS'
-    ? 'text-[#2A4A6B] border-[#2A4A6B]/30'
-    : 'text-[#9B948A] border-[rgba(26,22,18,0.10)]';
+  const statusColor =
+    task.status === 'DONE'
+      ? 'bg-emerald-500/10 text-emerald-300 border-emerald-400/40'
+      : task.status === 'IN_PROGRESS'
+        ? 'text-violet-300 border-violet-400/40 bg-violet-500/[0.06]'
+        : 'text-zinc-500 border-white/10';
 
-  const priorityColor = task.priority === 'HIGH'
-    ? 'text-[#B53C2A]' : task.priority === 'LOW'
-    ? 'text-[#9B948A]' : 'text-[#C99A2E]';
+  const priorityColor =
+    task.priority === 'HIGH' ? 'text-red-300'
+    : task.priority === 'LOW' ? 'text-zinc-500'
+    : 'text-amber-300';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md">
-      <div className="w-[560px] max-h-[85vh] bg-[#EFEAE0] border border-[rgba(26,22,18,0.10)] flex flex-col">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{ background: 'rgba(9,9,11,0.72)', backdropFilter: 'blur(12px) saturate(1.2)' }}
+      onClick={onClose}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        className="w-[580px] max-h-[85vh] bg-zinc-950/95 border border-white/[0.10] flex flex-col backdrop-blur-2xl shadow-deep"
+      >
         {/* Header */}
-        <div className="flex justify-between items-start p-6 border-b border-[rgba(26,22,18,0.10)] shrink-0">
+        <div className="flex justify-between items-start p-6 border-b border-white/[0.06] shrink-0">
           <div className="flex-1 pr-4">
-            <div className="text-[9px] uppercase tracking-widest opacity-30 mb-2">Task Detail</div>
-            <h2 className="text-[13px] font-black uppercase tracking-wide leading-tight">{task.title}</h2>
+            <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-emerald-400/80 mb-2">
+              Task Detail
+            </div>
+            <h2 className="font-display italic text-zinc-100 leading-tight" style={{ fontSize: 22, fontWeight: 400 }}>
+              {task.title}
+            </h2>
           </div>
-          <button onClick={onClose} className="opacity-40 hover:opacity-100 shrink-0">
+          <button
+            onClick={onClose}
+            className="text-zinc-500 hover:text-red-400 transition-colors shrink-0"
+          >
             <X size={18} />
           </button>
         </div>
@@ -106,119 +108,127 @@ export default function TaskDetail({ task, onClose, onViewDiff }: Props) {
         {/* Body */}
         <div className="flex-1 overflow-y-auto custom-scrollbar p-6 flex flex-col gap-6">
           {/* Status + Priority */}
-          <div className="flex items-center gap-3">
-            <span className={cn('text-[8px] font-black uppercase tracking-widest px-2 py-1 border', statusColor)}>
+          <div className="flex items-center gap-3 flex-wrap">
+            <span className={cn('text-[9px] font-mono tracking-[0.25em] uppercase px-2 py-1 border', statusColor)}>
               {task.status.replace('_', ' ')}
             </span>
             {task.priority && (
-              <span className={cn('text-[8px] font-black uppercase tracking-widest', priorityColor)}>
+              <span className={cn('text-[9px] font-mono tracking-[0.25em] uppercase', priorityColor)}>
                 {task.priority} priority
               </span>
             )}
             {task.due_date && (
-              <span className="text-[9px] opacity-30 ml-auto">
+              <span className="text-[10px] text-zinc-500 font-mono ml-auto tracking-[0.10em]">
                 Due {new Date(task.due_date).toLocaleDateString()}
               </span>
             )}
           </div>
 
-          {/* Description */}
           {task.description && (
             <div>
-              <div className="text-[9px] uppercase tracking-widest opacity-30 mb-2">Description</div>
-              <p className="text-[12px] text-[#1A1612]/80 leading-relaxed whitespace-pre-wrap">{task.description}</p>
+              <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500 mb-2">Description</div>
+              <p className="text-[13px] text-zinc-300 leading-relaxed whitespace-pre-wrap">{task.description}</p>
             </div>
           )}
 
-          {/* URL */}
           {task.url && (
             <div>
-              <div className="text-[9px] uppercase tracking-widest opacity-30 mb-2">Reference URL</div>
-              <a href={task.url} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 text-[11px] text-[#2A4A6B] hover:text-[#1A3A5B] break-all">
-                <ExternalLink size={12} className="shrink-0" />
+              <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500 mb-2">Reference URL</div>
+              <a
+                href={task.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-[12px] text-emerald-400 hover:text-emerald-300 break-all"
+              >
+                <ExternalLink size={12} className="shrink-0" strokeWidth={1.5} />
                 {task.url}
               </a>
             </div>
           )}
 
-          {/* Original ZIP */}
           <div>
-            <div className="text-[9px] uppercase tracking-widest opacity-30 mb-2">Codebase (Original)</div>
+            <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500 mb-2">Codebase (Original)</div>
             {task.original_zip_path ? (
-              <button onClick={handleDownloadOriginal} disabled={downloadingOrig}
-                className="flex items-center gap-2 border border-[rgba(26,22,18,0.18)] px-4 py-2.5 text-[10px] uppercase tracking-widest font-bold hover:border-[rgba(26,22,18,0.07)]0 transition-colors disabled:opacity-40">
-                {downloadingOrig ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
+              <button
+                onClick={handleDownloadOriginal}
+                disabled={downloadingOrig}
+                className="flex items-center gap-2 border border-white/[0.18] px-4 py-2.5 text-[10px] font-mono uppercase tracking-[0.20em] text-zinc-200 hover:border-emerald-400/40 hover:text-emerald-300 transition-colors disabled:opacity-40"
+              >
+                {downloadingOrig ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} strokeWidth={1.5} />}
                 Download original.zip
               </button>
             ) : (
-              <div className="text-[10px] opacity-20 uppercase tracking-widest">No ZIP attached</div>
+              <div className="text-[10px] text-zinc-600 font-mono uppercase tracking-[0.20em]">No ZIP attached</div>
             )}
           </div>
 
-          {/* Patched ZIP upload */}
           {canUploadPatch && task.status !== 'DONE' && (
             <div>
-              <div className="text-[9px] uppercase tracking-widest opacity-30 mb-2">Upload Patched Codebase</div>
-              <div className="text-[9px] opacity-20 mb-3 uppercase tracking-wider">
+              <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500 mb-2">Upload Patched Codebase</div>
+              <div className="text-[9px] text-zinc-600 mb-3 uppercase tracking-[0.15em] font-mono">
                 Uploading marks this task as DONE
               </div>
               <div
                 onClick={() => !uploading && fileRef.current?.click()}
-                className="border border-dashed border-[rgba(26,22,18,0.18)] p-5 flex items-center gap-3 cursor-pointer hover:border-[#1A1612]/40 transition-colors">
+                className="border border-dashed border-white/[0.18] p-5 flex items-center gap-3 cursor-pointer hover:border-emerald-400/40 hover:bg-emerald-500/[0.04] transition-colors"
+              >
                 {uploading ? (
-                  <><Loader2 size={14} className="animate-spin opacity-60" /><span className="text-[10px] opacity-40">Uploading…</span></>
+                  <><Loader2 size={14} className="animate-spin text-emerald-400" /><span className="text-[10px] text-emerald-300 font-mono tracking-wide">Uploading…</span></>
                 ) : (
-                  <><Upload size={14} className="opacity-30" /><span className="text-[10px] text-[#9B948A] uppercase tracking-widest">Upload patched .zip</span></>
+                  <><Upload size={14} className="text-zinc-500" strokeWidth={1.5} /><span className="text-[10px] text-zinc-500 uppercase tracking-[0.20em] font-mono">Upload patched .zip</span></>
                 )}
               </div>
-              <input ref={fileRef} type="file" accept=".zip" className="hidden"
-                onChange={e => { const f = e.target.files?.[0]; if (f) handleUploadPatch(f); }} />
+              <input ref={fileRef} type="file" accept=".zip" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) handleUploadPatch(f); }} />
             </div>
           )}
 
-          {/* Patched ZIP — download for admin, confirmation for member */}
           {task.patched_zip_path && (
             <div>
-              <div className="text-[9px] uppercase tracking-widest opacity-30 mb-2">Patched Codebase</div>
+              <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500 mb-2">Patched Codebase</div>
               {isAdmin ? (
-                <button onClick={handleDownloadPatched} disabled={downloadingPatch}
-                  className="flex items-center gap-2 border border-[rgba(26,22,18,0.18)] px-4 py-2.5 text-[10px] uppercase tracking-widest font-bold hover:border-[rgba(26,22,18,0.07)]0 transition-colors disabled:opacity-40">
-                  {downloadingPatch ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
+                <button
+                  onClick={handleDownloadPatched}
+                  disabled={downloadingPatch}
+                  className="flex items-center gap-2 border border-emerald-400/40 px-4 py-2.5 text-[10px] font-mono uppercase tracking-[0.20em] text-emerald-300 hover:bg-emerald-500/10 transition-colors disabled:opacity-40"
+                >
+                  {downloadingPatch ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} strokeWidth={1.5} />}
                   Download patched.zip
                 </button>
               ) : (
-                <div className="flex items-center gap-2 text-[10px] text-[#6B645C]">
-                  <File size={12} className="opacity-60" />
+                <div className="flex items-center gap-2 text-[11px] text-zinc-400">
+                  <File size={12} className="text-emerald-400" strokeWidth={1.5} />
                   <span>patched.zip uploaded</span>
-                  <span className="ml-auto text-[8px] uppercase tracking-widest text-[#9B948A]/60">✓ Submitted</span>
+                  <span className="ml-auto text-[9px] font-mono uppercase tracking-[0.20em] text-emerald-300">✓ Submitted</span>
                 </div>
               )}
             </div>
           )}
         </div>
 
-        {/* Footer actions */}
-        <div className="p-6 border-t border-[rgba(26,22,18,0.10)] flex items-center gap-3 shrink-0">
-            {/* Live progress — IN_PROGRESS task with original ZIP */}
+        {/* Footer */}
+        <div className="p-6 border-t border-white/[0.06] flex items-center gap-3 shrink-0">
           {task.status === 'IN_PROGRESS' && task.original_zip_path && (
             <button
               onClick={() => { setDiffMode('live'); setDiffTask(task); onClose(); }}
-              className="flex items-center gap-2 border border-[#007acc]/50 text-[#007acc] font-black uppercase tracking-widest text-[10px] px-5 py-3 hover:bg-[#007acc]/10">
-              <Radio size={13} className="animate-pulse" />
+              className="flex items-center gap-2 border border-violet-400/50 text-violet-300 font-mono uppercase tracking-[0.25em] text-[10px] px-5 py-3 hover:bg-violet-500/10 transition-colors"
+            >
+              <Radio size={13} className="animate-pulse" strokeWidth={1.5} />
               Live Changes
             </button>
           )}
           {hasBothZips && (
             <button
               onClick={() => { setDiffMode('zip'); setDiffTask(task); onClose(); }}
-              className="flex items-center gap-2 bg-[#1A1612] text-[#F4EFE6] font-black uppercase tracking-widest text-[10px] px-5 py-3 hover:bg-[#1A1612]/90">
-              <GitCompare size={13} />
+              className="flex items-center gap-2 bg-emerald-400 text-zinc-950 font-mono uppercase tracking-[0.25em] text-[10px] px-5 py-3 hover:bg-emerald-300 transition-colors"
+            >
+              <GitCompare size={13} strokeWidth={1.8} />
               View Diff
             </button>
           )}
-          <button onClick={onClose}
-            className="flex-1 border border-[rgba(26,22,18,0.18)] text-[10px] uppercase tracking-widest font-bold py-3 hover:border-[rgba(26,22,18,0.07)]0 transition-colors">
+          <button
+            onClick={onClose}
+            className="flex-1 border border-white/[0.10] text-[10px] font-mono uppercase tracking-[0.20em] text-zinc-300 py-3 hover:border-white/[0.30] transition-colors"
+          >
             Close
           </button>
         </div>

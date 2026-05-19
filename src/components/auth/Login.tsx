@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
-import { Loader2, ArrowRight } from 'lucide-react';
-import { transitions } from '@/design';
+import { Loader2, ArrowRight, Sparkles } from 'lucide-react';
+import WebGLBackground from '../effects/WebGLBackground';
+import { MagneticButton, RevealText } from '../primitives';
 
 export default function Login() {
   const { setLoginState, setCurrentUserId, setUserRole, setProfile } = useWorkspace();
@@ -70,19 +71,15 @@ export default function Login() {
 
   const handleGuest = () => {
     setCurrentUserId('demo-1'); setUserRole('ADMIN'); setLoginState('guest');
-    setProfile({ id: 'demo-1', email: 'admin@creat.studio', full_name: 'Admin Demo', role: 'ADMIN', created_at: new Date().toISOString() });
+    setProfile({ id: 'demo-1', email: 'admin@forge.dev', full_name: 'Admin Demo', role: 'ADMIN', created_at: new Date().toISOString() });
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex overflow-hidden"
-      style={{
-        background:
-          'radial-gradient(ellipse 90% 70% at 50% -10%, rgba(191,74,42,0.05) 0%, transparent 55%), #F4EFE6',
-      }}
-    >
-      {/* ── LEFT: Editorial brand panel ── */}
-      <div className="relative flex-1 flex flex-col justify-between" style={{ padding: '56px 64px' }}>
+    <div className="fixed inset-0 z-50 flex overflow-hidden text-zinc-200 antialiased" style={{ fontFamily: '"Inter", sans-serif' }}>
+      <WebGLBackground />
+
+      {/* ── LEFT: Cinematic editorial brand panel ── */}
+      <div className="relative z-10 flex-1 flex flex-col justify-between" style={{ padding: '56px 64px' }}>
         {/* Top masthead */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -90,89 +87,60 @@ export default function Login() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="flex justify-between items-baseline"
         >
-          <span
-            style={{
-              fontFamily: '"JetBrains Mono", monospace',
-              fontSize: 11,
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: '#6B645C',
-            }}
-          >
-            Volume 01 — Studio Edition
-          </span>
-          <span
-            style={{
-              fontFamily: '"JetBrains Mono", monospace',
-              fontSize: 11,
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: '#6B645C',
-            }}
-          >
-            {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 border border-white/[0.10] flex items-center justify-center bg-zinc-950/40 backdrop-blur-md">
+              <Sparkles className="w-4 h-4 text-emerald-400" strokeWidth={1.5} />
+            </div>
+            <div className="space-y-0.5">
+              <span className="block font-mono text-[9px] tracking-[0.25em] uppercase text-emerald-400">
+                Volume 01 — Cinematic Edition
+              </span>
+              <span className="block font-mono text-[9px] tracking-[0.25em] uppercase text-zinc-600">
+                Deployment Environment Secure
+              </span>
+            </div>
+          </div>
+          <span className="font-mono text-[10px] tracking-[0.20em] uppercase text-zinc-500">
+            {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' }).toUpperCase()}
           </span>
         </motion.div>
 
-        {/* Hero — giant italic display */}
-        <div>
-          <motion.div
-            initial={{ opacity: 0, filter: 'blur(6px)', y: 24 }}
-            animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
-            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
+        {/* Hero */}
+        <div className="max-w-5xl">
+          <div className="flex items-center gap-2 mb-6 text-emerald-400 font-mono text-[10px] tracking-[0.25em] uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            Neural Engineering Console — Online
+          </div>
+
+          <motion.h1
+            initial={{ opacity: 0, filter: 'blur(8px)' }}
+            animate={{ opacity: 1, filter: 'blur(0px)' }}
+            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+            className="font-display text-zinc-100 leading-[0.95] tracking-tight"
+            style={{ fontSize: 'clamp(56px, 8.5vw, 144px)', fontWeight: 300, fontStyle: 'italic' }}
           >
-            <h1
-              style={{
-                fontFamily: '"Fraunces", serif',
-                fontStyle: 'italic',
-                fontWeight: 400,
-                fontSize: 'clamp(72px, 9.5vw, 168px)',
-                lineHeight: 0.88,
-                letterSpacing: '-0.03em',
-                color: '#1A1612',
-                fontFeatureSettings: '"ss01" 1, "swsh" 1',
-                margin: 0,
-              }}
-            >
-              A studio
-              <br />
-              for teams
-              <br />
-              that&nbsp;
-              <span style={{ color: '#BF4A2A' }}>ship.</span>
-            </h1>
-          </motion.div>
+            <RevealText text="Automating" />
+            <br />
+            <RevealText text="engineering," delay={0.15} />
+            <br />
+            <span className="text-emerald-400 italic">cinematically.</span>
+          </motion.h1>
 
           <motion.div
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.7 }}
-            style={{
-              marginTop: 44,
-              height: 1,
-              width: 96,
-              background: '#1A1612',
-              transformOrigin: 'left',
-            }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.8 }}
+            className="mt-12 h-px w-24 bg-emerald-400/60 origin-left"
           />
 
           <motion.p
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              marginTop: 24,
-              fontSize: 15,
-              fontFamily: '"Inter", sans-serif',
-              fontWeight: 400,
-              color: '#1A1612',
-              lineHeight: 1.65,
-              maxWidth: 420,
-            }}
+            transition={{ duration: 0.8, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-6 font-sans text-sm text-zinc-400 leading-relaxed max-w-md"
           >
-            Tasks, files, and an{' '}
-            <span className="italic-display">AI cortex</span> — bound in a single editorial workspace
-            for teams that care how the work feels.
+            Tasks, files, and a multi-model <span className="italic-display text-zinc-200">AI cortex</span> —
+            bound in a single editorial console for teams that ship at speed.
           </motion.p>
         </div>
 
@@ -180,29 +148,14 @@ export default function Login() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.1 }}
-          className="flex justify-between items-baseline"
+          transition={{ delay: 1.2 }}
+          className="flex justify-between items-baseline pt-8 border-t border-white/[0.06]"
         >
-          <span
-            style={{
-              fontFamily: '"Fraunces", serif',
-              fontStyle: 'italic',
-              fontSize: 13,
-              color: '#6B645C',
-            }}
-          >
-            creat / studio
+          <span className="font-display italic text-sm text-zinc-400">
+            forge / neural console
           </span>
-          <span
-            style={{
-              fontFamily: '"JetBrains Mono", monospace',
-              fontSize: 11,
-              letterSpacing: '0.15em',
-              color: '#9B948A',
-              textTransform: 'uppercase',
-            }}
-          >
-            № 001 / Edition
+          <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-600">
+            №&nbsp;001 / Cinematic Edition
           </span>
         </motion.div>
       </div>
@@ -211,75 +164,37 @@ export default function Login() {
       <motion.div
         initial={{ opacity: 0, x: 28 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-        className="flex flex-col justify-center shrink-0 relative"
-        style={{
-          width: 460,
-          background: '#FBF8F2',
-          borderLeft: '1px solid rgba(26,22,18,0.10)',
-          padding: '64px 56px',
-        }}
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+        className="relative z-10 flex flex-col justify-center shrink-0 border-l border-white/[0.08] bg-zinc-950/70 backdrop-blur-2xl"
+        style={{ width: 480, padding: '64px 56px' }}
       >
-        {/* Hairline column accent */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 56,
-            left: 56,
-            width: 32,
-            height: 1,
-            background: '#BF4A2A',
-          }}
-        />
+        {/* Hairline accent */}
+        <div className="absolute top-14 left-14 w-10 h-px bg-emerald-400" />
 
         {/* Panel header */}
-        <div style={{ marginBottom: 40, marginTop: 12 }}>
-          <div
-            style={{
-              fontFamily: '"JetBrains Mono", monospace',
-              fontSize: 11,
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: '#9B948A',
-              marginBottom: 16,
-            }}
-          >
-            {mode === 'login' ? 'Returning' : 'New to the studio'}
+        <div className="mt-3 mb-10">
+          <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500 mb-4">
+            {mode === 'login' ? 'Returning Operator' : 'New To Forge'}
           </div>
-          <div
-            style={{
-              fontFamily: '"Fraunces", serif',
-              fontStyle: 'italic',
-              fontWeight: 400,
-              fontSize: 38,
-              lineHeight: 1.05,
-              letterSpacing: '-0.02em',
-              color: '#1A1612',
-              fontFeatureSettings: '"ss01" 1, "swsh" 1',
-            }}
+          <h2
+            className="font-display text-zinc-100"
+            style={{ fontStyle: 'italic', fontWeight: 400, fontSize: 44, lineHeight: 1.05, letterSpacing: '-0.02em' }}
           >
             {mode === 'login' ? 'Welcome back.' : 'Make an entry.'}
-          </div>
+          </h2>
         </div>
 
         {/* Mode toggle */}
-        <div className="flex mb-8" style={{ borderBottom: '1px solid rgba(26,22,18,0.10)', gap: 28 }}>
+        <div className="flex mb-8 gap-7 border-b border-white/[0.08]">
           {(['login', 'register'] as const).map(m => (
             <button
               key={m}
               type="button"
               onClick={() => { setMode(m); setError(''); }}
-              className="pb-3 transition-all"
+              className="pb-3 font-mono text-[10px] tracking-[0.20em] uppercase transition-colors duration-300 -mb-px"
               style={{
-                fontFamily: '"JetBrains Mono", monospace',
-                fontSize: 11,
-                fontWeight: 400,
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                color: mode === m ? '#1A1612' : '#9B948A',
-                borderBottom: `1px solid ${mode === m ? '#BF4A2A' : 'transparent'}`,
-                marginBottom: -1,
-                cursor: 'pointer',
+                color: mode === m ? '#f4f4f5' : '#71717a',
+                borderBottom: `1px solid ${mode === m ? '#34d399' : 'transparent'}`,
               }}
             >
               {m === 'login' ? 'Sign In' : 'Register'}
@@ -292,31 +207,21 @@ export default function Login() {
           <motion.div
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={transitions.fast}
-            style={{
-              marginBottom: 22,
-              padding: '12px 14px',
-              border: '1px solid rgba(181,60,42,0.22)',
-              background: 'rgba(181,60,42,0.06)',
-              color: '#B53C2A',
-              fontSize: 12,
-              fontFamily: '"Inter", sans-serif',
-              lineHeight: 1.55,
-              borderRadius: 2,
-            }}
+            transition={{ duration: 0.2 }}
+            className="mb-5 px-3.5 py-3 border border-red-400/30 bg-red-500/[0.06] text-red-300 text-[12px] leading-relaxed"
           >
             {error}
           </motion.div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+        <form onSubmit={handleAuth} className="flex flex-col gap-5">
           {mode === 'register' && (
             <>
               <div>
                 <label htmlFor="reg-name" className="form-label">Full Name</label>
                 <input
-                  id="reg-name" type="text" placeholder="Your name" value={fullName}
+                  id="reg-name" type="text" placeholder="Operator name" value={fullName}
                   onChange={e => setFullName(e.target.value)} required
                   className="input-contained"
                 />
@@ -325,8 +230,7 @@ export default function Login() {
                 <label htmlFor="reg-role" className="form-label">Role</label>
                 <select
                   id="reg-role" value={role} onChange={e => setRole(e.target.value as any)}
-                  className="input-contained"
-                  style={{ fontFamily: '"Inter", sans-serif', cursor: 'pointer' }}
+                  className="input-contained cursor-pointer"
                 >
                   <option value="MEMBER">Member</option>
                   <option value="ADMIN">Admin</option>
@@ -338,7 +242,7 @@ export default function Login() {
           <div>
             <label htmlFor="auth-email" className="form-label">Email</label>
             <input
-              id="auth-email" type="email" placeholder="you@studio.com" value={email}
+              id="auth-email" type="email" placeholder="you@forge.dev" value={email}
               onChange={e => setEmail(e.target.value)} required
               className="input-contained"
             />
@@ -353,82 +257,26 @@ export default function Login() {
             />
           </div>
 
-          <motion.button
+          <MagneticButton
             type="submit"
             disabled={loading}
-            whileHover={loading ? {} : { y: -1 }}
-            whileTap={{ scale: 0.99 }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              marginTop: 12,
-              padding: '14px 22px',
-              background: '#1A1612',
-              color: '#F4EFE6',
-              fontFamily: '"Inter", sans-serif',
-              fontSize: 13,
-              fontWeight: 500,
-              letterSpacing: '0',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 10,
-              borderRadius: 2,
-              border: '1px solid #1A1612',
-              opacity: loading ? 0.65 : 1,
-              cursor: loading ? 'not-allowed' : 'pointer',
-              transition: 'background 0.25s, border-color 0.25s',
-            }}
-            onMouseEnter={e => {
-              if (!loading) {
-                (e.currentTarget as HTMLElement).style.background = '#BF4A2A';
-                (e.currentTarget as HTMLElement).style.borderColor = '#BF4A2A';
-              }
-            }}
-            onMouseLeave={e => {
-              if (!loading) {
-                (e.currentTarget as HTMLElement).style.background = '#1A1612';
-                (e.currentTarget as HTMLElement).style.borderColor = '#1A1612';
-              }
-            }}
+            className="mt-3 flex items-center justify-center gap-2.5 bg-zinc-100 text-zinc-950 font-mono text-[10px] font-semibold tracking-[0.20em] uppercase px-6 py-3.5 hover:bg-emerald-400 transition-colors duration-300 disabled:opacity-60 disabled:cursor-not-allowed border border-zinc-100 hover:border-emerald-400"
           >
-            {loading && <Loader2 size={14} className="animate-spin" />}
-            <span>{mode === 'login' ? 'Enter the studio' : 'Create account'}</span>
-            {!loading && <ArrowRight size={14} />}
-          </motion.button>
+            {loading && <Loader2 size={13} className="animate-spin" />}
+            <span>{mode === 'login' ? 'Initialize Matrix' : 'Create Account'}</span>
+            {!loading && <ArrowRight size={13} strokeWidth={2} />}
+          </MagneticButton>
         </form>
 
-        {/* Guest divider + link */}
-        <div
-          style={{
-            marginTop: 32,
-            paddingTop: 24,
-            borderTop: '1px solid rgba(26,22,18,0.10)',
-            textAlign: 'center',
-          }}
-        >
-          <div
-            style={{
-              fontFamily: '"JetBrains Mono", monospace',
-              fontSize: 10,
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: '#9B948A',
-              marginBottom: 10,
-            }}
-          >
+        {/* Guest divider */}
+        <div className="mt-8 pt-6 border-t border-white/[0.08] text-center">
+          <div className="font-mono text-[9px] tracking-[0.25em] uppercase text-zinc-500 mb-3">
             Or look around
           </div>
           <button
             type="button"
             onClick={handleGuest}
-            className="link-editorial"
-            style={{
-              fontFamily: '"Fraunces", serif',
-              fontStyle: 'italic',
-              fontSize: 15,
-              background: 'transparent',
-              cursor: 'pointer',
-            }}
+            className="font-display italic text-[15px] text-zinc-200 hover:text-emerald-400 transition-colors duration-300 border-b border-white/20 hover:border-emerald-400 pb-0.5"
           >
             Enter as guest — admin view
           </button>

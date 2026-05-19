@@ -31,8 +31,6 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
   const displayProgress = useTransform(springProgress, v => Math.round(v));
   const ruleWidth = useTransform(springProgress, [0, 100], ['0%', '100%']);
-
-  // Wordmark fill — terracotta inks over espresso as progress climbs
   const wordmarkInk = useTransform(springProgress, [0, 100], ['0%', '100%']);
 
   return (
@@ -42,16 +40,13 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       className="fixed inset-0 z-50 flex flex-col select-none pointer-events-none overflow-hidden"
-      style={{ background: '#F4EFE6' }}
+      style={{ background: '#09090b' }}
     >
-      {/* Editorial paper texture — barely-there grain */}
+      {/* Subtle background glow */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(26,22,18,0.025) 1px, transparent 1px)',
-          backgroundSize: '3px 3px',
-          mixBlendMode: 'multiply',
-          opacity: 0.6,
+          background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(52,211,153,0.06), transparent 70%)',
         }}
       />
 
@@ -61,70 +56,60 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          style={{
-            fontFamily: '"JetBrains Mono", monospace',
-            fontSize: 11,
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-            color: '#6B645C',
-          }}
+          className="font-mono text-[10px] tracking-[0.25em] uppercase text-emerald-400/80 flex items-center gap-2"
         >
-          Volume 01 — Studio Edition
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          Volume 01 — Cinematic Edition
         </motion.span>
         <motion.span
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          style={{
-            fontFamily: '"JetBrains Mono", monospace',
-            fontSize: 11,
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-            color: '#6B645C',
-          }}
+          className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500"
         >
-          {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
+          {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' }).toUpperCase()}
         </motion.span>
       </div>
 
-      {/* Centerpiece — giant italic wordmark */}
+      {/* Centerpiece — giant italic FORGE wordmark */}
       <div className="flex-1 flex items-center justify-center relative z-10">
         <motion.div
-          initial={{ opacity: 0, filter: 'blur(8px)' }}
+          initial={{ opacity: 0, filter: 'blur(10px)' }}
           animate={{ opacity: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
           className="relative"
           style={{ padding: '0 4vw' }}
         >
-          {/* Base layer — espresso ink */}
+          {/* Base — zinc layer */}
           <h1
             className="leading-[0.85] tracking-tight"
             style={{
-              fontFamily: '"Fraunces", serif',
+              fontFamily: '"Playfair Display", serif',
               fontStyle: 'italic',
               fontWeight: 400,
               fontSize: 'clamp(4rem, 14vw, 14rem)',
               letterSpacing: '-0.03em',
-              color: '#1A1612',
-              fontFeatureSettings: '"ss01" 1, "swsh" 1',
+              color: '#27272a',
             }}
           >
-            creat
+            forge
             <span
               style={{
-                fontFamily: '"Inter", sans-serif',
+                fontFamily: '"JetBrains Mono", monospace',
                 fontStyle: 'normal',
                 fontWeight: 300,
-                letterSpacing: '-0.02em',
-                color: '#6B645C',
-                marginLeft: '0.05em',
+                letterSpacing: '0.05em',
+                fontSize: '0.32em',
+                color: '#52525b',
+                marginLeft: '0.15em',
+                verticalAlign: 'top',
               }}
             >
-              /studio
+              /neural
             </span>
           </h1>
 
-          {/* Terracotta overlay — sweeps left→right as progress fills */}
+          {/* Emerald sweep overlay */}
           <motion.div
             className="absolute inset-0 overflow-hidden"
             style={{ width: wordmarkInk }}
@@ -132,47 +117,45 @@ export default function Preloader({ onComplete }: PreloaderProps) {
             <h1
               className="leading-[0.85] tracking-tight whitespace-nowrap"
               style={{
-                fontFamily: '"Fraunces", serif',
+                fontFamily: '"Playfair Display", serif',
                 fontStyle: 'italic',
                 fontWeight: 400,
                 fontSize: 'clamp(4rem, 14vw, 14rem)',
                 letterSpacing: '-0.03em',
-                color: '#BF4A2A',
-                fontFeatureSettings: '"ss01" 1, "swsh" 1',
+                color: '#34d399',
+                textShadow: '0 0 40px rgba(52,211,153,0.35)',
               }}
             >
-              creat
+              forge
               <span
                 style={{
-                  fontFamily: '"Inter", sans-serif',
+                  fontFamily: '"JetBrains Mono", monospace',
                   fontStyle: 'normal',
                   fontWeight: 300,
-                  letterSpacing: '-0.02em',
-                  color: '#BF4A2A',
-                  marginLeft: '0.05em',
-                  opacity: 0.85,
+                  letterSpacing: '0.05em',
+                  fontSize: '0.32em',
+                  color: '#8b5cf6',
+                  marginLeft: '0.15em',
+                  verticalAlign: 'top',
+                  opacity: 0.9,
                 }}
               >
-                /studio
+                /neural
               </span>
             </h1>
           </motion.div>
         </motion.div>
       </div>
 
-      {/* Bottom row — hairline rule + counter */}
+      {/* Bottom — hairline rule + counter */}
       <div className="absolute bottom-10 left-12 right-12 z-10">
-        {/* Hairline progress rule */}
-        <div
-          className="relative w-full mb-5"
-          style={{ height: 1, background: 'rgba(26,22,18,0.13)' }}
-        >
+        <div className="relative w-full mb-5 h-px bg-white/[0.08]">
           <motion.div
-            className="absolute left-0 top-0"
+            className="absolute left-0 top-0 h-px"
             style={{
-              height: 1,
               width: ruleWidth,
-              background: '#BF4A2A',
+              background: 'linear-gradient(90deg, #34d399, #8b5cf6)',
+              boxShadow: '0 0 8px rgba(52,211,153,0.6)',
             }}
           />
         </div>
@@ -182,35 +165,19 @@ export default function Preloader({ onComplete }: PreloaderProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            style={{
-              fontFamily: '"Fraunces", serif',
-              fontStyle: 'italic',
-              fontSize: 16,
-              color: '#1A1612',
-              letterSpacing: '-0.01em',
-            }}
+            className="font-display italic text-zinc-200"
+            style={{ fontSize: 16, letterSpacing: '-0.01em' }}
           >
-            A studio for teams that ship.
+            A console for teams that ship at speed.
           </motion.span>
 
           <div className="flex items-baseline gap-3">
-            <span
-              style={{
-                fontFamily: '"JetBrains Mono", monospace',
-                fontSize: 11,
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: '#9B948A',
-              }}
-            >
-              Loading
-            </span>
+            <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500">Loading</span>
             <motion.span
+              className="font-mono text-zinc-100"
               style={{
-                fontFamily: '"JetBrains Mono", monospace',
-                fontSize: 28,
+                fontSize: 32,
                 fontWeight: 400,
-                color: '#1A1612',
                 fontVariantNumeric: 'tabular-nums',
                 minWidth: '3ch',
                 textAlign: 'right',
@@ -218,15 +185,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
             >
               {displayProgress}
             </motion.span>
-            <span
-              style={{
-                fontFamily: '"JetBrains Mono", monospace',
-                fontSize: 14,
-                color: '#6B645C',
-              }}
-            >
-              /100
-            </span>
+            <span className="font-mono text-zinc-600" style={{ fontSize: 14 }}>/100</span>
           </div>
         </div>
       </div>

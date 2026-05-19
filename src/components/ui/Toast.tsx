@@ -28,10 +28,24 @@ const DEFAULT_DURATION = 4_000;
 const VISIBLE_LIMIT = 3;
 
 const toneClass: Record<ToastTone, string> = {
-  info: 'border-[rgba(26,22,18,0.13)] bg-[#F4EFE6] text-[#1A1612]',
-  success: 'border-[#4A6B3A]/30 bg-[#4A6B3A]/10 text-[#1A1612]',
-  warning: 'border-[#C99A2E]/30 bg-[#C99A2E]/10 text-[#1A1612]',
-  error: 'border-[#B53C2A]/30 bg-[#B53C2A]/10 text-[#1A1612]',
+  info: 'border-white/[0.10] bg-zinc-900/85 text-zinc-100',
+  success: 'border-emerald-400/40 bg-emerald-500/[0.08] text-emerald-100',
+  warning: 'border-amber-400/40 bg-amber-500/[0.08] text-amber-100',
+  error: 'border-red-400/40 bg-red-500/[0.08] text-red-100',
+};
+
+const toneIconColor: Record<ToastTone, string> = {
+  info: 'text-emerald-400',
+  success: 'text-emerald-400',
+  warning: 'text-amber-300',
+  error: 'text-red-400',
+};
+
+const toneTitleColor: Record<ToastTone, string> = {
+  info: 'text-zinc-100',
+  success: 'text-emerald-200',
+  warning: 'text-amber-200',
+  error: 'text-red-200',
 };
 
 const toneIcon = {
@@ -107,23 +121,25 @@ function ToastCard({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: str
       exit={{ opacity: 0, x: 20, scale: 0.98 }}
       transition={transitions.fast}
       className={cn(
-        'pointer-events-auto border px-3 py-3 text-[#f5f5f4] backdrop-blur-md',
+        'pointer-events-auto border px-3.5 py-3 backdrop-blur-xl',
         'grid grid-cols-[auto_1fr_auto] items-start gap-3',
         toneClass[toast.tone],
       )}
     >
-      <Icon size={15} className="mt-0.5 shrink-0 opacity-80" />
+      <Icon size={15} className={cn('mt-0.5 shrink-0', toneIconColor[toast.tone])} strokeWidth={1.5} />
       <div className="min-w-0">
-        <div className="text-[10px] font-black uppercase tracking-widest text-[#1A1612]">{toast.title}</div>
+        <div className={cn('text-[10px] font-mono uppercase tracking-[0.20em]', toneTitleColor[toast.tone])}>
+          {toast.title}
+        </div>
         {toast.description && (
-          <div className="mt-1 text-[11px] leading-relaxed text-[#1A1612]">{toast.description}</div>
+          <div className="mt-1 text-[12px] leading-relaxed text-zinc-300">{toast.description}</div>
         )}
       </div>
       <button
         type="button"
         aria-label={`Dismiss ${toast.title}`}
         onClick={() => onDismiss(toast.id)}
-        className="p-0.5 text-[#6B645C] transition-colors hover:text-[#1A1612]"
+        className="p-0.5 text-zinc-500 hover:text-zinc-100 transition-colors"
       >
         <X size={13} />
       </button>

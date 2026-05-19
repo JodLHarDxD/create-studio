@@ -66,9 +66,19 @@ export default function TeamChatPanel() {
       {!activeContext && (
         <div style={{
           padding: '14px 16px', borderBottom: '1px solid var(--border-chat)',
-          fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase',
-          color: 'var(--text-1-chat)',
-        }}>Team Chat</div>
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}>
+          <span style={{
+            fontFamily: '"JetBrains Mono", monospace',
+            fontSize: 10, fontWeight: 400, letterSpacing: '0.25em',
+            textTransform: 'uppercase', color: 'var(--text-3-chat)',
+          }}>Team Chat</span>
+          <span style={{
+            fontFamily: '"JetBrains Mono", monospace',
+            fontSize: 9, letterSpacing: '0.20em', textTransform: 'uppercase',
+            color: 'var(--accent)',
+          }}>Live</span>
+        </div>
       )}
 
       {!activeContext ? (
