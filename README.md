@@ -18,15 +18,14 @@ A precision-built developer workspace for teams that ship. Task management, live
 2. Go to **SQL Editor** → paste `database_setup.sql` → Run
 3. Copy **Project URL** and **anon key** from Settings → API
 
-### 2. Backend (Railway)
+### 2. Backend (Render)
 ```bash
-cd backend
-# Deploy to Railway — set these env vars:
+# Deploy via render.yaml Blueprint — set these env vars in Render dashboard:
 # SUPABASE_URL=your-project-url
 # SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 # GEMINI_API_KEY=your-google-key (optional server default)
 ```
-Start command: `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
+Start command: `python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
 
 ### 3. Frontend (Vercel)
 ```bash

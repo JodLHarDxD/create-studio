@@ -22,7 +22,7 @@
 | Database | Supabase (PostgreSQL + pgvector + RLS) | Auth + real-time + vector search |
 | Backend | FastAPI (Python) | Async, AI-first, industry standard |
 | AI | Anthropic / OpenAI / Google via direct httpx | No SDK lock-in, user key flexibility |
-| Deploy | Railway (backend) + Vercel (frontend) | Both free tier, production-grade |
+| Deploy | Render (backend) + Vercel (frontend) | Both free tier, production-grade |
 
 **CRITICAL: This project uses Supabase, NOT Firebase. Firebase was in the original scaffold and has been fully removed. Never reintroduce Firebase imports.**
 
@@ -65,7 +65,7 @@ teamforge/
 ├── .env.example                ← Copy to .env, fill in values
 ├── package.json
 ├── vite.config.ts
-├── railway.json                ← Backend deploy config
+├── render.yaml                 ← Backend deploy config (Render Blueprint)
 └── vercel.json                 ← Frontend SPA routing config
 ```
 
@@ -155,10 +155,10 @@ ProjectFile { id, project_id, file_name, path, content, updated_at? }
 ```
 VITE_SUPABASE_URL=https://xxx.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJ...
-VITE_API_URL=https://your-backend.railway.app
+VITE_API_URL=https://your-backend.onrender.com
 ```
 
-### Backend (Railway env vars)
+### Backend (Render env vars)
 ```
 SUPABASE_URL=https://xxx.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=eyJ...  ← service role, bypasses RLS for embeddings
@@ -225,8 +225,8 @@ Before writing any code in a new session:
 ## Deployment Commands
 
 ```bash
-# Backend (Railway auto-deploys on git push)
-# Start command: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+# Backend (Render — deploy via render.yaml blueprint)
+# Start command: python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT
 
 # Frontend local dev
 npm install

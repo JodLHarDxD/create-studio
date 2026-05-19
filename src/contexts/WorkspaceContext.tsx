@@ -49,7 +49,7 @@ const DEMO_FILES: ProjectFile[] = [
 const DEMO_TASKS: Task[] = [
   { id: '1', title: 'Setup database', status: 'DONE', project_id: 'demo', assignee_id: 'demo-1', description: 'Run init.sql in Supabase', due_date: new Date().toISOString() },
   { id: '2', title: 'Implement RAG pipeline', status: 'IN_PROGRESS', project_id: 'demo', assignee_id: 'demo-2', description: 'Vector embeddings for project files', due_date: new Date().toISOString() },
-  { id: '3', title: 'Deploy to Railway', status: 'TODO', project_id: 'demo', assignee_id: 'demo-1', description: 'Configure env vars and deploy', due_date: new Date().toISOString() },
+  { id: '3', title: 'Deploy to Render', status: 'TODO', project_id: 'demo', assignee_id: 'demo-1', description: 'Configure env vars and deploy', due_date: new Date().toISOString() },
   { id: '4', title: 'Write API endpoints', status: 'IN_PROGRESS', project_id: 'demo', assignee_id: 'demo-2', description: 'Projects, tasks, files CRUD', due_date: new Date().toISOString() },
   { id: '5', title: 'Fix Dashboard Bug', status: 'TODO', project_id: 'demo', assignee_id: null, description: 'Charts not rendering on mobile', due_date: new Date().toISOString() },
 ];
