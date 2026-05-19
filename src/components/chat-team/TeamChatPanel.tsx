@@ -8,8 +8,9 @@ import ContextList from './ContextList';
 import ContextHeader from './ContextHeader';
 import MessageList from './MessageList';
 import MessageComposer from './MessageComposer';
+import { DEMO_CHANNEL_ID } from './constants';
 
-export const DEMO_CHANNEL_ID = 'demo-ch-general' as const;
+export { DEMO_CHANNEL_ID };
 
 const DEMO_CHANNELS: Channel[] = [
   { id: DEMO_CHANNEL_ID, project_id: 'demo', name: 'general', description: 'Project chat',

@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import type { Message, MessageContextType } from '@/lib/supabaseClient';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
-import { DEMO_CHANNEL_ID } from '../TeamChatPanel';
+import { DEMO_CHANNEL_ID } from '../constants';
 
 const DEMO_MESSAGES: Message[] = [
   { id: 'dm1', context_type: 'channel', context_id: DEMO_CHANNEL_ID, author_id: 'demo-1',

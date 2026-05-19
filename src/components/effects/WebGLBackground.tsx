@@ -26,7 +26,7 @@ function DistortedObsidian() {
     <group ref={groupRef}>
       <Float floatIntensity={2} rotationIntensity={1.5} speed={1.2}>
         <mesh position={[-3, 1, -5]} scale={3.5}>
-          <sphereGeometry args={[1, 128, 128]} />
+          <sphereGeometry args={[1, 64, 64]} />
           <MeshDistortMaterial
             color="#030305"
             distort={0.4}
@@ -40,7 +40,7 @@ function DistortedObsidian() {
 
       <Float floatIntensity={3} rotationIntensity={2} speed={1.5}>
         <mesh position={[4, -2, -7]} scale={4.5}>
-          <sphereGeometry args={[1, 128, 128]} />
+          <sphereGeometry args={[1, 64, 64]} />
           <MeshDistortMaterial
             color="#030305"
             distort={0.5}
@@ -71,11 +71,14 @@ export default function WebGLBackground() {
     <div className="fixed inset-0 -z-50 pointer-events-none" aria-hidden="true">
       <Canvas
         camera={{ position: [0, 0, 8], fov: 45 }}
-        dpr={[1, 2]}
-        gl={{ antialias: true, powerPreference: 'high-performance' }}
+        dpr={[1, 1.5]}
+        gl={{ antialias: true, powerPreference: 'default' }}
         style={{ background: '#09090b' }}
         onCreated={({ gl }) => {
-          gl.domElement.addEventListener('webglcontextlost', () => setContextLost(true));
+          gl.domElement.addEventListener('webglcontextlost', (e) => {
+            e.preventDefault();
+            setContextLost(true);
+          });
         }}
       >
         <color attach="background" args={['#09090b']} />
