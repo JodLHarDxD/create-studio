@@ -12,9 +12,9 @@ export type UnreadMap = Record<string, UnreadEntry>;     // key = `${type}:${id}
 
 interface ChatContextType {
   activeContext: ActiveContext | null;
-  setActiveContext: (c: ActiveContext | null) => void;
+  setActiveContext: React.Dispatch<React.SetStateAction<ActiveContext | null>>;
   activeTaskThread: Task | null;
-  setActiveTaskThread: (t: Task | null) => void;
+  setActiveTaskThread: React.Dispatch<React.SetStateAction<Task | null>>;
   unreadMap: UnreadMap;
   setUnreadMap: React.Dispatch<React.SetStateAction<UnreadMap>>;
   onlineUserIds: Set<string>;
