@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 120" width="360" height="120" role="img" aria-label="CREATstudio">
+  <title>CREATstudio</title>
+  <text
+    x="0" y="92"
+    font-family="'Playfair Display', 'Iowan Old Style', Georgia, serif"
+    font-style="italic"
+    font-weight="400"
+    font-size="96"
+    fill="#09090b"
+    style="letter-spacing:-0.03em;"
+  >creat</text>
+  <text
+    x="266" y="42"
+    font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace"
+    font-style="normal"
+    font-weight="300"
+    font-size="20"
+    fill="#0f9b6e"
+    style="letter-spacing:0.05em;"
+  >/studio</text>
+</svg>
