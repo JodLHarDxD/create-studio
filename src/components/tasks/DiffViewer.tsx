@@ -127,17 +127,17 @@ function DiffTreeItem({
         <button
           onClick={() => setExpanded(p => !p)}
           className="w-full flex items-center gap-1.5 py-[3px] outline-none transition-colors"
-          style={{ paddingLeft: `${depth * 12 + 6}px`, fontSize: 11, color: '#6B645C', fontFamily: '"Inter", sans-serif' }}
-          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(26,22,18,0.04)')}
+          style={{ paddingLeft: `${depth * 12 + 6}px`, fontSize: 11, color: '#a1a1aa', fontFamily: '"Inter", sans-serif' }}
+          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
           onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
         >
           {expanded
-            ? <ChevronDown size={11} style={{ color: '#9B948A', flexShrink: 0 }} />
-            : <ChevronRight size={11} style={{ color: '#9B948A', flexShrink: 0 }} />}
-          <Folder size={11} style={{ color: '#BF4A2A', opacity: 0.6, flexShrink: 0 }} />
+            ? <ChevronDown size={11} style={{ color: '#71717a', flexShrink: 0 }} />
+            : <ChevronRight size={11} style={{ color: '#71717a', flexShrink: 0 }} />}
+          <Folder size={11} style={{ color: '#34d399', opacity: 0.7, flexShrink: 0 }} />
           <span className="truncate flex-1 text-left">{node.name}</span>
           {node.changedCount > 0 && (
-            <span className="mr-2" style={{ fontSize: 9, background: 'rgba(191,74,42,0.12)', color: '#BF4A2A', padding: '0 5px', fontFamily: '"JetBrains Mono", monospace' }}>
+            <span className="mr-2" style={{ fontSize: 9, background: 'rgba(52,211,153,0.12)', color: '#34d399', padding: '0 5px', fontFamily: '"JetBrains Mono", monospace' }}>
               {node.changedCount}
             </span>
           )}
@@ -154,7 +154,7 @@ function DiffTreeItem({
   const isDeleted = node.entry && node.entry.original && !node.entry.patched;
   const isModified = node.entry?.changed && !isNew && !isDeleted;
 
-  const fileColor = isModified ? '#BF4A2A' : isNew ? '#4A6B3A' : isDeleted ? '#B53C2A' : '#9B948A';
+  const fileColor = isModified ? '#34d399' : isNew ? '#a3e635' : isDeleted ? '#f87171' : '#a1a1aa';
 
   return (
     <button
@@ -162,18 +162,18 @@ function DiffTreeItem({
       className="w-full flex items-center gap-1.5 py-[3px] text-left outline-none transition-colors"
       style={{
         paddingLeft: `${depth * 12 + 22}px`,
-        background: isSelected ? 'rgba(191,74,42,0.07)' : 'transparent',
-        borderLeft: isSelected ? '2px solid #BF4A2A' : '2px solid transparent',
+        background: isSelected ? 'rgba(52,211,153,0.08)' : 'transparent',
+        borderLeft: isSelected ? '2px solid #34d399' : '2px solid transparent',
       }}
-      onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = 'rgba(26,22,18,0.04)'; }}
+      onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}
       onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = 'transparent'; }}
     >
       <span className="truncate flex-1" style={{ fontSize: 11, color: fileColor, fontFamily: '"Inter", sans-serif' }}>
         {node.name}
       </span>
-      {isModified && <span className="mr-2 shrink-0" style={{ fontSize: 9, color: 'rgba(191,74,42,0.5)', fontFamily: '"JetBrains Mono", monospace' }}>M</span>}
-      {isNew && <span className="mr-2 shrink-0" style={{ fontSize: 9, color: 'rgba(74,107,58,0.5)', fontFamily: '"JetBrains Mono", monospace' }}>A</span>}
-      {isDeleted && <span className="mr-2 shrink-0" style={{ fontSize: 9, color: 'rgba(181,60,42,0.5)', fontFamily: '"JetBrains Mono", monospace' }}>D</span>}
+      {isModified && <span className="mr-2 shrink-0" style={{ fontSize: 9, color: 'rgba(52,211,153,0.6)', fontFamily: '"JetBrains Mono", monospace' }}>M</span>}
+      {isNew && <span className="mr-2 shrink-0" style={{ fontSize: 9, color: 'rgba(163,230,53,0.6)', fontFamily: '"JetBrains Mono", monospace' }}>A</span>}
+      {isDeleted && <span className="mr-2 shrink-0" style={{ fontSize: 9, color: 'rgba(248,113,113,0.6)', fontFamily: '"JetBrains Mono", monospace' }}>D</span>}
     </button>
   );
 }
@@ -242,50 +242,51 @@ export default function DiffViewer() {
   if (!diffTask) return null;
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#E8E2D6]">
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-zinc-950">
       {/* Tab bar */}
-      <div className="h-9 flex items-center shrink-0" style={{ background: '#DDD5C6', borderBottom: '1px solid #E8E2D6' }}>
-        <div className="h-full px-4 flex items-center gap-2" style={{ background: '#ECE6DA', borderBottom: '1px solid rgba(26,22,18,0.10)' }}>
-          <FileDiff size={13} style={{ color: '#BF4A2A', opacity: 0.7 }} />
-          <span className="truncate max-w-[220px]" style={{ fontSize: 13, color: '#1A1612', fontFamily: '"Inter", sans-serif' }}>{diffTask.title}</span>
+      <div className="h-10 flex items-center shrink-0 border-b border-white/[0.06] bg-zinc-950/80 backdrop-blur-md">
+        <div className="h-full px-4 flex items-center gap-2 border-r border-white/[0.06] bg-zinc-900/40">
+          <FileDiff size={13} style={{ color: '#34d399', opacity: 0.8 }} strokeWidth={1.5} />
+          <span className="truncate max-w-[220px] text-[13px] text-zinc-100">{diffTask.title}</span>
           {isLive && (
-            <span className="flex items-center gap-1" style={{ fontSize: 9, color: '#BF4A2A', border: '1px solid rgba(191,74,42,0.3)', padding: '1px 6px', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em' }}>
+            <span className="flex items-center gap-1 text-[9px] text-violet-300 border border-violet-400/40 px-1.5 py-0.5 font-mono tracking-[0.20em]">
               <Radio size={8} className="animate-pulse" /> LIVE
             </span>
           )}
           {!isLive && changedCount > 0 && (
-            <span style={{ fontSize: 9, background: '#BF4A2A', color: '#F4EFE6', padding: '1px 6px', fontFamily: '"JetBrains Mono", monospace', fontWeight: 700 }}>
+            <span className="text-[9px] bg-emerald-400 text-zinc-950 px-1.5 py-0.5 font-mono font-semibold">
               {changedCount} changed
             </span>
           )}
-          <button onClick={() => setDiffTask(null)} className="p-0.5 transition-opacity" style={{ opacity: 0.3, color: '#1A1612' }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '0.3')}>
+          <button
+            onClick={() => setDiffTask(null)}
+            className="p-0.5 text-zinc-500 hover:text-red-400 transition-colors"
+          >
             <X size={13} />
           </button>
         </div>
-        <span className="ml-auto px-4" style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#9B948A', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+        <span className="ml-auto px-4 text-[9px] font-mono text-emerald-400 tracking-[0.25em] uppercase">
           {isLive ? 'LIVE DIFF' : 'DIFF VIEW'}
         </span>
       </div>
 
       {loading ? (
-        <div className="flex-1 flex flex-col items-center justify-center gap-3 text-[#6B645C]">
-          <Loader2 size={20} className="animate-spin opacity-40" />
-          <span className="text-[10px] uppercase tracking-widest opacity-40">{loadingMsg || 'Loading…'}</span>
+        <div className="flex-1 flex flex-col items-center justify-center gap-3 text-zinc-500">
+          <Loader2 size={20} className="animate-spin text-emerald-400/70" />
+          <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-500">{loadingMsg || 'Loading…'}</span>
         </div>
       ) : error ? (
         <div className="flex-1 flex items-center justify-center">
-          <div className="p-4 border border-[#B53C2A]/30 bg-[#B53C2A]/10 text-[#B53C2A] text-[11px] font-mono max-w-sm text-center leading-relaxed">
+          <div className="p-4 border border-red-400/30 bg-red-500/[0.06] text-red-300 text-[12px] font-mono max-w-sm text-center leading-relaxed">
             {error}
           </div>
         </div>
       ) : (
         <div className="flex-1 flex overflow-hidden">
-          {/* Hierarchical file tree */}
-          <div className="w-64 shrink-0 flex flex-col overflow-hidden" style={{ background: '#DDD5C6', borderRight: '1px solid #E8E2D6' }}>
-            <div className="px-4 py-2 shrink-0" style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C4BDB1', borderBottom: '1px solid #E8E2D6' }}>
-              {diffs.length} files · {changedCount} modified
+          {/* File tree */}
+          <div className="w-64 shrink-0 flex flex-col overflow-hidden bg-zinc-950/60 border-r border-white/[0.06]">
+            <div className="px-4 py-2.5 shrink-0 border-b border-white/[0.06] font-mono text-[10px] tracking-[0.20em] uppercase text-zinc-500">
+              {diffs.length} files · <span className="text-emerald-400">{changedCount} modified</span>
             </div>
             <div className="flex-1 overflow-y-auto custom-scrollbar py-1">
               {tree.map(node => (
@@ -304,9 +305,9 @@ export default function DiffViewer() {
           <div className="flex-1 overflow-hidden flex flex-col">
             {selected ? (
               <>
-                <div className="h-6 flex items-center px-4 bg-[#E8E2D6] text-[#1A1612] text-[11px] shrink-0 border-b border-[#DDD5C6]">
-                  <span className="opacity-40 truncate">{selected.path}</span>
-                  <span className="ml-auto text-[9px] opacity-20 uppercase tracking-widest">{getLanguage(selected.path)}</span>
+                <div className="h-7 flex items-center px-4 bg-zinc-950/60 text-zinc-300 text-[11px] shrink-0 border-b border-white/[0.06]">
+                  <span className="text-zinc-500 truncate font-mono tracking-[0.10em]">{selected.path}</span>
+                  <span className="ml-auto text-[9px] text-emerald-400 font-mono uppercase tracking-[0.25em]">{getLanguage(selected.path)}</span>
                 </div>
                 <div className="flex-1 overflow-hidden">
                   <DiffEditor
@@ -317,11 +318,11 @@ export default function DiffViewer() {
                     modified={selected.patched}
                     options={{
                       fontSize: 13,
-                      fontFamily: 'Consolas, "Courier New", monospace',
+                      fontFamily: 'JetBrains Mono, Consolas, "Courier New", monospace',
                       minimap: { enabled: false },
                       scrollBeyondLastLine: false,
                       automaticLayout: true,
-                      padding: { top: 8 },
+                      padding: { top: 12 },
                       lineHeight: 20,
                       readOnly: true,
                       renderSideBySide: true,
@@ -331,7 +332,7 @@ export default function DiffViewer() {
                 </div>
               </>
             ) : (
-              <div className="flex-1 flex items-center justify-center text-[#6B645C] text-[11px] opacity-30 uppercase tracking-widest">
+              <div className="flex-1 flex items-center justify-center text-zinc-600 text-[11px] font-mono uppercase tracking-[0.25em]">
                 Select a file to compare
               </div>
             )}

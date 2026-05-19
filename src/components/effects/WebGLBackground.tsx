@@ -1,95 +1,92 @@
-﻿import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { MeshDistortMaterial, Float } from '@react-three/drei';
 import { useRef, useState } from 'react';
-import * as THREE from 'three';
+import type * as THREE from 'three';
 
-const vertexShader = /* glsl */ `
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
+/**
+ * Cinematic obsidian fluid background — distorted spheres with
+ * cursor parallax. Decorative only, silently degrades on context loss.
+ * Source spec: design-master/design.md → AmbientWebGLBackground.
+ */
 
-const fragmentShader = /* glsl */ `
-  uniform float uTime;
-  varying vec2 vUv;
-
-  float hash(vec2 p) {
-    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
-  }
-  float noise(vec2 p) {
-    vec2 i = floor(p);
-    vec2 f = fract(p);
-    float a = hash(i);
-    float b = hash(i + vec2(1.0, 0.0));
-    float c = hash(i + vec2(0.0, 1.0));
-    float d = hash(i + vec2(1.0, 1.0));
-    vec2 u = f * f * (3.0 - 2.0 * f);
-    return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-  }
-
-  void main() {
-    vec2 uv = vUv;
-    float t = uTime * 0.05;
-    float n = noise(uv * 3.0 + vec2(t, -t * 0.7));
-    n += 0.5 * noise(uv * 6.0 + vec2(-t * 1.3, t));
-    n *= 0.5;
-
-    float dist = distance(uv, vec2(0.5));
-    float vignette = smoothstep(0.9, 0.2, dist);
-
-    vec3 base = vec3(0.04, 0.04, 0.05);
-    vec3 highlight = vec3(0.0, 0.48, 0.80) * 0.06;
-    vec3 color = base + n * 0.08 + highlight * n;
-    color *= vignette;
-
-    gl_FragColor = vec4(color, 1.0);
-  }
-`;
-
-function ShaderPlane() {
-  const matRef = useRef<THREE.ShaderMaterial>(null);
+function DistortedObsidian() {
+  const groupRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
-    if (matRef.current) {
-      matRef.current.uniforms.uTime.value = state.clock.elapsedTime;
-    }
+    if (!groupRef.current) return;
+    // Normalized mouse coords (-1..+1)
+    const targetX = state.pointer.x * 2;
+    const targetY = state.pointer.y * 2;
+    // Heavy inertia for premium feel
+    groupRef.current.position.x += (targetX - groupRef.current.position.x) * 0.03;
+    groupRef.current.position.y += (targetY - groupRef.current.position.y) * 0.03;
   });
 
   return (
-    <mesh>
-      <planeGeometry args={[2, 2]} />
-      <shaderMaterial
-        ref={matRef}
-        vertexShader={vertexShader}
-        fragmentShader={fragmentShader}
-        uniforms={{ uTime: { value: 0 } }}
-      />
-    </mesh>
+    <group ref={groupRef}>
+      <Float floatIntensity={2} rotationIntensity={1.5} speed={1.2}>
+        <mesh position={[-3, 1, -5]} scale={3.5}>
+          <sphereGeometry args={[1, 64, 64]} />
+          <MeshDistortMaterial
+            color="#030305"
+            distort={0.4}
+            metalness={0.9}
+            roughness={0.2}
+            clearcoat={0.2}
+            speed={2}
+          />
+        </mesh>
+      </Float>
+
+      <Float floatIntensity={3} rotationIntensity={2} speed={1.5}>
+        <mesh position={[4, -2, -7]} scale={4.5}>
+          <sphereGeometry args={[1, 64, 64]} />
+          <MeshDistortMaterial
+            color="#030305"
+            distort={0.5}
+            metalness={1}
+            roughness={0.15}
+            speed={1.5}
+          />
+        </mesh>
+      </Float>
+    </group>
   );
 }
 
 export default function WebGLBackground() {
   const [contextLost, setContextLost] = useState(false);
 
-  // Decorative only — silently degrade to dark background on context loss
   if (contextLost) {
-    return <div className="fixed inset-0 z-0 pointer-events-none bg-[#050508]" aria-hidden="true" />;
+    return (
+      <div
+        className="fixed inset-0 -z-50 pointer-events-none"
+        style={{ background: '#09090b' }}
+        aria-hidden="true"
+      />
+    );
   }
 
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
+    <div className="fixed inset-0 -z-50 pointer-events-none" aria-hidden="true">
       <Canvas
-        orthographic
-        camera={{ position: [0, 0, 1], zoom: 1 }}
-        gl={{ antialias: false, powerPreference: 'low-power' }}
+        camera={{ position: [0, 0, 8], fov: 45 }}
         dpr={[1, 1.5]}
-        style={{ pointerEvents: 'none' }}
+        gl={{ antialias: true, powerPreference: 'default' }}
+        style={{ background: '#09090b' }}
         onCreated={({ gl }) => {
-          gl.domElement.addEventListener('webglcontextlost', () => setContextLost(true));
+          gl.domElement.addEventListener('webglcontextlost', (e) => {
+            e.preventDefault();
+            setContextLost(true);
+          });
         }}
       >
-        <ShaderPlane />
+        <color attach="background" args={['#09090b']} />
+        <ambientLight intensity={0.1} />
+        <directionalLight position={[10, 10, 5]} intensity={3} color="#8b5cf6" />
+        <directionalLight position={[-10, -10, -5]} intensity={4} color="#34d399" />
+        <spotLight position={[0, 5, 10]} intensity={1} penumbra={1} color="#ffffff" distance={20} />
+        <DistortedObsidian />
       </Canvas>
     </div>
   );

@@ -1,8 +1,7 @@
-﻿import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { ChevronDown, ChevronRight, Plus, FolderOpen, X, Folder, CloudUpload, Loader2, Radio } from 'lucide-react';
 import { motion, AnimatePresence, LayoutGroup } from 'motion/react';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
-import { cn } from '@/lib/utils';
 import TaskDetail from '../tasks/TaskDetail';
 import { supabase, Task, LocalFileView } from '@/lib/supabaseClient';
 
@@ -76,7 +75,6 @@ async function readFileContent(handle: FileSystemFileHandle, name: string): Prom
   return { name, content: '', objectUrl, mimeType, lastModified: file.lastModified };
 }
 
-// Count changed files recursively for folder badges
 function countChangedInNode(nodes: FileNode[], changedPaths: Set<string>): number {
   return nodes.reduce((sum, node) => {
     if (node.type === 'file') return sum + (changedPaths.has(node.path) ? 1 : 0);
@@ -84,24 +82,20 @@ function countChangedInNode(nodes: FileNode[], changedPaths: Set<string>): numbe
   }, 0);
 }
 
-// ─── File icon dot color by extension ────────────────────────────────────────
-
 function FileColorDot({ name }: { name: string }) {
   const ext = name.split('.').pop()?.toLowerCase() || '';
   const color: Record<string, string> = {
-    ts: '#3178c6', tsx: '#3178c6', js: '#f7df1e', jsx: '#61dafb',
-    py: '#3572a5', rs: '#dea584', go: '#00acd7', java: '#b07219',
-    css: '#563d7c', scss: '#c6538c', html: '#e34c26', json: '#292929',
-    md: '#aaaaaa', sql: '#e38c00', sh: '#89e051', yaml: '#cb171e', yml: '#cb171e',
-    png: '#4ec9b0', jpg: '#4ec9b0', jpeg: '#4ec9b0', gif: '#4ec9b0',
-    svg: '#ffb13b', mp3: '#c586c0', mp4: '#c586c0', wav: '#c586c0', pdf: '#f44336',
+    ts: '#3178c6', tsx: '#60a5fa', js: '#fbbf24', jsx: '#22d3ee',
+    py: '#8b5cf6', rs: '#fb923c', go: '#06b6d4', java: '#a78bfa',
+    css: '#a78bfa', scss: '#ec4899', html: '#f97316', json: '#a1a1aa',
+    md: '#71717a', sql: '#fbbf24', sh: '#34d399', yaml: '#f87171', yml: '#f87171',
+    png: '#34d399', jpg: '#34d399', jpeg: '#34d399', gif: '#34d399',
+    svg: '#fbbf24', mp3: '#c084fc', mp4: '#c084fc', wav: '#c084fc', pdf: '#f87171',
   };
   return (
-    <span className="w-2 h-2 rounded-full shrink-0 inline-block" style={{ backgroundColor: color[ext] || '#6B645C' }} />
+    <span className="w-1.5 h-1.5 rounded-full shrink-0 inline-block" style={{ backgroundColor: color[ext] || '#71717a' }} />
   );
 }
-
-// ─── Recursive tree node ──────────────────────────────────────────────────────
 
 function FileTreeItem({
   node, depth, activeFilePath, onFileClick, changedPaths,
@@ -119,17 +113,15 @@ function FileTreeItem({
     return (
       <div>
         <div
-          className="flex items-center gap-1.5 cursor-pointer select-none transition-colors"
+          className="flex items-center gap-1.5 cursor-pointer select-none transition-colors hover:bg-white/[0.03]"
           style={{ paddingLeft: `${depth * 12 + 6}px`, paddingTop: 3, paddingBottom: 3 }}
           onClick={() => setExpanded(p => !p)}
-          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(26,22,18,0.04)')}
-          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
         >
-          {expanded ? <ChevronDown size={11} className="shrink-0" style={{ color: '#9B948A' }} /> : <ChevronRight size={11} className="shrink-0" style={{ color: '#9B948A' }} />}
-          <Folder size={12} className="shrink-0" style={{ color: '#BF4A2A', opacity: 0.6 }} />
-          <span className="truncate flex-1" style={{ fontSize: 11, color: '#6B645C', fontFamily: '"Inter", sans-serif' }}>{node.name}</span>
+          {expanded ? <ChevronDown size={11} className="shrink-0 text-zinc-500" /> : <ChevronRight size={11} className="shrink-0 text-zinc-500" />}
+          <Folder size={12} className="shrink-0 text-emerald-400/70" />
+          <span className="truncate flex-1 text-[11px] text-zinc-300">{node.name}</span>
           {changedCount > 0 && (
-            <span className="mr-2 font-mono" style={{ fontSize: 9, background: 'rgba(191,74,42,0.12)', color: '#BF4A2A', padding: '0 5px', borderRadius: 2 }}>
+            <span className="mr-2 font-mono text-[9px] bg-emerald-500/[0.10] text-emerald-400 px-1.5 py-px">
               {changedCount}
             </span>
           )}
@@ -146,26 +138,26 @@ function FileTreeItem({
   return (
     <button
       onClick={() => onFileClick(node)}
-      className="w-full flex items-center gap-1.5 text-left outline-none transition-colors"
-      style={{
-        paddingLeft: `${depth * 12 + 22}px`, paddingTop: 3, paddingBottom: 3,
-        background: isActive ? 'rgba(191,74,42,0.07)' : 'transparent',
-      }}
-      onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(26,22,18,0.04)'; }}
-      onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
+      className={`w-full flex items-center gap-1.5 text-left outline-none transition-colors ${
+        isActive ? 'bg-emerald-500/[0.08]' : 'hover:bg-white/[0.03]'
+      }`}
+      style={{ paddingLeft: `${depth * 12 + 22}px`, paddingTop: 3, paddingBottom: 3 }}
     >
       <FileColorDot name={node.name} />
-      <span className="truncate flex-1" style={{ fontSize: 11, color: isChanged ? '#BF4A2A' : isActive ? '#1A1612' : '#6B645C', fontFamily: '"Inter", sans-serif' }}>{node.name}</span>
-      {isChanged && <span className="mr-2" style={{ fontSize: 9, color: 'rgba(191,74,42,0.5)', fontFamily: '"JetBrains Mono", monospace' }}>M</span>}
+      <span
+        className="truncate flex-1 text-[11px]"
+        style={{ color: isChanged ? '#34d399' : isActive ? '#f4f4f5' : '#a1a1aa' }}
+      >
+        {node.name}
+      </span>
+      {isChanged && <span className="mr-2 text-[9px] text-emerald-400/70 font-mono">M</span>}
     </button>
   );
 }
 
-// ─── Main Explorer ────────────────────────────────────────────────────────────
-
 export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
   const {
-    activeProject, tasks, currentUserId, users, userRole,
+    tasks, currentUserId, users, userRole,
     setTasks, refetchTasks, loginState,
     localActiveFile, setLocalActiveFile,
     setDiffTask, setDiffMode,
@@ -175,12 +167,10 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
   const [tasksExpanded, setTasksExpanded] = useState(true);
   const [detailTask, setDetailTask] = useState<Task | null>(null);
 
-  // Local folder state
   const [localDirHandle, setLocalDirHandle] = useState<FileSystemDirectoryHandle | null>(null);
   const [fileTree, setFileTree] = useState<FileNode[]>([]);
   const [localExpanded, setLocalExpanded] = useState(true);
 
-  // Live sync state
   const [linkedTaskId, setLinkedTaskId] = useState<string | null>(null);
   const [syncing, setSyncing] = useState(false);
   const [syncStatus, setSyncStatus] = useState('');
@@ -194,7 +184,6 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
 
   const isAdmin = userRole === 'ADMIN';
   const visibleTasks = isAdmin ? tasks : tasks.filter(t => t.assignee_id === currentUserId);
-  // Archived tasks are cleared from the panel but preserved in the dashboard
   const filteredTasks = visibleTasks.filter(t => {
     if (t.archived) return false;
     if (taskFilter === 'TODO') return t.status !== 'DONE';
@@ -202,7 +191,6 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
     return true;
   });
 
-  // Task eligible for sync: member's assigned task with a ZIP (TODO or IN_PROGRESS)
   const syncCandidateTask = useMemo(() => {
     if (!localDirHandle || linkedTaskId || isAdmin) return null;
     return visibleTasks.find(t =>
@@ -212,13 +200,11 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
     ) ?? null;
   }, [localDirHandle, linkedTaskId, isAdmin, visibleTasks, currentUserId]);
 
-  // Local progress for the currently linked task (reactive, no DB roundtrip)
   const localProgress = useMemo(() => {
     if (!linkedTaskId || totalFiles === 0) return 0;
     return Math.round((changedPaths.size / totalFiles) * 100);
   }, [linkedTaskId, totalFiles, changedPaths]);
 
-  // ── Open local folder ──
   const openFolder = async () => {
     if (!(window as any).showDirectoryPicker) {
       setFolderError('Requires Chrome or Edge browser.');
@@ -227,7 +213,6 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
     setFolderError('');
     try {
       const handle = await (window as any).showDirectoryPicker({ mode: 'readwrite' });
-      // Reset all previous folder state before mounting the new one
       if (localActiveFile?.objectUrl) URL.revokeObjectURL(localActiveFile.objectUrl);
       setLocalActiveFile(null);
       setLinkedTaskId(null);
@@ -258,7 +243,6 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
     setFolderError('');
   };
 
-  // ── Link folder to task + initial manifest upload ──
   const linkToTask = async (task: Task) => {
     if (!localDirHandle || syncing) return;
     setSyncing(true);
@@ -303,7 +287,6 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
       setLinkedTaskId(task.id);
       setSyncStatus(`Linked · ${fileCount} files`);
 
-      // Auto-mark as IN_PROGRESS when folder is first linked
       if (task.status === 'TODO' && loginState !== 'guest') {
         await supabase.from('tasks').update({ status: 'IN_PROGRESS', progress: 0 }).eq('id', task.id);
         await refetchTasks();
@@ -318,7 +301,6 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
     }
   };
 
-  // ── Detect + upload changed files ──
   const syncChanges = useCallback(async (taskId: string) => {
     if (!localDirHandle || isUploadingRef.current) return;
 
@@ -364,7 +346,6 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
         changedPathsRef.current = newChanged;
         setChangedPaths(new Set(newChanged));
 
-        // Compute progress and push to DB (non-blocking)
         const total = Object.keys(manifest).length;
         const progress = total > 0 ? Math.round((newChanged.size / total) * 100) : 0;
         setTotalFiles(total);
@@ -378,7 +359,6 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
     }
   }, [localDirHandle, loginState]);
 
-  // ── Read directory & poll for changes ──
   const refreshTree = useCallback(async () => {
     if (!localDirHandle) return;
     try {
@@ -395,7 +375,6 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
     return () => clearInterval(id);
   }, [refreshTree]);
 
-  // ── Poll active file for changes ──
   useEffect(() => {
     if (!localActiveFile) return;
     const id = setInterval(async () => {
@@ -418,7 +397,6 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
     return () => clearInterval(id);
   }, [localActiveFile]);
 
-  // ── File click handler ──
   const handleFileClick = async (node: FileNode) => {
     if (node.type !== 'file') return;
     try {
@@ -430,7 +408,6 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
     }
   };
 
-  // ── Task actions ──
   const updateTask = async (taskId: string, updates: any) => {
     if (loginState === 'guest') {
       setTasks(prev => prev.map(t => t.id === taskId ? { ...t, ...updates } : t));
@@ -451,33 +428,29 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
 
   const linkedTask = tasks.find(t => t.id === linkedTaskId);
 
-  const sectionLabel = (text: string) => (
-    <span className="section-header">{text}</span>
-  );
-
   return (
-    <div className="flex flex-col h-full overflow-hidden" style={{ color: '#6B645C', fontSize: 12 }}>
+    <div className="flex flex-col h-full overflow-hidden text-zinc-400 text-[12px]">
       {/* Panel header */}
-      <div className="px-4 py-2.5 shrink-0" style={{ borderBottom: '1px solid var(--border-1)' }}>
-        {sectionLabel('Explorer')}
+      <div className="px-4 py-3 shrink-0 border-b border-white/[0.06] flex items-center justify-between">
+        <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500">Explorer</span>
+        <span className="font-mono text-[9px] tracking-[0.20em] uppercase text-emerald-400/70">
+          {visibleTasks.length} units
+        </span>
       </div>
 
       {/* ── Local Folder Section ── */}
-      <div className="shrink-0" style={{ borderBottom: '1px solid var(--border-1)' }}>
+      <div className="shrink-0 border-b border-white/[0.06]">
         {!localDirHandle ? (
           <>
             <button
               onClick={openFolder}
-              className="w-full flex items-center gap-2 px-3 py-2 transition-colors"
-              style={{ color: '#C4BDB1', fontSize: 10, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#BF4A2A')}
-              onMouseLeave={e => (e.currentTarget.style.color = '#C4BDB1')}
+              className="w-full flex items-center gap-2 px-3 py-2.5 text-zinc-500 hover:text-emerald-400 transition-colors font-mono text-[10px] tracking-[0.20em] uppercase"
             >
-              <FolderOpen size={12} />
+              <FolderOpen size={12} strokeWidth={1.5} />
               Open Local Folder
             </button>
             {folderError && (
-              <div className="px-3 pb-2" style={{ fontSize: 9, color: '#B53C2A', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.05em' }}>
+              <div className="px-3 pb-2 text-[9px] text-red-400 font-mono tracking-wide">
                 {folderError}
               </div>
             )}
@@ -485,58 +458,54 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
         ) : (
           <>
             <div
-              className="flex items-center justify-between px-2 py-1.5 cursor-pointer group transition-colors"
+              className="flex items-center justify-between px-2 py-2 cursor-pointer group transition-colors hover:bg-white/[0.03]"
               onClick={() => setLocalExpanded(p => !p)}
-              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(26,22,18,0.03)')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
               <div className="flex items-center gap-1.5 min-w-0">
                 {localExpanded
-                  ? <ChevronDown size={11} style={{ color: '#9B948A', flexShrink: 0 }} />
-                  : <ChevronRight size={11} style={{ color: '#9B948A', flexShrink: 0 }} />}
-                <span className="truncate max-w-[130px]" style={{ fontSize: 10, fontFamily: '"Inter", sans-serif', fontWeight: 600, color: '#1A1612', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{localDirHandle.name}</span>
+                  ? <ChevronDown size={11} className="text-zinc-500 shrink-0" />
+                  : <ChevronRight size={11} className="text-zinc-500 shrink-0" />}
+                <span className="truncate max-w-[130px] text-[10px] font-mono tracking-[0.10em] uppercase text-zinc-200">
+                  {localDirHandle.name}
+                </span>
                 {linkedTaskId && (
-                  <span className="flex items-center gap-1 shrink-0" style={{ fontSize: 8, color: '#BF4A2A', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em' }}>
+                  <span className="flex items-center gap-1 shrink-0 text-[8px] text-emerald-400 font-mono tracking-[0.20em] uppercase">
                     <Radio size={8} className="animate-pulse" /> live
                   </span>
                 )}
               </div>
               <button
                 onClick={e => { e.stopPropagation(); closeFolder(); }}
-                className="opacity-0 group-hover:opacity-100 p-1 transition-opacity"
-                style={{ color: '#9B948A' }}
+                className="opacity-0 group-hover:opacity-100 p-1 transition-opacity text-zinc-500 hover:text-red-400"
                 title="Close folder"
               >
                 <X size={10} />
               </button>
             </div>
 
-            {/* Sync banner — shown when member opens a folder and has a relevant task */}
             {!linkedTaskId && syncCandidateTask && (
-              <div className="mx-2 mb-1.5 px-3 py-2 flex items-center gap-2" style={{ border: '1px solid rgba(191,74,42,0.2)', background: 'rgba(191,74,42,0.04)' }}>
-                <CloudUpload size={10} style={{ color: '#BF4A2A', flexShrink: 0, opacity: 0.7 }} />
+              <div className="mx-2 mb-1.5 px-3 py-2.5 flex items-center gap-2 border border-emerald-400/20 bg-emerald-500/[0.04]">
+                <CloudUpload size={11} className="text-emerald-400 shrink-0 opacity-80" strokeWidth={1.5} />
                 <div className="flex-1 min-w-0">
-                  <div className="truncate" style={{ fontSize: 9, color: '#BF4A2A', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.08em' }}>
+                  <div className="truncate text-[10px] text-emerald-300 font-mono tracking-[0.10em]">
                     {syncCandidateTask.title}
                   </div>
-                  <div style={{ fontSize: 8, color: '#9B948A', fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.06em', marginTop: 2 }}>
+                  <div className="text-[8px] text-zinc-500 font-mono tracking-[0.10em] mt-0.5 uppercase">
                     {syncCandidateTask.status === 'TODO' ? 'link folder → starts task' : 'link folder → sync progress'}
                   </div>
                 </div>
                 <button
                   onClick={() => linkToTask(syncCandidateTask)}
                   disabled={syncing}
-                  className="shrink-0 transition-all"
-                  style={{ fontSize: 8, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#BF4A2A', border: '1px solid rgba(191,74,42,0.3)', padding: '2px 8px' }}
+                  className="shrink-0 text-[9px] font-mono tracking-[0.20em] uppercase text-emerald-300 border border-emerald-400/40 px-2.5 py-1 hover:bg-emerald-500/10 transition-colors"
                 >
                   {syncing ? <Loader2 size={9} className="animate-spin" /> : syncCandidateTask.status === 'TODO' ? 'Start' : 'Link'}
                 </button>
               </div>
             )}
 
-            {/* Linked task status */}
             {linkedTask && syncStatus && (
-              <div className="mx-2 mb-1 flex items-center gap-1.5 px-1" style={{ fontSize: 9, color: '#BF4A2A', fontFamily: '"JetBrains Mono", monospace' }}>
+              <div className="mx-2 mb-1 flex items-center gap-1.5 px-1 text-[9px] text-emerald-400 font-mono tracking-[0.10em]">
                 <Radio size={8} className="animate-pulse shrink-0" />
                 <span className="truncate">{syncStatus}</span>
               </div>
@@ -545,7 +514,7 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
             {localExpanded && (
               <div className="overflow-y-auto custom-scrollbar" style={{ maxHeight: '45vh' }}>
                 {fileTree.length === 0 && (
-                  <div className="px-6 py-3" style={{ fontSize: 10, color: '#C4BDB1', fontStyle: 'italic' }}>Empty folder</div>
+                  <div className="px-6 py-3 text-[10px] text-zinc-600 italic">Empty folder</div>
                 )}
                 {fileTree.map(node => (
                   <FileTreeItem
@@ -566,22 +535,18 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
       {/* ── Tasks Section ── */}
       <div className="mt-0 flex-1 overflow-y-auto custom-scrollbar flex flex-col">
         <div
-          className="flex items-center justify-between px-2 py-1.5 cursor-pointer group shrink-0 transition-colors"
+          className="flex items-center justify-between px-2 py-2 cursor-pointer group shrink-0 transition-colors hover:bg-white/[0.03] border-b border-white/[0.06]"
           onClick={() => setTasksExpanded(p => !p)}
-          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(26,22,18,0.03)')}
-          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-          style={{ borderBottom: '1px solid var(--border-1)' }}
         >
           <div className="flex items-center gap-1.5">
-            {tasksExpanded ? <ChevronDown size={11} style={{ color: '#9B948A' }} /> : <ChevronRight size={11} style={{ color: '#9B948A' }} />}
-            {sectionLabel('Tasks')}
-            <span style={{ fontSize: 9, color: '#C4BDB1', fontFamily: '"JetBrains Mono", monospace' }}>({filteredTasks.length})</span>
+            {tasksExpanded ? <ChevronDown size={11} className="text-zinc-500" /> : <ChevronRight size={11} className="text-zinc-500" />}
+            <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500">Tasks</span>
+            <span className="text-[9px] text-zinc-600 font-mono">({filteredTasks.length})</span>
           </div>
           {isAdmin && (
             <button
               onClick={e => { e.stopPropagation(); onNewTask(); }}
-              className="p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-              style={{ color: '#BF4A2A' }}
+              className="p-1 opacity-0 group-hover:opacity-100 transition-opacity text-emerald-400"
             >
               <Plus size={12} />
             </button>
@@ -590,18 +555,17 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
 
         {tasksExpanded && (
           <>
-            <div className="flex gap-0 px-3 py-0 shrink-0" style={{ borderBottom: '1px solid var(--border-1)' }}>
+            <div className="flex gap-0 px-3 py-0 shrink-0 border-b border-white/[0.06]">
               {(['ALL', 'TODO', 'DONE'] as const).map(f => (
-                <button key={f} onClick={() => setTaskFilter(f)}
-                  className="px-3 py-2 transition-colors"
+                <button
+                  key={f}
+                  onClick={() => setTaskFilter(f)}
+                  className="px-3 py-2.5 transition-colors font-mono text-[10px] tracking-[0.20em] uppercase -mb-px"
                   style={{
-                    fontSize: 10, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
-                    color: taskFilter === f ? '#BF4A2A' : '#C4BDB1',
-                    borderBottom: `2px solid ${taskFilter === f ? '#BF4A2A' : 'transparent'}`,
-                    marginBottom: -1,
+                    color: taskFilter === f ? '#34d399' : '#71717a',
+                    borderBottom: `1px solid ${taskFilter === f ? '#34d399' : 'transparent'}`,
                   }}
-                  onMouseEnter={e => { if (taskFilter !== f) (e.currentTarget as HTMLElement).style.color = '#6B645C'; }}
-                  onMouseLeave={e => { if (taskFilter !== f) (e.currentTarget as HTMLElement).style.color = '#C4BDB1'; }}>
+                >
                   {f}
                 </button>
               ))}
@@ -617,11 +581,10 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                     const isInProgress = task.status === 'IN_PROGRESS';
                     const isDone = task.status === 'DONE';
 
-                    const statusColor = isDone ? '#4A6B3A' : isInProgress ? '#BF4A2A' : '#9B948A';
-                    const statusBg = isDone ? '#4A6B3A' : isInProgress ? '#BF4A2A' : 'transparent';
-                    const statusBorder = isDone || isInProgress ? 'none' : '1.5px solid #9B948A';
+                    const statusBg = isDone ? '#34d399' : isInProgress ? '#fbbf24' : 'transparent';
+                    const statusBorder = isDone || isInProgress ? 'none' : '1.5px solid #52525b';
 
-                    const priorityColors: Record<string, string> = { HIGH: '#B53C2A', MED: '#C99A2E', LOW: '#9B948A' };
+                    const priorityColors: Record<string, string> = { HIGH: '#f87171', MED: '#fbbf24', LOW: '#71717a' };
 
                     return (
                       <motion.div
@@ -630,23 +593,23 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                         initial={{ opacity: 0, y: -4 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 4 }}
-                        transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                        className="group transition-colors cursor-pointer"
-                        style={{ borderBottom: '1px solid rgba(26,22,18,0.05)' }}
-                        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(26,22,18,0.04)')}
-                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                        className="group transition-colors cursor-pointer hover:bg-white/[0.03] border-b border-white/[0.04]"
                       >
-                        {/* Main row */}
                         <div className="flex items-center gap-3 px-4 py-3">
-                          {/* Status indicator */}
-                          <div className="shrink-0" style={{
-                            width: 8, height: 8, borderRadius: '50%',
-                            background: statusBg,
-                            border: statusBorder,
-                            boxShadow: isInProgress ? '0 0 6px rgba(191,74,42,0.5)' : isDone ? '0 0 6px rgba(74,107,58,0.3)' : 'none',
-                          }} />
+                          <div
+                            className="shrink-0 w-2 h-2 rounded-full"
+                            style={{
+                              background: statusBg,
+                              border: statusBorder,
+                              boxShadow: isInProgress
+                                ? '0 0 8px rgba(251,191,36,0.6)'
+                                : isDone
+                                  ? '0 0 8px rgba(52,211,153,0.5)'
+                                  : 'none',
+                            }}
+                          />
 
-                          {/* Title */}
                           <button
                             onClick={() => setDetailTask(task)}
                             className="flex-1 text-left truncate transition-colors"
@@ -654,7 +617,7 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                               fontSize: 13,
                               fontFamily: '"Inter", sans-serif',
                               fontWeight: isDone ? 400 : 500,
-                              color: isDone ? '#9B948A' : '#1A1612',
+                              color: isDone ? '#71717a' : '#f4f4f5',
                               textDecoration: isDone ? 'line-through' : 'none',
                               lineHeight: 1.4,
                             }}
@@ -662,19 +625,20 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                             {task.title}
                           </button>
 
-                          {/* Right meta */}
                           <div className="flex items-center gap-2 shrink-0">
                             {task.priority && (
-                              <span style={{
-                                width: 6, height: 6, borderRadius: '50%',
-                                background: priorityColors[task.priority] || '#9B948A',
-                                display: 'inline-block', flexShrink: 0,
-                              }} title={task.priority} />
+                              <span
+                                className="w-1.5 h-1.5 rounded-full inline-block shrink-0"
+                                style={{ background: priorityColors[task.priority] || '#71717a' }}
+                                title={task.priority}
+                              />
                             )}
                             {assignee && (
-                              <div className="w-5 h-5 rounded-full overflow-hidden flex items-center justify-center shrink-0"
-                                style={{ background: 'rgba(26,22,18,0.10)', border: '1px solid rgba(26,22,18,0.13)', fontSize: 9, color: '#6B645C', fontFamily: '"Fraunces", serif', fontWeight: 700 }}
-                                title={assignee.full_name}>
+                              <div
+                                className="w-5 h-5 overflow-hidden flex items-center justify-center shrink-0 border border-white/10 bg-white/[0.04] text-[9px] text-zinc-300"
+                                style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic' }}
+                                title={assignee.full_name}
+                              >
                                 {assignee.avatar_url
                                   ? <img src={assignee.avatar_url} alt={assignee.full_name} className="w-full h-full object-cover" />
                                   : assignee.full_name[0]}
@@ -683,8 +647,7 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                             {isAdmin && isInProgress && task.original_zip_path && (
                               <button
                                 onClick={e => { e.stopPropagation(); setDiffMode('live'); setDiffTask(task); }}
-                                className="opacity-0 group-hover:opacity-100 shrink-0 transition-all"
-                                style={{ fontSize: 9, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#BF4A2A', border: '1px solid rgba(191,74,42,0.3)', padding: '2px 6px', borderRadius: 2 }}
+                                className="opacity-0 group-hover:opacity-100 shrink-0 transition-all text-[9px] font-mono tracking-[0.20em] uppercase text-emerald-300 border border-emerald-400/40 px-2 py-0.5"
                               >
                                 Live
                               </button>
@@ -692,68 +655,80 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                           </div>
                         </div>
 
-                        {/* Description */}
                         {task.description && (
                           <div className="px-4 pb-2 pl-[52px]">
-                            <span className="line-clamp-1" style={{ fontSize: 11, color: '#9B948A', fontFamily: '"Inter", sans-serif', lineHeight: 1.4 }}>{task.description}</span>
+                            <span className="line-clamp-1 text-[11px] text-zinc-500 leading-relaxed">{task.description}</span>
                           </div>
                         )}
 
-                        {/* Progress bar */}
                         {isInProgress && task.original_zip_path && (
                           <div className="px-4 pb-2.5 pl-[52px] flex items-center gap-2">
-                            <div className="flex-1 overflow-hidden" style={{ height: 2, background: 'rgba(26,22,18,0.08)', borderRadius: 1 }}>
-                              <div className="h-full transition-all duration-700"
-                                style={{ width: `${linkedTaskId === task.id ? localProgress : (task.progress ?? 0)}%`, background: '#BF4A2A', borderRadius: 1 }} />
+                            <div className="flex-1 overflow-hidden h-px bg-white/[0.08]">
+                              <div
+                                className="h-full transition-all duration-700"
+                                style={{
+                                  width: `${linkedTaskId === task.id ? localProgress : (task.progress ?? 0)}%`,
+                                  background: 'linear-gradient(90deg, #34d399, #8b5cf6)',
+                                  boxShadow: '0 0 6px rgba(52,211,153,0.6)',
+                                }}
+                              />
                             </div>
-                            <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#9B948A', minWidth: 26, textAlign: 'right' }}>
+                            <span className="text-[9px] font-mono text-zinc-500 min-w-[26px] text-right">
                               {linkedTaskId === task.id ? localProgress : (task.progress ?? 0)}%
                             </span>
                           </div>
                         )}
 
-                        {/* Action row */}
                         <div className="flex items-center gap-2 px-4 pb-2.5 pl-[52px] opacity-0 group-hover:opacity-100 transition-opacity flex-wrap">
                           {isAdmin && (
-                            <select value={task.assignee_id || ''} onChange={e => updateTask(task.id, { assignee_id: e.target.value || null })}
-                              className="outline-none"
-                              style={{ background: '#E8E2D6', border: '1px solid rgba(26,22,18,0.11)', borderRadius: 3, fontSize: 10, fontFamily: '"Inter", sans-serif', color: '#6B645C', padding: '3px 6px' }}>
+                            <select
+                              value={task.assignee_id || ''}
+                              onChange={e => updateTask(task.id, { assignee_id: e.target.value || null })}
+                              className="outline-none bg-zinc-900 border border-white/10 text-[10px] text-zinc-300 px-2 py-1"
+                            >
                               <option value="">Unassigned</option>
                               {users.map(u => <option key={u.id} value={u.id}>{u.full_name}</option>)}
                             </select>
                           )}
                           {isAdmin && (
-                            <select value={task.status} onChange={e => updateTask(task.id, { status: e.target.value })}
-                              className="outline-none"
-                              style={{ background: '#E8E2D6', border: '1px solid rgba(26,22,18,0.11)', borderRadius: 3, fontSize: 10, fontFamily: '"Inter", sans-serif', color: '#6B645C', padding: '3px 6px' }}>
+                            <select
+                              value={task.status}
+                              onChange={e => updateTask(task.id, { status: e.target.value })}
+                              className="outline-none bg-zinc-900 border border-white/10 text-[10px] text-zinc-300 px-2 py-1"
+                            >
                               <option value="TODO">Todo</option>
                               <option value="IN_PROGRESS">In Progress</option>
                               <option value="DONE">Done</option>
                             </select>
                           )}
                           {!isAdmin && isUnassigned && !isDone && (
-                            <button onClick={() => updateTask(task.id, { assignee_id: currentUserId, status: 'IN_PROGRESS' })}
-                              style={{ fontSize: 10, fontFamily: '"Inter", sans-serif', fontWeight: 600, color: '#BF4A2A', border: '1px solid rgba(191,74,42,0.3)', padding: '3px 10px', borderRadius: 3 }}>
+                            <button
+                              onClick={() => updateTask(task.id, { assignee_id: currentUserId, status: 'IN_PROGRESS' })}
+                              className="text-[10px] font-mono tracking-[0.20em] uppercase text-emerald-300 border border-emerald-400/40 px-2.5 py-1 hover:bg-emerald-500/10 transition-colors"
+                            >
                               Take
                             </button>
                           )}
                           {!isAdmin && isMine && isInProgress && (
-                            <button onClick={() => updateTask(task.id, { status: 'DONE' })}
-                              style={{ fontSize: 10, fontFamily: '"Inter", sans-serif', fontWeight: 600, color: '#4A6B3A', border: '1px solid rgba(74,107,58,0.3)', padding: '3px 10px', borderRadius: 3 }}>
+                            <button
+                              onClick={() => updateTask(task.id, { status: 'DONE' })}
+                              className="text-[10px] font-mono tracking-[0.20em] uppercase text-emerald-300 border border-emerald-400/40 px-2.5 py-1 hover:bg-emerald-500/10 transition-colors"
+                            >
                               Done
                             </button>
                           )}
                           {!isAdmin && isMine && task.status === 'TODO' && (
-                            <button onClick={() => updateTask(task.id, { status: 'IN_PROGRESS' })}
-                              style={{ fontSize: 10, fontFamily: '"Inter", sans-serif', fontWeight: 600, color: '#BF4A2A', border: '1px solid rgba(191,74,42,0.3)', padding: '3px 10px', borderRadius: 3 }}>
+                            <button
+                              onClick={() => updateTask(task.id, { status: 'IN_PROGRESS' })}
+                              className="text-[10px] font-mono tracking-[0.20em] uppercase text-amber-300 border border-amber-400/40 px-2.5 py-1 hover:bg-amber-500/10 transition-colors"
+                            >
                               Start
                             </button>
                           )}
                           {isAdmin && isDone && (
-                            <button onClick={() => archiveTask(task.id)}
-                              style={{ fontSize: 10, fontFamily: '"Inter", sans-serif', fontWeight: 600, color: '#9B948A', border: '1px solid rgba(26,22,18,0.08)', padding: '3px 10px', borderRadius: 3, transition: 'color 0.15s' }}
-                              onMouseEnter={e => (e.currentTarget.style.color = '#B53C2A')}
-                              onMouseLeave={e => (e.currentTarget.style.color = '#9B948A')}
+                            <button
+                              onClick={() => archiveTask(task.id)}
+                              className="text-[10px] font-mono tracking-[0.20em] uppercase text-zinc-500 border border-white/10 px-2.5 py-1 hover:text-red-400 hover:border-red-400/30 transition-colors"
                             >
                               Clear
                             </button>
@@ -765,7 +740,7 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
                 </AnimatePresence>
               </LayoutGroup>
               {filteredTasks.length === 0 && (
-                <div className="px-4 py-8 text-center" style={{ fontSize: 11, color: '#9B948A', fontFamily: '"Inter", sans-serif' }}>No tasks found</div>
+                <div className="px-4 py-8 text-center text-[11px] text-zinc-600 italic font-display">No tasks found</div>
               )}
             </div>
           </>
@@ -776,7 +751,7 @@ export default function Explorer({ onNewTask }: { onNewTask: () => void }) {
         <TaskDetail
           task={detailTask}
           onClose={() => setDetailTask(null)}
-          onViewDiff={t => { setDetailTask(null); }}
+          onViewDiff={() => { setDetailTask(null); }}
         />
       )}
     </div>

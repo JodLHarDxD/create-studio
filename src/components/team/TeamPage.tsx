@@ -1,10 +1,9 @@
-﻿import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
-import { Github, Zap, CheckCircle2, Clock, Circle, Crown, User } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Github, Zap, Crown } from 'lucide-react';
 
 export default function TeamPage() {
-  const { users, tasks, currentUserId, loginState } = useWorkspace();
+  const { users, tasks, currentUserId } = useWorkspace();
 
   const members = useMemo(() => {
     return users
@@ -25,80 +24,87 @@ export default function TeamPage() {
   const admins      = users.filter(u => u.role === 'ADMIN').length;
 
   return (
-    <div className="flex-1 overflow-auto custom-scrollbar" style={{ background: '#EFEAE0', color: '#1A1612' }}>
+    <div className="flex-1 overflow-auto custom-scrollbar bg-zinc-950/40 text-zinc-200">
 
       {/* ── Header ── */}
-      <div className="relative overflow-hidden" style={{ borderBottom: '1px solid rgba(26,22,18,0.08)' }}>
-        {/* Background grid */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'linear-gradient(rgba(191,74,42,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(191,74,42,0.03) 1px, transparent 1px)',
-          backgroundSize: '48px 48px',
-        }} />
+      <div className="relative overflow-hidden border-b border-white/[0.06]">
+        <div className="absolute inset-0 grid-overlay" />
 
-        <div className="relative px-12 py-10 flex items-end justify-between gap-8">
+        <div className="relative px-12 py-12 flex items-end justify-between gap-8">
           <div>
-            <div style={{ fontSize: 8, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: '#BF4A2A', marginBottom: 10 }}>
+            <div className="font-mono text-[10px] tracking-[0.30em] uppercase text-emerald-400 mb-3 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Internal Directory
             </div>
-            <h1 style={{ fontFamily: '"Fraunces", serif', fontWeight: 800, fontSize: 52, letterSpacing: '-0.03em', lineHeight: 0.9, color: '#1A1612' }}>
-              THE TEAM
+            <h1
+              className="font-display italic text-zinc-100"
+              style={{ fontSize: 64, fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 0.95 }}
+            >
+              The Team.
             </h1>
-            <div style={{ marginTop: 14, fontSize: 11, fontFamily: '"JetBrains Mono", monospace', color: '#C4BDB1', letterSpacing: '0.08em' }}>
+            <div className="mt-4 text-[11px] font-mono text-zinc-500 tracking-[0.10em]">
               {members.length} operative{members.length !== 1 ? 's' : ''} · {admins} admin{admins !== 1 ? 's' : ''}
             </div>
           </div>
 
           {/* Global stats */}
-          <div className="flex gap-px shrink-0" style={{ border: '1px solid rgba(26,22,18,0.08)' }}>
+          <div className="flex shrink-0 border border-white/[0.06]">
             {[
               { label: 'Total Tasks', value: tasks.length },
-              { label: 'Delivered', value: totalDone, amber: true },
-              { label: 'In Flight', value: totalActive },
-            ].map(({ label, value, amber }) => (
-              <div key={label} className="px-6 py-4 flex flex-col gap-1" style={{ background: '#EFEAE0', borderRight: '1px solid rgba(26,22,18,0.05)' }}>
-                <div style={{ fontSize: 7, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#C4BDB1' }}>{label}</div>
-                <div style={{ fontFamily: '"Fraunces", serif', fontWeight: 800, fontSize: 28, letterSpacing: '-0.02em', color: amber ? '#BF4A2A' : '#1A1612', lineHeight: 1 }}>{value}</div>
+              { label: 'Delivered',  value: totalDone, accent: true },
+              { label: 'In Flight',  value: totalActive },
+            ].map(({ label, value, accent }) => (
+              <div
+                key={label}
+                className="px-6 py-4 flex flex-col gap-1 bg-zinc-900/50 backdrop-blur-md border-r border-white/[0.06] last:border-r-0"
+              >
+                <div className="font-mono text-[9px] tracking-[0.30em] uppercase text-zinc-500">{label}</div>
+                <div
+                  className="font-display italic"
+                  style={{
+                    fontWeight: 400, fontSize: 32, letterSpacing: '-0.02em',
+                    color: accent ? '#34d399' : '#f4f4f5',
+                    lineHeight: 1,
+                  }}
+                >
+                  {value}
+                </div>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* ── Column headers ── */}
-      <div className="px-12 py-3 flex items-center gap-4" style={{ borderBottom: '1px solid rgba(26,22,18,0.05)', background: '#F4EFE6' }}>
+      {/* Column headers */}
+      <div className="px-12 py-3 flex items-center gap-4 border-b border-white/[0.04] bg-zinc-950/60">
         <div style={{ width: 32, flexShrink: 0 }} />
-        <div className="flex-1" style={{ fontSize: 7, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#C4BDB1' }}>Operative</div>
-        <div className="hidden md:block" style={{ width: 72, textAlign: 'center', fontSize: 7, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#C4BDB1' }}>Done</div>
-        <div className="hidden md:block" style={{ width: 72, textAlign: 'center', fontSize: 7, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#C4BDB1' }}>Active</div>
-        <div className="hidden lg:block" style={{ width: 72, textAlign: 'center', fontSize: 7, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#C4BDB1' }}>Assigned</div>
-        <div style={{ width: 120, fontSize: 7, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#C4BDB1' }}>Completion</div>
-        <div style={{ width: 60, textAlign: 'right', fontSize: 7, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#C4BDB1' }}>Score</div>
+        <div className="flex-1 font-mono text-[9px] tracking-[0.25em] uppercase text-zinc-500">Operative</div>
+        <div className="hidden md:block w-[72px] text-center font-mono text-[9px] tracking-[0.25em] uppercase text-zinc-500">Done</div>
+        <div className="hidden md:block w-[72px] text-center font-mono text-[9px] tracking-[0.25em] uppercase text-zinc-500">Active</div>
+        <div className="hidden lg:block w-[72px] text-center font-mono text-[9px] tracking-[0.25em] uppercase text-zinc-500">Assigned</div>
+        <div className="w-[120px] font-mono text-[9px] tracking-[0.25em] uppercase text-zinc-500">Completion</div>
+        <div className="w-[60px] text-right font-mono text-[9px] tracking-[0.25em] uppercase text-zinc-500">Score</div>
       </div>
 
-      {/* ── Member rows ── */}
+      {/* Member rows */}
       <div>
         {members.map((member, idx) => {
-          const isMe     = member.id === currentUserId;
+          const isMe = member.id === currentUserId;
           const isOnline = member.active > 0;
-          const isAdmin  = member.role === 'ADMIN';
+          const isAdmin = member.role === 'ADMIN';
 
           return (
             <div
               key={member.id}
-              className="px-12 py-5 flex items-center gap-4 group transition-colors duration-150"
-              style={{
-                borderBottom: '1px solid rgba(26,22,18,0.04)',
-                background: isMe ? 'rgba(191,74,42,0.02)' : 'transparent',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.background = isMe ? 'rgba(191,74,42,0.04)' : 'rgba(26,22,18,0.02)')}
-              onMouseLeave={e => (e.currentTarget.style.background = isMe ? 'rgba(191,74,42,0.02)' : 'transparent')}
+              className="px-12 py-5 flex items-center gap-4 group transition-colors duration-200 border-b border-white/[0.04] hover:bg-white/[0.02]"
+              style={{ background: isMe ? 'rgba(52,211,153,0.025)' : 'transparent' }}
             >
               {/* Rank */}
-              <div style={{ width: 32, flexShrink: 0, textAlign: 'center' }}>
+              <div style={{ width: 32, flexShrink: 0 }} className="text-center">
                 {idx === 0 ? (
-                  <Crown size={14} style={{ color: '#BF4A2A', margin: '0 auto' }} />
+                  <Crown size={15} className="text-emerald-400 mx-auto" strokeWidth={1.5} />
                 ) : (
-                  <span style={{ fontSize: 10, fontFamily: '"JetBrains Mono", monospace', color: '#C4BDB1' }}>
+                  <span className="font-mono text-[11px] text-zinc-600 tracking-wide">
                     {String(idx + 1).padStart(2, '0')}
                   </span>
                 )}
@@ -106,73 +112,67 @@ export default function TeamPage() {
 
               {/* Avatar + info */}
               <div className="flex items-center gap-4 flex-1 min-w-0">
-                {/* Avatar */}
                 <div className="relative shrink-0">
-                  <div className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center"
-                    style={{
-                      background: 'rgba(191,74,42,0.08)',
-                      border: isMe ? '2px solid rgba(191,74,42,0.5)' : '1px solid rgba(26,22,18,0.08)',
-                    }}>
+                  <div
+                    className="w-11 h-11 overflow-hidden flex items-center justify-center bg-emerald-500/[0.08]"
+                    style={{ border: isMe ? '2px solid rgba(52,211,153,0.55)' : '1px solid rgba(255,255,255,0.08)' }}
+                  >
                     {member.avatar_url
                       ? <img src={member.avatar_url} alt={member.full_name} className="w-full h-full object-cover" />
-                      : <span style={{ fontFamily: '"Fraunces", serif', fontWeight: 800, fontSize: 16, color: '#BF4A2A' }}>
+                      : <span className="font-display italic text-emerald-300" style={{ fontSize: 18 }}>
                           {member.full_name[0]?.toUpperCase()}
                         </span>
                     }
                   </div>
-                  {/* Online dot */}
-                  <div className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full"
-                    style={{
-                      background: isOnline ? '#4A6B3A' : '#C4BDB1',
-                      border: '2px solid #EFEAE0',
-                    }}
-                    title={isOnline ? 'Active — has tasks in progress' : 'Idle'}
+                  <div
+                    className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-zinc-950"
+                    style={{ background: isOnline ? '#34d399' : '#52525b', boxShadow: isOnline ? '0 0 6px rgba(52,211,153,0.6)' : 'none' }}
+                    title={isOnline ? 'Active' : 'Idle'}
                   />
                 </div>
 
-                {/* Name + meta */}
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span style={{ fontFamily: '"Fraunces", serif', fontWeight: 800, fontSize: 14, color: '#1A1612', letterSpacing: '-0.01em' }}>
+                    <span className="font-display italic text-zinc-100" style={{ fontSize: 17, fontWeight: 400, letterSpacing: '-0.01em' }}>
                       {member.full_name}
                     </span>
                     {isMe && (
-                      <span style={{ fontSize: 7, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#BF4A2A', border: '1px solid rgba(191,74,42,0.3)', padding: '1px 5px' }}>
+                      <span className="text-[8px] font-mono tracking-[0.25em] uppercase text-emerald-300 border border-emerald-400/30 px-1.5 py-0.5">
                         you
                       </span>
                     )}
-                    <span style={{
-                      fontSize: 7, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.2em',
-                      textTransform: 'uppercase', padding: '1px 6px',
-                      color: isAdmin ? '#BF4A2A' : '#9B948A',
-                      border: isAdmin ? '1px solid rgba(191,74,42,0.25)' : '1px solid rgba(26,22,18,0.08)',
-                      background: isAdmin ? 'rgba(191,74,42,0.05)' : 'transparent',
-                    }}>
+                    <span
+                      className="text-[8px] font-mono tracking-[0.25em] uppercase px-2 py-0.5 border"
+                      style={{
+                        color: isAdmin ? '#34d399' : '#71717a',
+                        borderColor: isAdmin ? 'rgba(52,211,153,0.30)' : 'rgba(255,255,255,0.10)',
+                        background: isAdmin ? 'rgba(52,211,153,0.04)' : 'transparent',
+                      }}
+                    >
                       {member.role}
                     </span>
                     {isOnline && (
-                      <span className="flex items-center gap-1" style={{ fontSize: 7, fontFamily: '"JetBrains Mono", monospace', color: '#4A6B3A', letterSpacing: '0.1em' }}>
-                        <Zap size={8} /> ACTIVE
+                      <span className="flex items-center gap-1 text-[8px] font-mono tracking-[0.15em] text-emerald-400">
+                        <Zap size={8} strokeWidth={2} /> ACTIVE
                       </span>
                     )}
                   </div>
 
                   <div className="flex items-center gap-3 mt-1 flex-wrap">
-                    <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#C4BDB1' }}>
-                      {member.email}
-                    </span>
+                    <span className="text-[10px] font-mono text-zinc-500">{member.email}</span>
                     {member.bio && (
-                      <span style={{ fontSize: 9, fontFamily: '"Inter", sans-serif', color: '#9B948A' }} className="truncate max-w-[200px]">
+                      <span className="text-[10px] text-zinc-500 truncate max-w-[200px] italic">
                         · {member.bio}
                       </span>
                     )}
                     {member.github_url && (
-                      <a href={member.github_url} target="_blank" rel="noopener noreferrer"
-                        className="flex items-center gap-1 transition-colors"
-                        style={{ fontSize: 9, color: '#C4BDB1' }}
+                      <a
+                        href={member.github_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1 text-[10px] text-zinc-500 hover:text-emerald-400 transition-colors"
                         onClick={e => e.stopPropagation()}
-                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#1A1612'}
-                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#C4BDB1'}>
+                      >
                         <Github size={10} /> github
                       </a>
                     )}
@@ -180,49 +180,81 @@ export default function TeamPage() {
                 </div>
               </div>
 
-              {/* Done */}
-              <div className="hidden md:flex flex-col items-center shrink-0" style={{ width: 72 }}>
-                <span style={{ fontFamily: '"Fraunces", serif', fontWeight: 800, fontSize: 22, letterSpacing: '-0.02em', color: member.done > 0 ? '#4A6B3A' : '#C4BDB1', lineHeight: 1 }}>
+              <div className="hidden md:flex flex-col items-center shrink-0 w-[72px]">
+                <span
+                  className="font-display italic"
+                  style={{
+                    fontSize: 26, fontWeight: 400, letterSpacing: '-0.02em',
+                    color: member.done > 0 ? '#34d399' : '#52525b', lineHeight: 1,
+                  }}
+                >
                   {member.done}
                 </span>
-                <span style={{ fontSize: 7, fontFamily: '"JetBrains Mono", monospace', color: '#C4BDB1', letterSpacing: '0.12em', marginTop: 2 }}>DONE</span>
+                <span className="font-mono text-[8px] text-zinc-600 tracking-[0.20em] uppercase mt-1">Done</span>
               </div>
 
-              {/* Active */}
-              <div className="hidden md:flex flex-col items-center shrink-0" style={{ width: 72 }}>
-                <span style={{ fontFamily: '"Fraunces", serif', fontWeight: 800, fontSize: 22, letterSpacing: '-0.02em', color: member.active > 0 ? '#60a5fa' : '#C4BDB1', lineHeight: 1 }}>
+              <div className="hidden md:flex flex-col items-center shrink-0 w-[72px]">
+                <span
+                  className="font-display italic"
+                  style={{
+                    fontSize: 26, fontWeight: 400, letterSpacing: '-0.02em',
+                    color: member.active > 0 ? '#8b5cf6' : '#52525b', lineHeight: 1,
+                  }}
+                >
                   {member.active}
                 </span>
-                <span style={{ fontSize: 7, fontFamily: '"JetBrains Mono", monospace', color: '#C4BDB1', letterSpacing: '0.12em', marginTop: 2 }}>IN FLIGHT</span>
+                <span className="font-mono text-[8px] text-zinc-600 tracking-[0.20em] uppercase mt-1">In Flight</span>
               </div>
 
-              {/* Assigned */}
-              <div className="hidden lg:flex flex-col items-center shrink-0" style={{ width: 72 }}>
-                <span style={{ fontFamily: '"Fraunces", serif', fontWeight: 800, fontSize: 22, letterSpacing: '-0.02em', color: '#C4BDB1', lineHeight: 1 }}>
+              <div className="hidden lg:flex flex-col items-center shrink-0 w-[72px]">
+                <span
+                  className="font-display italic text-zinc-500"
+                  style={{ fontSize: 26, fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1 }}
+                >
                   {member.assigned}
                 </span>
-                <span style={{ fontSize: 7, fontFamily: '"JetBrains Mono", monospace', color: '#C4BDB1', letterSpacing: '0.12em', marginTop: 2 }}>TOTAL</span>
+                <span className="font-mono text-[8px] text-zinc-600 tracking-[0.20em] uppercase mt-1">Total</span>
               </div>
 
-              {/* Completion bar */}
-              <div className="shrink-0" style={{ width: 120 }}>
+              <div className="shrink-0 w-[120px]">
                 <div className="flex items-center justify-between mb-1.5">
-                  <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: member.rate > 0 ? '#BF4A2A' : '#C4BDB1' }}>
+                  <span
+                    className="font-mono text-[10px]"
+                    style={{ color: member.rate > 0 ? '#34d399' : '#52525b' }}
+                  >
                     {member.rate}%
                   </span>
                 </div>
-                <div className="w-full h-px" style={{ background: 'rgba(26,22,18,0.08)' }}>
-                  <div style={{ width: `${member.rate}%`, height: '100%', background: member.rate >= 80 ? '#4A6B3A' : member.rate >= 40 ? '#BF4A2A' : '#C4BDB1', transition: 'width 0.6s ease' }} />
+                <div className="w-full h-px bg-white/[0.08]">
+                  <div
+                    style={{
+                      width: `${member.rate}%`,
+                      height: '100%',
+                      background:
+                        member.rate >= 80
+                          ? 'linear-gradient(90deg, #34d399, #8b5cf6)'
+                          : member.rate >= 40
+                            ? '#34d399'
+                            : '#52525b',
+                      transition: 'width 0.6s ease',
+                      boxShadow: member.rate >= 40 ? '0 0 6px rgba(52,211,153,0.5)' : 'none',
+                    }}
+                  />
                 </div>
               </div>
 
-              {/* Score */}
-              <div className="shrink-0 text-right" style={{ width: 60 }}>
-                <span style={{
-                  fontFamily: '"Fraunces", serif', fontWeight: 800, fontSize: 18,
-                  letterSpacing: '-0.02em', lineHeight: 1,
-                  color: idx === 0 ? '#BF4A2A' : idx === 1 ? '#a0a0a0' : idx === 2 ? '#8b7355' : '#C4BDB1',
-                }}>
+              <div className="shrink-0 text-right w-[60px]">
+                <span
+                  className="font-display italic"
+                  style={{
+                    fontWeight: 400, fontSize: 22, letterSpacing: '-0.02em', lineHeight: 1,
+                    color:
+                      idx === 0 ? '#34d399'
+                      : idx === 1 ? '#d4d4d8'
+                      : idx === 2 ? '#a78bfa'
+                      : '#52525b',
+                  }}
+                >
                   {member.score}
                 </span>
               </div>
@@ -231,23 +263,23 @@ export default function TeamPage() {
         })}
 
         {members.length === 0 && (
-          <div className="py-24 text-center" style={{ fontSize: 10, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C4BDB1' }}>
+          <div className="py-24 text-center font-mono text-[11px] tracking-[0.25em] uppercase text-zinc-600">
             No team members yet.
           </div>
         )}
       </div>
 
-      {/* ── Score legend ── */}
-      <div className="px-12 py-6 flex items-center gap-8" style={{ borderTop: '1px solid rgba(26,22,18,0.05)' }}>
-        <span style={{ fontSize: 7, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#C4BDB1' }}>Score formula</span>
+      {/* Score legend */}
+      <div className="px-12 py-6 flex items-center gap-8 border-t border-white/[0.04] bg-zinc-950/40">
+        <span className="font-mono text-[9px] tracking-[0.30em] uppercase text-zinc-500">Score formula</span>
         {[
-          { label: 'Task done', value: '×10' },
-          { label: 'In progress', value: '×4' },
-          { label: 'Completion %', value: '×1' },
+          { label: 'Task done',     value: '×10' },
+          { label: 'In progress',   value: '×4'  },
+          { label: 'Completion %',  value: '×1'  },
         ].map(({ label, value }) => (
           <div key={label} className="flex items-center gap-2">
-            <span style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', color: '#BF4A2A' }}>{value}</span>
-            <span style={{ fontSize: 8, fontFamily: '"Inter", sans-serif', color: '#C4BDB1' }}>{label}</span>
+            <span className="font-mono text-[10px] text-emerald-400">{value}</span>
+            <span className="text-[10px] text-zinc-500">{label}</span>
           </div>
         ))}
       </div>

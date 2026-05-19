@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { supabase } from '@/lib/supabaseClient';
 import { User, Activity, Github, Trophy, CheckCircle2, Edit3, Save, X, Loader2, Camera } from 'lucide-react';
@@ -79,111 +79,105 @@ export default function Profile() {
 
   const inputStyle: React.CSSProperties = {
     width: '100%', background: 'transparent', outline: 'none',
-    borderBottom: '1px solid rgba(26,22,18,0.13)', padding: '8px 0',
-    color: '#1A1612', fontFamily: '"Inter", sans-serif',
+    borderBottom: '1px solid rgba(255,255,255,0.12)', padding: '8px 0',
+    color: '#f4f4f5', fontFamily: '"Inter", sans-serif',
   };
 
   return (
-    <div className="flex-1 overflow-auto custom-scrollbar pb-12" style={{ background: '#EFEAE0' }}>
+    <div className="flex-1 overflow-auto custom-scrollbar pb-12 bg-zinc-950/40">
       <div className="max-w-4xl mx-auto p-10">
 
-        {/* Header row */}
-        <div className="flex items-start gap-8 pb-12 mb-12" style={{ borderBottom: '1px solid var(--border-1)' }}>
+        {/* Header */}
+        <div className="flex items-start gap-8 pb-10 mb-12 border-b border-white/[0.06]">
 
-          {/* Avatar — clickable upload */}
+          {/* Avatar */}
           <div className="relative shrink-0" style={{ width: 96, height: 96 }}>
-            {/* Avatar image / placeholder */}
             <div
-              className="w-24 h-24 rounded-full flex items-center justify-center overflow-hidden cursor-pointer"
-              style={{ background: 'rgba(191,74,42,0.06)', border: '2px solid rgba(191,74,42,0.35)' }}
+              className="w-24 h-24 flex items-center justify-center overflow-hidden cursor-pointer bg-emerald-500/[0.08] border border-emerald-400/40"
               onClick={() => loginState !== 'guest' && avatarInputRef.current?.click()}
               title={loginState === 'guest' ? 'Login to upload avatar' : 'Change profile picture'}
             >
               {profile?.avatar_url ? (
                 <img src={profile.avatar_url} alt="avatar" className="w-full h-full object-cover" />
               ) : (
-                <User size={36} style={{ color: '#BF4A2A', opacity: 0.4 }} />
+                <User size={36} className="text-emerald-400/60" strokeWidth={1.5} />
               )}
             </div>
 
-            {/* Always-visible camera badge — bottom right */}
             {loginState !== 'guest' && (
               <button
                 onClick={() => avatarInputRef.current?.click()}
-                className="absolute bottom-0 right-0 flex items-center justify-center rounded-full transition-all"
-                style={{
-                  width: 28, height: 28,
-                  background: '#BF4A2A',
-                  border: '2px solid #EFEAE0',
-                  color: '#F4EFE6',
-                  cursor: 'pointer',
-                }}
+                className="absolute bottom-0 right-0 flex items-center justify-center transition-all w-7 h-7 bg-emerald-400 border-2 border-zinc-950 text-zinc-950 hover:bg-emerald-300"
                 title="Change profile picture"
               >
-                {uploadingAvatar
-                  ? <Loader2 size={13} className="animate-spin" />
-                  : <Camera size={13} />}
+                {uploadingAvatar ? <Loader2 size={13} className="animate-spin" /> : <Camera size={13} strokeWidth={1.8} />}
               </button>
             )}
 
-            <input
-              ref={avatarInputRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleAvatarChange}
-            />
+            <input ref={avatarInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
           </div>
 
           {/* Info / edit form */}
           <div className="flex-1 min-w-0">
             {isEditing ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <div className="flex flex-col gap-5">
                 {[
-                  { label: 'Name', key: 'full_name' as const, type: 'input', style: { fontSize: 20, fontFamily: '"Fraunces", serif', fontWeight: 800, letterSpacing: '-0.02em' } },
+                  { label: 'Name', key: 'full_name' as const, type: 'input', extra: { fontSize: 24, fontFamily: '"Playfair Display", serif', fontWeight: 400, letterSpacing: '-0.02em', fontStyle: 'italic' as const } },
                   { label: 'Bio', key: 'bio' as const, type: 'textarea' },
                   { label: 'GitHub URL', key: 'github_url' as const, type: 'input', placeholder: 'https://github.com/…' },
-                ].map(({ label, key, type, style: extraStyle, placeholder }) => (
+                ].map(({ label, key, type, extra, placeholder }) => (
                   <div key={key}>
-                    <label style={{ fontSize: 8, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#9B948A', display: 'block', marginBottom: 6 }}>{label}</label>
+                    <label className="form-label">{label}</label>
                     {type === 'textarea'
                       ? <textarea value={form[key]} onChange={e => setForm(p => ({ ...p, [key]: e.target.value }))} rows={3}
                           className="w-full outline-none resize-none custom-scrollbar" style={{ ...inputStyle, fontSize: 12, fontFamily: '"JetBrains Mono", monospace' }} />
                       : <input value={form[key]} onChange={e => setForm(p => ({ ...p, [key]: e.target.value }))} placeholder={placeholder}
-                          style={{ ...inputStyle, fontSize: 13, ...extraStyle }} />
+                          style={{ ...inputStyle, fontSize: 13, ...(extra ?? {}) }} />
                     }
                   </div>
                 ))}
               </div>
             ) : (
               <>
-                <h1 style={{ fontFamily: '"Fraunces", serif', fontWeight: 800, fontSize: 36, letterSpacing: '-0.025em', lineHeight: 1, color: '#1A1612', marginBottom: 16 }}>
+                <h1
+                  className="font-display italic text-zinc-100 mb-4"
+                  style={{ fontSize: 52, fontWeight: 400, letterSpacing: '-0.025em', lineHeight: 1 }}
+                >
                   {form.full_name || 'Operative'}
                 </h1>
-                <div className="flex gap-2 items-center flex-wrap" style={{ marginBottom: 16 }}>
+                <div className="flex gap-2 items-center flex-wrap mb-4">
                   {[
-                    { content: <><Activity size={10} /> {userRole}</>, amber: true },
+                    { content: <><Activity size={10} strokeWidth={1.5} /> {userRole}</>, accent: true },
                     { content: displayEmail },
                   ].map((badge, i) => (
-                    <span key={i} className="flex items-center gap-1"
-                      style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em', padding: '3px 8px',
-                        border: badge.amber ? '1px solid rgba(191,74,42,0.3)' : '1px solid var(--border-2)',
-                        color: badge.amber ? '#BF4A2A' : '#9B948A',
-                        background: badge.amber ? 'rgba(191,74,42,0.06)' : 'transparent' }}>
+                    <span
+                      key={i}
+                      className="flex items-center gap-1 text-[9px] font-mono tracking-[0.20em] uppercase px-2.5 py-1 border"
+                      style={{
+                        borderColor: badge.accent ? 'rgba(52,211,153,0.40)' : 'rgba(255,255,255,0.10)',
+                        color: badge.accent ? '#34d399' : '#a1a1aa',
+                        background: badge.accent ? 'rgba(52,211,153,0.06)' : 'transparent',
+                      }}
+                    >
                       {badge.content}
                     </span>
                   ))}
                   {form.github_url && (
-                    <a href={form.github_url} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1 transition-colors"
-                      style={{ fontSize: 9, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.1em', padding: '3px 8px', border: '1px solid var(--border-2)', color: '#9B948A' }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#1A1612'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-3)'; }}
-                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#9B948A'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-2)'; }}>
+                    <a
+                      href={form.github_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 transition-colors text-[9px] font-mono tracking-[0.20em] uppercase px-2.5 py-1 border border-white/10 text-zinc-400 hover:text-emerald-400 hover:border-emerald-400/40"
+                    >
                       <Github size={10} /> GitHub
                     </a>
                   )}
                 </div>
-                {form.bio && <p style={{ fontSize: 12, fontFamily: '"JetBrains Mono", monospace', color: '#9B948A', lineHeight: 1.7, maxWidth: 560, whiteSpace: 'pre-wrap' }}>{form.bio}</p>}
+                {form.bio && (
+                  <p className="text-[13px] text-zinc-400 leading-relaxed max-w-xl whitespace-pre-wrap font-display italic">
+                    {form.bio}
+                  </p>
+                )}
               </>
             )}
           </div>
@@ -191,29 +185,37 @@ export default function Profile() {
           {/* Stats + actions */}
           <div className="flex flex-col items-end gap-6 shrink-0">
             <div className="text-right">
-              <div style={{ fontSize: 8, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#9B948A', marginBottom: 4 }}>Tasks Done</div>
-              <div style={{ fontFamily: '"Fraunces", serif', fontWeight: 800, fontSize: 48, lineHeight: 1, letterSpacing: '-0.02em', color: '#BF4A2A' }}>{completedTasks}</div>
+              <div className="font-mono text-[9px] tracking-[0.25em] uppercase text-zinc-500 mb-2">Tasks Done</div>
+              <div
+                className="font-display italic text-emerald-400"
+                style={{ fontSize: 64, fontWeight: 400, lineHeight: 1, letterSpacing: '-0.02em' }}
+              >
+                {completedTasks}
+              </div>
             </div>
             <div className="flex gap-2">
               {isEditing ? (
                 <>
-                  <button onClick={() => setIsEditing(false)} disabled={isSaving}
-                    className="flex items-center gap-1.5 px-3 py-2 transition-all"
-                    style={{ fontSize: 9, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', border: '1px solid var(--border-2)', color: '#9B948A' }}>
+                  <button
+                    onClick={() => setIsEditing(false)}
+                    disabled={isSaving}
+                    className="flex items-center gap-1.5 px-3 py-2 transition-all text-[9px] font-mono tracking-[0.20em] uppercase border border-white/10 text-zinc-500 hover:text-zinc-200 hover:border-white/30"
+                  >
                     <X size={11} /> Cancel
                   </button>
-                  <button onClick={handleSave} disabled={isSaving}
-                    className="flex items-center gap-1.5 px-4 py-2 transition-all"
-                    style={{ fontSize: 9, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', background: '#BF4A2A', color: '#F4EFE6', opacity: isSaving ? 0.6 : 1 }}>
+                  <button
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="flex items-center gap-1.5 px-4 py-2 transition-all text-[9px] font-mono tracking-[0.20em] uppercase bg-emerald-400 text-zinc-950 hover:bg-emerald-300 disabled:opacity-60"
+                  >
                     {isSaving ? <Loader2 size={11} className="animate-spin" /> : <Save size={11} />} Save
                   </button>
                 </>
               ) : (
-                <button onClick={() => setIsEditing(true)}
-                  className="flex items-center gap-1.5 px-3 py-2 transition-all"
-                  style={{ fontSize: 9, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', border: '1px solid rgba(191,74,42,0.3)', color: '#BF4A2A' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(191,74,42,0.08)'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="flex items-center gap-1.5 px-3 py-2 transition-all text-[9px] font-mono tracking-[0.20em] uppercase border border-emerald-400/40 text-emerald-300 hover:bg-emerald-500/10"
+                >
                   <Edit3 size={11} /> Edit
                 </button>
               )}
@@ -225,37 +227,49 @@ export default function Profile() {
         <div className="grid grid-cols-3 gap-8">
           <div className="col-span-2">
             <div className="flex items-center gap-2 mb-5">
-              <Trophy size={12} style={{ color: '#BF4A2A', opacity: 0.6 }} />
-              <span style={{ fontSize: 9, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#9B948A' }}>Recent Activity</span>
+              <Trophy size={12} className="text-emerald-400/60" strokeWidth={1.5} />
+              <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500">Recent Activity</span>
             </div>
-            <div style={{ border: '1px solid var(--border-1)', background: '#000' }}>
+            <div className="border border-white/[0.06] bg-zinc-900/40 backdrop-blur-md">
               {myTasks.filter(t => t.status === 'DONE').map(t => (
-                <div key={t.id} className="flex items-start gap-3 p-4" style={{ borderBottom: '1px solid rgba(26,22,18,0.05)' }}>
-                  <CheckCircle2 size={13} style={{ color: '#4A6B3A', marginTop: 1, flexShrink: 0 }} />
-                  <div>
-                    <div style={{ fontSize: 11, fontFamily: '"Inter", sans-serif', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#1A1612' }}>{t.title}</div>
-                    {t.description && <div style={{ fontSize: 10, color: '#C4BDB1', marginTop: 2 }}>{t.description}</div>}
+                <div key={t.id} className="flex items-start gap-3 p-4 border-b border-white/[0.04]">
+                  <CheckCircle2 size={13} className="text-emerald-400 mt-0.5 shrink-0" strokeWidth={1.5} />
+                  <div className="min-w-0">
+                    <div className="text-[12px] text-zinc-100 font-medium">{t.title}</div>
+                    {t.description && <div className="text-[11px] text-zinc-500 mt-1 leading-relaxed">{t.description}</div>}
                   </div>
                 </div>
               ))}
               {completedTasks === 0 && (
-                <div style={{ padding: '32px', textAlign: 'center', fontSize: 10, fontFamily: '"JetBrains Mono", monospace', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#C4BDB1' }}>No completed tasks yet.</div>
+                <div className="p-8 text-center text-[10px] font-mono tracking-[0.20em] uppercase text-zinc-600">
+                  No completed tasks yet.
+                </div>
               )}
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: 9, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#9B948A', marginBottom: 20 }}>Details</div>
-            <div style={{ border: '1px solid var(--border-1)', background: '#000', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500 mb-5">Details</div>
+            <div className="border border-white/[0.06] bg-zinc-900/40 backdrop-blur-md p-5 flex flex-col gap-4">
               {[
                 { label: 'User ID', value: currentUserId, mono: true, truncate: true },
-                { label: 'Role', value: userRole, mono: true, amber: true },
+                { label: 'Role', value: userRole, mono: true, accent: true },
                 { label: 'Tasks Assigned', value: String(myTasks.length), mono: true },
                 { label: 'Completion Rate', value: `${myTasks.length > 0 ? Math.round((completedTasks / myTasks.length) * 100) : 0}%`, mono: true },
-              ].map(({ label, value, mono, truncate, amber }) => (
+              ].map(({ label, value, mono, truncate, accent }) => (
                 <div key={label}>
-                  <div style={{ fontSize: 8, fontFamily: '"Fraunces", serif', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#C4BDB1', marginBottom: 4 }}>{label}</div>
-                  <div className={truncate ? 'truncate' : ''} style={{ fontSize: truncate ? 9 : 11, fontFamily: mono ? '"JetBrains Mono", monospace' : '"Inter", sans-serif', color: amber ? '#BF4A2A' : '#6B645C', fontWeight: amber ? 700 : 400 }}>{value}</div>
+                  <div className="font-mono text-[9px] tracking-[0.22em] uppercase text-zinc-600 mb-1">{label}</div>
+                  <div
+                    className={truncate ? 'truncate' : ''}
+                    style={{
+                      fontSize: truncate ? 9 : 12,
+                      fontFamily: mono ? '"JetBrains Mono", monospace' : '"Inter", sans-serif',
+                      color: accent ? '#34d399' : '#d4d4d8',
+                      fontWeight: accent ? 500 : 400,
+                    }}
+                  >
+                    {value}
+                  </div>
                 </div>
               ))}
             </div>

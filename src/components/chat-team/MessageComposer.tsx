@@ -70,7 +70,7 @@ export default function MessageComposer({ contextType, contextId }: Props) {
         disabled={sending || !value.trim()}
         style={{
           width: 36, height: 36, borderRadius: 'var(--radius-chip)',
-          background: 'var(--accent)', color: '#0E1014',
+          background: 'var(--accent)', color: '#09090b',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           border: 'none', cursor: 'pointer', opacity: value.trim() ? 1 : 0.4,
         }}

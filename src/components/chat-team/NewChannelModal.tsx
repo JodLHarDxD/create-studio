@@ -79,7 +79,7 @@ export default function NewChannelModal({ isOpen, onClose, onCreated }: Props) {
               border: '1px solid var(--border-chat)', borderRadius: 'var(--radius-chip)', cursor: 'pointer',
             }}>Cancel</button>
             <button type="submit" disabled={busy} style={{
-              padding: '8px 14px', background: 'var(--accent)', color: '#0E1014',
+              padding: '8px 14px', background: 'var(--accent)', color: '#09090b',
               border: 'none', borderRadius: 'var(--radius-chip)', cursor: 'pointer', fontWeight: 600,
             }}>{busy ? 'Creating…' : 'Create'}</button>
           </div>

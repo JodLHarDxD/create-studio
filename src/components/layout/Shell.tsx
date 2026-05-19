@@ -1,6 +1,5 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
-import { FileCode, BarChart3, UserCircle, LogOut, Command, Users } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useState, useEffect } from 'react';
+import { FileCode, BarChart3, UserCircle, LogOut, Command, Users, Sparkles } from 'lucide-react';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import Explorer from '../explorer/Explorer';
 import EditorPanel from '../editor/EditorPanel';
@@ -12,8 +11,9 @@ import TeamPage from '../team/TeamPage';
 import DiffViewer from '../tasks/DiffViewer';
 import CommandPalette from '../ui/CommandPalette';
 import NewTaskModal from '../tasks/NewTaskModal';
+import WebGLBackground from '../effects/WebGLBackground';
 import { motion, AnimatePresence } from 'motion/react';
-import { variants, transitions } from '@/design';
+import { variants } from '@/design';
 
 const NAV = [
   { v: 'editor'    as const, icon: FileCode,   label: 'Editor',    shortcut: 'E' },
@@ -29,14 +29,12 @@ export default function Shell() {
   const isSidebarOpen = true;
   const isChatOpen = true;
 
-  // ── Cmd+K ──
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setCmdOpen(p => !p);
       }
-      // Cmd+N → new task
       if ((e.metaKey || e.ctrlKey) && e.key === 'n' && userRole === 'ADMIN') {
         e.preventDefault();
         setNewTaskOpen(true);
@@ -52,37 +50,31 @@ export default function Shell() {
 
   return (
     <div
-      className="flex h-screen w-screen overflow-hidden"
-      style={{ background: 'var(--surface-1)', color: 'var(--text-1)', fontFamily: '"Inter", sans-serif' }}
+      className="relative flex h-screen w-screen overflow-hidden text-zinc-200 antialiased"
+      style={{ background: 'transparent', fontFamily: '"Inter", sans-serif' }}
     >
+      {/* Cinematic ambient WebGL — sits beneath everything */}
+      <WebGLBackground />
+
       {/* ═══════════════════════════════════════════════
-          ACTIVITY BAR
+          ACTIVITY RAIL — left vertical chrome
       ═══════════════════════════════════════════════ */}
       <div
-        className="flex flex-col items-center py-4 gap-1 z-20 shrink-0"
-        style={{
-          width: 48,
-          background: '#EFEAE0',
-          borderRight: '1px solid var(--border-1)',
-        }}
+        className="relative z-20 flex flex-col items-center py-5 gap-1 shrink-0 border-r border-white/[0.06] bg-zinc-950/60 backdrop-blur-xl"
+        style={{ width: 56 }}
       >
-        {/* Logo — CREATstudio wordmark mark, triggers command palette */}
+        {/* Forge mark — opens command palette */}
         <button
           onClick={() => setCmdOpen(true)}
           title="CREATstudio — Command Palette (⌘K)"
-          className="mb-5 flex flex-col items-center justify-center relative group"
-          style={{ width: 32, lineHeight: 1, gap: 0 }}
+          className="mb-6 w-10 h-10 flex items-center justify-center border border-white/[0.08] hover:border-emerald-400/40 transition-colors duration-500 group relative"
         >
-          <div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            style={{ background: 'radial-gradient(circle, rgba(191,74,42,0.12), transparent 70%)' }}
-          />
-          <span style={{ fontFamily: '"Fraunces", serif', fontWeight: 800, fontSize: 11, letterSpacing: '-0.02em', color: '#1A1612', lineHeight: 1 }}>CR</span>
-          <span style={{ fontFamily: '"Fraunces", serif', fontWeight: 300, fontSize: 7.5, letterSpacing: '0.04em', color: '#BF4A2A', lineHeight: 1, opacity: 0.8 }}>st</span>
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-emerald-500/10 to-violet-500/10" />
+          <Sparkles className="w-4 h-4 text-zinc-400 group-hover:text-emerald-400 transition-colors duration-500" strokeWidth={1.5} />
         </button>
 
-        {/* Nav items */}
-        <div className="flex flex-col items-center gap-0.5 flex-1">
+        {/* Nav */}
+        <div className="flex flex-col items-center gap-1 flex-1">
           {NAV.map(({ v, icon: Icon, label }) => {
             const isActive = view === v && !diffTask;
             return (
@@ -92,56 +84,39 @@ export default function Shell() {
                 title={`${label} (⌘${v[0].toUpperCase()})`}
                 className="relative w-10 h-10 flex items-center justify-center group"
               >
-                {/* Icon container — active state via background tint + color, no side stripe */}
-                <motion.div
-                  className="w-9 h-9 flex items-center justify-center rounded transition-all duration-200"
-                  style={{
-                    background: isActive ? 'rgba(191,74,42,0.12)' : 'transparent',
-                    border: isActive ? '1px solid rgba(191,74,42,0.18)' : '1px solid transparent',
-                  }}
-                  onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'rgba(26,22,18,0.07)'; }}
-                  onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = isActive ? 'rgba(191,74,42,0.12)' : 'transparent'; }}
-                >
-                  <Icon
-                    size={17}
-                    strokeWidth={isActive ? 2 : 1.5}
-                    style={{
-                      opacity: isActive ? 1 : 0.3,
-                      color: isActive ? '#BF4A2A' : '#1A1612',
-                      transition: 'opacity 0.15s, color 0.15s',
-                    }}
+                {isActive && (
+                  <motion.div
+                    layoutId="nav-active"
+                    className="absolute inset-0 border border-emerald-400/30 bg-emerald-500/[0.06]"
+                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                   />
-                </motion.div>
+                )}
+                <Icon
+                  size={17}
+                  strokeWidth={isActive ? 1.8 : 1.4}
+                  className={`relative z-10 transition-colors duration-300 ${
+                    isActive ? 'text-emerald-400' : 'text-zinc-500 group-hover:text-zinc-200'
+                  }`}
+                />
               </button>
             );
           })}
         </div>
 
-        {/* Bottom section */}
-        <div className="flex flex-col items-center gap-2.5 pb-2">
-          {/* Cmd shortcut hint */}
+        {/* Bottom controls */}
+        <div className="flex flex-col items-center gap-3 pb-2">
           <button
             onClick={() => setCmdOpen(true)}
             title="Command Palette (⌘K)"
-            className="w-8 h-8 flex items-center justify-center transition-opacity duration-200"
-            style={{ opacity: 0.18 }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '0.7')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '0.18')}
+            className="w-8 h-8 flex items-center justify-center text-zinc-600 hover:text-zinc-200 transition-colors duration-200"
           >
-            <Command size={13} />
+            <Command size={13} strokeWidth={1.5} />
           </button>
 
-          {/* User avatar */}
           {profile && (
             <div
-              className="w-7 h-7 rounded-full overflow-hidden shrink-0 flex items-center justify-center text-[10px] font-bold"
-              style={{
-                background: 'rgba(191,74,42,0.1)',
-                border: '1.5px solid rgba(191,74,42,0.35)',
-                color: '#BF4A2A',
-                fontFamily: '"Fraunces", serif',
-                fontWeight: 700,
-              }}
+              className="w-8 h-8 overflow-hidden shrink-0 flex items-center justify-center text-[10px] border border-emerald-400/40 bg-emerald-500/[0.08] text-emerald-300"
+              style={{ fontFamily: '"Playfair Display", serif', fontWeight: 500, fontStyle: 'italic' }}
               title={profile.full_name}
             >
               {profile.avatar_url
@@ -150,15 +125,11 @@ export default function Shell() {
             </div>
           )}
 
-          {/* Logout */}
           <button
             onClick={logout}
             title="Logout"
             aria-label="Logout"
-            className="w-8 h-8 flex items-center justify-center transition-all duration-200"
-            style={{ opacity: 0.18, color: '#1A1612' }}
-            onMouseEnter={e => { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.color = '#B53C2A'; }}
-            onMouseLeave={e => { e.currentTarget.style.opacity = '0.18'; e.currentTarget.style.color = '#1A1612'; }}
+            className="w-8 h-8 flex items-center justify-center text-zinc-600 hover:text-red-400 transition-colors duration-200"
           >
             <LogOut size={14} strokeWidth={1.5} />
           </button>
@@ -168,16 +139,16 @@ export default function Shell() {
       {/* ═══════════════════════════════════════════════
           MAIN LAYOUT
       ═══════════════════════════════════════════════ */}
-      <div className="flex-1 flex overflow-hidden" style={{ paddingBottom: 28 }}>
-        {/* Sidebar — Explorer */}
+      <div className="relative z-10 flex-1 flex overflow-hidden" style={{ paddingBottom: 28 }}>
+        {/* Explorer sidebar */}
         <AnimatePresence initial={false}>
           {isSidebarOpen && (
             <motion.div
               initial={{ width: 0 }}
-              animate={{ width: 260 }}
+              animate={{ width: 280 }}
               exit={{ width: 0 }}
-              className="overflow-hidden flex flex-col shrink-0"
-              style={{ background: '#F4EFE6', borderRight: '1px solid var(--border-1)' }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden flex flex-col shrink-0 border-r border-white/[0.06] bg-zinc-950/50 backdrop-blur-xl"
             >
               <Explorer onNewTask={() => setNewTaskOpen(true)} />
             </motion.div>
@@ -185,7 +156,7 @@ export default function Shell() {
         </AnimatePresence>
 
         {/* Center panel */}
-        <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-zinc-950/30 backdrop-blur-md">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={diffTask ? 'diff' : view}
@@ -198,7 +169,7 @@ export default function Shell() {
               {diffTask ? (
                 <DiffViewer />
               ) : view === 'editor' ? (
-                <div className="flex-1 flex flex-col min-h-0" style={{ background: '#E8E2D6' }}>
+                <div className="flex-1 flex flex-col min-h-0 bg-zinc-950/40">
                   <EditorPanel />
                 </div>
               ) : view === 'dashboard' ? (
@@ -217,10 +188,10 @@ export default function Shell() {
           {isChatOpen && (
             <motion.div
               initial={{ width: 0 }}
-              animate={{ width: 360 }}
+              animate={{ width: 380 }}
               exit={{ width: 0 }}
-              className="overflow-hidden flex flex-col shrink-0"
-              style={{ background: '#F4EFE6', borderLeft: '1px solid var(--border-1)' }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden flex flex-col shrink-0 border-l border-white/[0.06] bg-zinc-950/50 backdrop-blur-xl"
             >
               <TeamChatPanel />
             </motion.div>
@@ -232,60 +203,37 @@ export default function Shell() {
           STATUS BAR
       ═══════════════════════════════════════════════ */}
       <div
-        className="fixed bottom-0 w-full z-30 flex items-center px-5"
-        style={{
-          height: 28,
-          background: '#EFEAE0',
-          borderTop: '1px solid var(--border-1)',
-          fontFamily: '"JetBrains Mono", monospace',
-          fontSize: 10,
-        }}
+        className="fixed bottom-0 left-0 right-0 z-30 flex items-center px-5 border-t border-white/[0.06] bg-zinc-950/80 backdrop-blur-xl"
+        style={{ height: 28, fontFamily: '"JetBrains Mono", monospace', fontSize: 10 }}
       >
-        {/* Left */}
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <div
-              className="w-1.5 h-1.5 rounded-full amber-pulse"
-              style={{ background: '#BF4A2A' }}
-            />
-            <span style={{ fontFamily: '"Fraunces", serif', fontWeight: 800, fontSize: 9, letterSpacing: '0.1em', color: '#1A1612' }}>
-              CREAT
-            </span>
-            <span style={{ fontFamily: '"Fraunces", serif', fontWeight: 300, fontSize: 8, letterSpacing: '0.06em', color: '#BF4A2A', opacity: 0.8, marginLeft: -1 }}>
-              studio
+            <div className="w-1.5 h-1.5 rounded-full amber-pulse" style={{ background: '#34d399' }} />
+            <span style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontSize: 13, letterSpacing: '-0.01em', color: '#f4f4f5' }}>
+              creat
             </span>
           </div>
-          <span style={{ color: 'var(--border-2)' }}>·</span>
-          <span style={{ color: 'var(--text-3)' }}>
-            {userRole}
-          </span>
+          <span className="text-zinc-700">·</span>
+          <span className="text-[9px] tracking-[0.20em] uppercase text-zinc-500">{userRole}</span>
         </div>
 
-        {/* Right */}
-        <div className="ml-auto flex items-center gap-5" style={{ color: 'var(--text-3)' }}>
+        <div className="ml-auto flex items-center gap-5 text-zinc-500">
           <button
             onClick={() => setCmdOpen(true)}
-            className="flex items-center gap-1.5 transition-colors duration-150"
-            style={{ color: 'var(--text-3)' }}
-            onMouseEnter={e => (e.currentTarget.style.color = '#BF4A2A')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-3)')}
+            className="flex items-center gap-1.5 hover:text-emerald-400 transition-colors duration-200"
           >
-            <Command size={9} />
+            <Command size={9} strokeWidth={1.5} />
             <span>⌘K</span>
           </button>
-          <span>Supabase</span>
+          <span className="text-[9px] tracking-[0.20em] uppercase">Supabase</span>
           <motion.div
-            className="w-1.5 h-1.5 rounded-full"
-            style={{ background: '#4A6B3A' }}
+            className="w-1.5 h-1.5 rounded-full bg-emerald-400"
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
           />
         </div>
       </div>
 
-      {/* ═══════════════════════════════════════════════
-          COMMAND PALETTE
-      ═══════════════════════════════════════════════ */}
       <CommandPalette
         isOpen={cmdOpen}
         onClose={() => setCmdOpen(false)}
