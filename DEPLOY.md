@@ -26,25 +26,27 @@ service_role:    eyJhbGciOiJ...  (different long JWT — keep secret)
 
 ---
 
-## Step 2 — Backend on Railway (10 min)
+## Step 2 — Backend on Render (10 min)
 
-1. Push project to GitHub (include the `backend/` folder)
-2. Go to [railway.app](https://railway.app) → New Project → Deploy from GitHub
-3. Select your repo
-4. Railway auto-detects Python from `requirements.txt`
-5. Set start command: `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
-   - Settings → Deploy → Start Command
+1. Push project to GitHub (include `backend/` and `render.yaml`)
+2. Go to [render.com](https://render.com) → New → **Blueprint**
+3. Connect this repo — Render auto-detects `render.yaml`
+4. When prompted for secret values, enter:
 
-**Set Environment Variables (Settings → Variables):**
+**Environment Variables:**
 ```
 SUPABASE_URL              = https://xxxxxxxxxxxx.supabase.co
 SUPABASE_SERVICE_ROLE_KEY = eyJhbGciOiJ...  (service_role key from Step 1)
 GEMINI_API_KEY            = AIzaSy...        (optional — Google API key)
+OPENAI_API_KEY            = sk-...           (optional)
+ANTHROPIC_API_KEY         = sk-ant-...       (optional)
 ```
 
-6. Deploy → wait for green checkmark
-7. Copy the Railway URL: `https://your-app.railway.app`
-8. Test: open `https://your-app.railway.app/health` → should return `{"status":"operational"}`
+5. Deploy → wait for green checkmark
+6. Copy the Render URL: `https://creat-studio-api.onrender.com`
+7. Test: open `https://creat-studio-api.onrender.com/health` → should return `{"status":"operational"}`
+
+> **Note:** Render free web services sleep after 15 min inactivity. First request after sleep takes ~30s. Upgrade to paid Render instance for always-on behavior.
 
 ---
 
@@ -58,13 +60,13 @@ GEMINI_API_KEY            = AIzaSy...        (optional — Google API key)
 
 **Set Environment Variables:**
 ```
-VITE_SUPABASE_URL     = https://xxxxxxxxxxxx.supabase.co
+VITE_SUPABASE_URL      = https://xxxxxxxxxxxx.supabase.co
 VITE_SUPABASE_ANON_KEY = eyJhbGciOiJ...  (anon public key from Step 1)
-VITE_API_URL          = https://your-app.railway.app  (Railway URL from Step 2)
+VITE_API_URL           = https://creat-studio-api.onrender.com  (Render URL from Step 2)
 ```
 
 6. Deploy → wait for green checkmark
-7. Open the Vercel URL → should see Kinetix OS login screen
+7. Open the Vercel URL → should see login screen
 
 ---
 
@@ -119,15 +121,15 @@ After deployment, verify each:
 ## Troubleshooting
 
 ### "Failed to fetch" on AI chat
-→ Check `VITE_API_URL` in Vercel matches Railway URL exactly (no trailing slash)
-→ Check Railway is deployed and healthy at `/health`
-→ Check CORS — Railway backend has `allow_origins=["*"]`
+→ Check `VITE_API_URL` in Vercel matches Render URL exactly (no trailing slash)
+→ Check Render service is deployed and healthy at `/health`
+→ Check CORS — backend has `allow_origins=["*"]`
 
 ### Login fails with "Invalid credentials"
 → Supabase Email auth must be enabled: Authentication → Providers → Email → Enable
 
-### "Supabase credentials missing" in Railway logs
-→ Set `SUPABASE_URL` (not `VITE_SUPABASE_URL`) in Railway env vars
+### "Supabase credentials missing" in Render logs
+→ Set `SUPABASE_URL` (not `VITE_SUPABASE_URL`) in Render env vars
 
 ### Real-time not working
 → Enable Realtime for `tasks` and `project_files` tables in Supabase
@@ -140,16 +142,5 @@ After deployment, verify each:
 → Test in Supabase SQL editor: `SET LOCAL role = authenticated; SELECT * FROM tasks;`
 → Check `is_admin()` function exists (from database_setup.sql)
 
----
-
-## Railway → Render Migration (if Railway unavailable)
-
-1. Go to [render.com](https://render.com) → New Web Service
-2. Connect GitHub repo
-3. Runtime: Python 3
-4. Build command: `pip install -r backend/requirements.txt`
-5. Start command: `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
-6. Set same env vars as Railway
-7. Update `VITE_API_URL` in Vercel to new Render URL
-
-Note: Render free tier sleeps after 15min inactivity. Use Koyeb.com for always-on free tier.
+### Render service is slow to respond
+→ Render free tier sleeps after 15 min. First request wakes it. Use paid tier for production.

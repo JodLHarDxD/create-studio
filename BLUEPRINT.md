@@ -15,7 +15,7 @@
 | Real-time subscriptions (tasks + files) | ✅ Done | `WorkspaceContext.tsx` |
 | Guest/demo mode | ✅ Done | `WorkspaceContext.tsx` (DEMO_* constants) |
 | Database schema + RLS | ✅ Done | `database_setup.sql` |
-| Railway deploy config | ✅ Done | `railway.json`, `Procfile` |
+| Render deploy config | ✅ Done | `render.yaml` |
 | Vercel deploy config | ✅ Done | `vercel.json` |
 
 ### Frontend Components
@@ -35,7 +35,7 @@
 |----------|--------|-------|
 | `POST /api/ai/chat` | ✅ Done | Multi-provider: Anthropic, OpenAI, Google |
 | `POST /api/ai/files` | ✅ Done | Saves file + generates vector embedding |
-| `GET /health` | ✅ Done | Railway health check |
+| `GET /health` | ✅ Done | Render health check |
 | RAG pipeline | ✅ Done | Embedding → pgvector search → prompt injection |
 | Key resolution | ✅ Done | User key > server env var |
 
@@ -59,7 +59,7 @@
 ## Architecture Decisions Log
 
 ### Why no SSR / Next.js?
-Assignment requires Railway deployment + 24hr build. Vite SPA = zero config, instant Railway deploy via static build served by any CDN or the FastAPI itself.
+Assignment requires backend deployment + 24hr build. Vite SPA = zero config, deployed on Render (FastAPI backend) + Vercel (frontend).
 
 ### Why httpx instead of official SDKs (anthropic, openai)?
 - No version conflicts between 3 SDKs

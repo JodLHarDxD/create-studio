@@ -79,3 +79,30 @@ export const motion = {
     spring:   { type: 'spring' as const, stiffness: 280, damping: 30 },
   },
 } as const;
+
+export const chatTokens = {
+  bg: {
+    base:     '#0E1014',
+    card:     '#1A1D24',
+    elevated: '#222630',
+  },
+  text: {
+    primary:   '#FFFFFF',
+    secondary: '#A8ADB8',
+    tertiary:  '#6B7080',
+  },
+  accent: {
+    lavender: '#C5B8FF',
+    cream:    '#E8E2A8',
+    success:  '#7ED4A8',
+    danger:   '#FF8B8B',
+  },
+  border: 'rgba(255,255,255,0.06)',
+  radius: {
+    card: 16,
+    chip: 10,
+  },
+  font: {
+    sans: '"Inter", "General Sans", ui-sans-serif, system-ui, sans-serif',
+  },
+} as const;

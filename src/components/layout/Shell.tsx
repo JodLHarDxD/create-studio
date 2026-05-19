@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import Explorer from '../explorer/Explorer';
 import EditorPanel from '../editor/EditorPanel';
-import ChatPanel from '../chat/ChatPanel';
+import TeamChatPanel from '../chat-team/TeamChatPanel';
 import Dashboard from '../dashboard/Dashboard';
 import Login from '../auth/Login';
 import Profile from '../profile/Profile';
@@ -222,7 +222,7 @@ export default function Shell() {
               className="overflow-hidden flex flex-col shrink-0"
               style={{ background: '#F4EFE6', borderLeft: '1px solid var(--border-1)' }}
             >
-              <ChatPanel />
+              <TeamChatPanel />
             </motion.div>
           )}
         </AnimatePresence>

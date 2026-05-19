@@ -147,14 +147,14 @@ The service role key bypasses ALL RLS policies. Wrong usage creates security hol
 
 ---
 
-## Deployment (Railway)
+## Deployment (Render)
 
 Start command:
 ```
-uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT
 ```
 
-Railway injects `$PORT` automatically. Never hardcode port 8000 in production.
+Render injects `$PORT` automatically. Never hardcode port 8000 in production.
 
 Health check: `GET /health` → `{"status": "operational"}`
 

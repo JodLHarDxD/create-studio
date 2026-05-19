@@ -1,6 +1,7 @@
 ﻿import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { WorkspaceProvider } from './contexts/WorkspaceContext';
+import { ChatProvider } from '@/contexts/ChatContext';
 import Shell from './components/layout/Shell';
 import { ToastProvider } from './components/ui/Toast';
 import ErrorBoundary from './components/ui/ErrorBoundary';
@@ -12,11 +13,13 @@ export default function App() {
   return (
     <ErrorBoundary>
       <WorkspaceProvider>
-        <ToastProvider>
-          <ErrorBoundary>
-            <Shell />
-          </ErrorBoundary>
-        </ToastProvider>
+        <ChatProvider>
+          <ToastProvider>
+            <ErrorBoundary>
+              <Shell />
+            </ErrorBoundary>
+          </ToastProvider>
+        </ChatProvider>
       </WorkspaceProvider>
 
       <AnimatePresence>
