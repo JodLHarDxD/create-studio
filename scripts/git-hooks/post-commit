@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Auto-push every commit to the branch's tracked remote.
+# Skips silently when:
+#  - in a detached HEAD
+#  - branch has no upstream (push -u not set yet)
+#  - we're mid-rebase / merge / cherry-pick
+
+set -u
+
+git_dir="$(git rev-parse --git-dir 2>/dev/null)" || exit 0
+if [[ -d "$git_dir/rebase-merge" \
+   || -d "$git_dir/rebase-apply" \
+   || -f "$git_dir/MERGE_HEAD" \
+   || -f "$git_dir/CHERRY_PICK_HEAD" ]]; then
+  exit 0
+fi
+
+branch="$(git symbolic-ref --quiet --short HEAD 2>/dev/null)" || exit 0
+if [[ -z "$branch" ]]; then exit 0; fi
+
+if ! git rev-parse --abbrev-ref --symbolic-full-name "@{u}" >/dev/null 2>&1; then
+  echo "[post-commit] no upstream for '$branch' — run: git push -u origin $branch" >&2
+  exit 0
+fi
+
+echo "[post-commit] pushing '$branch' → origin..."
+if git push --quiet 2>&1; then
+  echo "[post-commit] pushed ✓"
+else
+  echo "[post-commit] push failed (non-fatal — your commit is local)" >&2
+fi
